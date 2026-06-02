@@ -61,6 +61,14 @@ body {
   transition: var(--transition);
 }
 .read-btn:hover { background: var(--blue-dark); }
+.hub-btn {
+  font-size: 11px; font-weight: 700; color: var(--blue); background: transparent;
+  padding: 6px 14px; border-radius: var(--radius); text-decoration: none;
+  border: 1px solid rgba(30,34,170,0.3);
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: var(--transition);
+}
+.hub-btn:hover { background: rgba(30,34,170,0.06); border-color: var(--blue); }
 
 /* DOT NAV */
 .dot-nav {
@@ -697,6 +705,7 @@ h2.section-title { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.03em;
   </div>
   <div class="topbar-center">Chapter 1: Where We Play</div>
   <div class="topbar-right">
+    <a class="hub-btn" href="hub.html"><i class="fa-solid fa-house"></i>&nbsp;Course Hub</a>
     <span class="screen-counter" id="screenCounter">1 / 6</span>
     <button class="read-btn" id="btnRead" onclick="setMode('read')">
       <i class="fa-solid fa-book-open"></i>&nbsp;Read Full Chapter
