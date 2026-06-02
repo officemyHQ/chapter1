@@ -385,12 +385,9 @@ body {
         <button class="card-cta cta-locked" disabled>Locked</button>
       </div>
       <div class="unlock-section" id="unlock-section-ch2">
-        <div class="unlock-label">Unlock code</div>
-        <div class="unlock-row">
-          <input class="unlock-input" id="code-ch2" type="text" placeholder="Enter code from Chapter 1" maxlength="20" autocomplete="off" spellcheck="false">
-          <button class="unlock-btn" onclick="tryUnlock('ch2')">Unlock</button>
-        </div>
-        <div class="unlock-hint" id="hint-ch2">Complete Chapter 1 to receive your unlock code.</div>
+        <div class="unlock-label" id="unlock-ch2-label">Chapter 2 is locked</div>
+        <div class="unlock-hint" id="hint-ch2">Complete Chapter 1 and submit your answers to unlock Chapter 2.</div>
+        <button class="unlock-btn" id="check-approval-btn" onclick="checkApproval()" style="margin-top:12px;display:none;">Check approval status</button>
       </div>
     </div>
 
@@ -398,7 +395,7 @@ body {
 </div>
 
 <script>
-const CODES = { ch2: 'SPARK2016' };
+const SHEET_URL = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';
 
 window.addEventListener('DOMContentLoaded', function() {
   const name = localStorage.getItem('myhq_name');
@@ -407,10 +404,11 @@ window.addEventListener('DOMContentLoaded', function() {
     window.location.href = 'landing.html'; return;
   }
   document.getElementById('nav-username').textContent = name.split(' ')[0];
+  // Auto-check approval silently on load if answers already submitted
+  if (localStorage.getItem('myhq_ch1_submitted') === 'true' && localStorage.getItem('myhq_ch2_unlocked') !== 'true') {
+    silentCheckApproval();
+  }
   updateHub();
-  document.getElementById('code-ch2').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') tryUnlock('ch2');
-  });
 });
 
 function updateHub() {
@@ -461,8 +459,14 @@ function updateHub() {
       footer2.innerHTML = `<a class="card-cta cta-primary" href="chapter2.html"><span>${ctaLabel}</span><span class="arrow">→</span></a>`;
     }
     unlockSec.style.display = 'none';
-  } else if (ch1Complete) {
-    document.getElementById('hint-ch2').textContent = 'Find your unlock code at the end of Chapter 1.';
+  } else {
+    const submitted = localStorage.getItem('myhq_ch1_submitted') === 'true';
+    if (submitted) {
+      document.getElementById('hint-ch2').textContent = 'Your Chapter 1 answers are under review. You\'ll be notified once approved.';
+      document.getElementById('check-approval-btn').style.display = '';
+    } else {
+      document.getElementById('hint-ch2').textContent = 'Complete Chapter 1 and submit your answers to unlock Chapter 2.';
+    }
   }
 
   // Overall
@@ -471,19 +475,44 @@ function updateHub() {
   document.getElementById('overall-pct').textContent = total + '%';
 }
 
-function tryUnlock(chapter) {
-  const input = document.getElementById('code-' + chapter);
-  const entered = input.value.trim().toUpperCase();
-  if (entered === CODES[chapter].toUpperCase()) {
-    localStorage.setItem('myhq_' + chapter + '_unlocked', 'true');
-    input.classList.remove('error');
-    updateHub();
-    setTimeout(() => document.getElementById('card-ch2').scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
-  } else {
-    input.classList.add('error'); input.value = '';
-    input.placeholder = 'Incorrect — try again';
-    setTimeout(() => { input.classList.remove('error'); input.placeholder = 'Enter code from Chapter 1'; }, 2000);
-  }
+function silentCheckApproval() {
+  const email = localStorage.getItem('myhq_email');
+  if (!email) return;
+  fetch(SHEET_URL + '?action=check&email=' + encodeURIComponent(email))
+    .then(r => r.json())
+    .then(data => {
+      if (data.approved) {
+        localStorage.setItem('myhq_ch2_unlocked', 'true');
+        updateHub();
+      }
+    })
+    .catch(() => {});
+}
+
+function checkApproval() {
+  const btn = document.getElementById('check-approval-btn');
+  const hint = document.getElementById('hint-ch2');
+  btn.disabled = true;
+  btn.textContent = 'Checking…';
+  const email = localStorage.getItem('myhq_email');
+  fetch(SHEET_URL + '?action=check&email=' + encodeURIComponent(email))
+    .then(r => r.json())
+    .then(data => {
+      if (data.approved) {
+        localStorage.setItem('myhq_ch2_unlocked', 'true');
+        updateHub();
+        document.getElementById('card-ch2').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        hint.textContent = 'Not approved yet — your answers are still under review.';
+        btn.disabled = false;
+        btn.textContent = 'Check approval status';
+      }
+    })
+    .catch(() => {
+      hint.textContent = 'Could not connect. Please try again.';
+      btn.disabled = false;
+      btn.textContent = 'Check approval status';
+    });
 }
 
 function signOut() {

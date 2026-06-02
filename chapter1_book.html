@@ -694,6 +694,82 @@ h2.section-title { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.03em;
 .tl-title { font-size: 14px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; margin-bottom: 5px; }
 .tl-desc { font-size: 13px; color: #4A4E6A; line-height: 1.65; }
 
+/* ── ASSESSMENT Q&A ── */
+.aq-tracker {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 36px; padding: 16px 20px;
+  background: #FAFBFF; border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+}
+.aq-tracker-bar {
+  flex: 1; height: 6px; background: var(--hairline);
+  border-radius: 99px; overflow: hidden;
+}
+.aq-tracker-fill {
+  height: 100%; width: 0%; background: var(--blue);
+  border-radius: 99px; transition: width 0.4s var(--ease);
+}
+.aq-tracker-label {
+  font-size: 12px; font-weight: 700; color: var(--blue);
+  white-space: nowrap; letter-spacing: 0.02em;
+}
+.aq-question {
+  margin-bottom: 36px; padding: 24px 28px;
+  border: 1px solid var(--hairline); border-radius: 12px;
+  background: var(--white); transition: border-color 0.2s;
+}
+.aq-question.is-filled { border-color: rgba(30,34,170,0.35); }
+.aq-q-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.aq-q-num {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--blue);
+  background: rgba(30,34,170,0.08); padding: 3px 10px;
+  border-radius: 99px;
+}
+.aq-q-status { font-size: 12px; font-weight: 600; color: var(--muted); }
+.aq-q-status.done { color: #2a7d3f; }
+.aq-q-text { font-size: 14px; color: var(--ink); line-height: 1.7; margin-bottom: 14px; font-weight: 500; }
+.aq-textarea {
+  width: 100%; padding: 12px 16px;
+  border: 1px solid var(--hairline); border-radius: 8px;
+  font-family: var(--sans); font-size: 14px; color: var(--ink);
+  line-height: 1.65; resize: vertical; min-height: 120px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #FAFBFF;
+}
+.aq-textarea:focus {
+  outline: none; border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(30,34,170,0.1);
+  background: var(--white);
+}
+.aq-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 12px; padding-top: 24px;
+  border-top: 1px solid var(--hairline);
+}
+.aq-footer-note { font-size: 13px; color: var(--muted); }
+.aq-submit-btn {
+  padding: 10px 28px; background: var(--blue); color: var(--white);
+  font-size: 13px; font-weight: 700; border: none; border-radius: var(--radius);
+  cursor: pointer; text-decoration: none; display: inline-flex; align-items: center;
+  transition: var(--transition);
+}
+.aq-submit-btn:hover:not(:disabled) { background: var(--blue-dark); }
+.aq-submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.aq-error {
+  margin-top: 12px; padding: 12px 16px; background: #fff3f3;
+  border: 1px solid #f5c6c6; border-radius: 8px;
+  font-size: 13px; color: #c0392b;
+}
+.aq-submitted {
+  text-align: center; padding: 48px 24px;
+  border: 1px solid rgba(30,34,170,0.2); border-radius: 12px;
+  background: #FAFBFF; margin-bottom: 24px;
+}
+.aq-submitted-icon { font-size: 40px; color: #2a7d3f; margin-bottom: 16px; }
+.aq-submitted-title { font-size: 20px; font-weight: 800; color: var(--ink); margin-bottom: 8px; }
+.aq-submitted-body { font-size: 14px; color: var(--body); line-height: 1.7; max-width: 440px; margin: 0 auto; }
+
 </style>
 </head>
 <body>
@@ -1109,6 +1185,8 @@ h2.section-title { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.03em;
       <div class="toc-ref-label">Reference</div>
       <a href="#s07" class="toc-link" data-s="s07">07 · Market Data</a>
       <a href="#s08" class="toc-link" data-s="s08">08 · The 2030 View</a>
+      <div class="toc-ref-label" style="margin-top:16px;">Assessment</div>
+      <a href="#s-assess" class="toc-link" data-s="s-assess">Chapter Questions</a>
     </aside>
     <main class="content">
 
@@ -2010,6 +2088,84 @@ h2.section-title { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.03em;
       </ul>
     </section>
 
+    <!-- ═══ CHAPTER ASSESSMENT ═══ -->
+    <section class="section" id="s-assess" style="margin-top:64px;padding-top:48px;border-top:2px solid var(--hairline);">
+      <div class="section-num">Assessment</div>
+      <h2 class="section-title">Chapter Questions</h2>
+      <p class="section-body" style="margin-bottom:32px;">Answer all 5 questions in your own words. Your responses will be reviewed before Chapter 2 is unlocked. There are no right or wrong answers — we're looking for genuine observation and independent thinking.</p>
+
+      <!-- Progress tracker -->
+      <div class="aq-tracker" id="aqTracker">
+        <div class="aq-tracker-bar">
+          <div class="aq-tracker-fill" id="aqTrackerFill"></div>
+        </div>
+        <span class="aq-tracker-label" id="aqTrackerLabel">0 / 5 answered</span>
+      </div>
+
+      <!-- Submitted state (shown after successful submission) -->
+      <div class="aq-submitted" id="aqSubmitted" style="display:none;">
+        <div class="aq-submitted-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="aq-submitted-title">Answers submitted!</div>
+        <div class="aq-submitted-body">Your responses are under review. You'll be able to access Chapter 2 once your answers are approved. Check back on the Course Hub.</div>
+        <a href="hub.html" class="aq-submit-btn" style="display:inline-flex;margin-top:20px;">Go to Course Hub →</a>
+      </div>
+
+      <!-- Question form -->
+      <form class="aq-form" id="aqForm" onsubmit="return submitAssessment(event);">
+
+        <div class="aq-question" id="aq1">
+          <div class="aq-q-header">
+            <span class="aq-q-num">Q1</span>
+            <span class="aq-q-status" id="aq1-status"></span>
+          </div>
+          <p class="aq-q-text">In your city, select one residential area and one nearby commercial space. List 5 specific differences you personally observed — in who occupies the space, how decisions to lease/buy are made, and what drives user behaviour in each. Don't use the chapter's language. Use your own words and your own examples.</p>
+          <textarea class="aq-textarea" id="aq1-ans" name="q1" placeholder="Write your answer here…" rows="6" oninput="onAnsInput(1)"></textarea>
+        </div>
+
+        <div class="aq-question" id="aq2">
+          <div class="aq-q-header">
+            <span class="aq-q-num">Q2</span>
+            <span class="aq-q-status" id="aq2-status"></span>
+          </div>
+          <p class="aq-q-text">Pick one operator from the list below — Awfis, Smartworks, or WeWork India. How many centres do they have, in which cities, at roughly what seat count? What's their primary positioning — enterprise, SME, or mixed? What does their pricing model look like?</p>
+          <textarea class="aq-textarea" id="aq2-ans" name="q2" placeholder="Write your answer here…" rows="6" oninput="onAnsInput(2)"></textarea>
+        </div>
+
+        <div class="aq-question" id="aq3">
+          <div class="aq-q-header">
+            <span class="aq-q-num">Q3</span>
+            <span class="aq-q-status" id="aq3-status"></span>
+          </div>
+          <p class="aq-q-text">Spend 5 minutes on the myHQ app and 5 minutes on the website as if you're a first-time client looking for a dedicated desk in your city. What can you do on one that you can't do on the other? Where does each experience feel strong? Where does it break?</p>
+          <textarea class="aq-textarea" id="aq3-ans" name="q3" placeholder="Write your answer here…" rows="6" oninput="onAnsInput(3)"></textarea>
+        </div>
+
+        <div class="aq-question" id="aq4">
+          <div class="aq-q-header">
+            <span class="aq-q-num">Q4</span>
+            <span class="aq-q-status" id="aq4-status"></span>
+          </div>
+          <p class="aq-q-text">India's gross office absorption in 2024 was reported at ~72 million sq ft, but net absorption tells a different story. Look up the net absorption number for any one city (BLR, NCR, HYD, MUM). What's the gap? What does that gap tell you about the difference between gross and net absorption?</p>
+          <textarea class="aq-textarea" id="aq4-ans" name="q4" placeholder="Write your answer here…" rows="6" oninput="onAnsInput(4)"></textarea>
+        </div>
+
+        <div class="aq-question" id="aq5">
+          <div class="aq-q-header">
+            <span class="aq-q-num">Q5</span>
+            <span class="aq-q-status" id="aq5-status"></span>
+          </div>
+          <p class="aq-q-text">Flex penetration in India is currently ~22–25% of total Grade A stock. Some analysts say India will hit 30% by 2030. Others say the enterprise swing back to conventional will cap it. Take a side — Flex Penetration or Conventional Swing Back — and defend it.</p>
+          <textarea class="aq-textarea" id="aq5-ans" name="q5" placeholder="Write your answer here…" rows="6" oninput="onAnsInput(5)"></textarea>
+        </div>
+
+        <div class="aq-footer">
+          <span class="aq-footer-note" id="aqFooterNote">Answer all 5 questions to submit.</span>
+          <button class="aq-submit-btn" type="submit" id="aqSubmitBtn" disabled>Submit Answers</button>
+        </div>
+        <div class="aq-error" id="aqError" style="display:none;"></div>
+      </form>
+    </section>
+
   </main>
     </main>
   </div>
@@ -2558,6 +2714,92 @@ const observer = new IntersectionObserver(entries => {
 sections.forEach(s => observer.observe(s));
 
 }
+
+/* ── ASSESSMENT ── */
+const SHEET_URL = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';
+const TOTAL_QUESTIONS = 5;
+
+function onAnsInput(n) {
+  const val = document.getElementById('aq' + n + '-ans').value.trim();
+  const q = document.getElementById('aq' + n);
+  const status = document.getElementById('aq' + n + '-status');
+  if (val.length > 0) {
+    q.classList.add('is-filled');
+    status.textContent = '✓ Answered';
+    status.classList.add('done');
+  } else {
+    q.classList.remove('is-filled');
+    status.textContent = '';
+    status.classList.remove('done');
+  }
+  updateTracker();
+}
+
+function updateTracker() {
+  let count = 0;
+  for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+    if (document.getElementById('aq' + i + '-ans').value.trim().length > 0) count++;
+  }
+  document.getElementById('aqTrackerFill').style.width = (count / TOTAL_QUESTIONS * 100) + '%';
+  document.getElementById('aqTrackerLabel').textContent = count + ' / ' + TOTAL_QUESTIONS + ' answered';
+  const btn = document.getElementById('aqSubmitBtn');
+  const note = document.getElementById('aqFooterNote');
+  if (count === TOTAL_QUESTIONS) {
+    btn.disabled = false;
+    note.textContent = 'All questions answered. Ready to submit.';
+  } else {
+    btn.disabled = true;
+    note.textContent = 'Answer all 5 questions to submit.';
+  }
+}
+
+function submitAssessment(e) {
+  e.preventDefault();
+  const btn = document.getElementById('aqSubmitBtn');
+  const errEl = document.getElementById('aqError');
+  errEl.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  const name = localStorage.getItem('myhq_name') || '—';
+  const email = localStorage.getItem('myhq_email') || '—';
+  const answers = {};
+  for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+    answers['q' + i] = document.getElementById('aq' + i + '-ans').value.trim();
+  }
+
+  fetch(SHEET_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, timestamp: new Date().toISOString(), ...answers })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.result === 'success') {
+      localStorage.setItem('myhq_ch1_submitted', 'true');
+      document.getElementById('aqForm').style.display = 'none';
+      document.getElementById('aqTracker').style.display = 'none';
+      document.getElementById('aqSubmitted').style.display = '';
+    } else {
+      throw new Error(data.error || 'Unknown error');
+    }
+  })
+  .catch(err => {
+    errEl.textContent = 'Submission failed: ' + err.message + '. Please try again.';
+    errEl.style.display = '';
+    btn.disabled = false;
+    btn.textContent = 'Submit Answers';
+  });
+  return false;
+}
+
+(function initAssessment() {
+  if (localStorage.getItem('myhq_ch1_submitted') === 'true') {
+    document.getElementById('aqForm').style.display = 'none';
+    document.getElementById('aqTracker').style.display = 'none';
+    document.getElementById('aqSubmitted').style.display = '';
+  }
+})();
 </script>
 </body>
 </html>
