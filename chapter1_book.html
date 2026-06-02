@@ -2103,14 +2103,6 @@ h2.section-title { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.03em;
         <span class="aq-tracker-label" id="aqTrackerLabel">0 / 5 answered</span>
       </div>
 
-      <!-- Submitted state (shown after successful submission) -->
-      <div class="aq-submitted" id="aqSubmitted" style="display:none;">
-        <div class="aq-submitted-icon"><i class="fa-solid fa-circle-check"></i></div>
-        <div class="aq-submitted-title">Answers submitted!</div>
-        <div class="aq-submitted-body">Your responses are under review. You'll be able to access Chapter 2 once your answers are approved. Check back on the Course Hub.</div>
-        <a href="hub.html" class="aq-submit-btn" style="display:inline-flex;margin-top:20px;">Go to Course Hub →</a>
-      </div>
-
       <!-- Question form -->
       <form class="aq-form" id="aqForm" onsubmit="return submitAssessment(event);">
 
@@ -2804,7 +2796,6 @@ function showSubmittedState() {
   // Hide tracker and footer, show confirmation banner
   document.getElementById('aqTracker').style.display = 'none';
   document.getElementById('aqFooter') && (document.getElementById('aqFooter').style.display = 'none');
-  document.getElementById('aqSubmitted').style.display = '';
 }
 
 (function initAssessment() {
