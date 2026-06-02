@@ -312,7 +312,7 @@ body {
   <img src="logo_landing_hub/myHQ_logo_landing.png" alt="myHQ" class="brand-mark">
   <div class="topbar-right">
     <div class="nav-user">Logged in as <strong id="nav-username">—</strong></div>
-    <a class="nav-home-btn" href="landing.html" title="Home"><i class="fa-solid fa-book"></i></a>
+    <a class="nav-signout" href="landing.html">&#8962; Home</a>
   </div>
 </div>
 
@@ -407,7 +407,7 @@ const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwX0Z5vx6DSwdwZwK26pK
 window.addEventListener('DOMContentLoaded', function() {
   const name = localStorage.getItem('myhq_name');
   const email = localStorage.getItem('myhq_email');
-  if (!name || !email || !email.endsWith('@myhq.in')) {
+  if (!name || !email) {
     window.location.href = 'landing.html'; return;
   }
   document.getElementById('nav-username').textContent = name.split(' ')[0];
