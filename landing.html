@@ -522,7 +522,12 @@ function signOut() {
 window.addEventListener('DOMContentLoaded', () => {
   const n = localStorage.getItem('myhq_name');
   const e = localStorage.getItem('myhq_email');
-  if (n && e) window.location.href = 'hub.html';
+  if (n && e) {
+    document.getElementById('success-name').textContent = n.split(' ')[0];
+    document.getElementById('form-panel').style.display = 'none';
+    document.getElementById('success-panel').classList.add('visible');
+    return;
+  }
 });
 </script>
 </body>
