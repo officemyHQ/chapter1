@@ -60,6 +60,13 @@ body {
   color: var(--blue-soft);
 }
 .nav-user strong { color: var(--blue); }
+.nav-home-btn {
+  font-size: 15px; color: var(--muted); text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 6px;
+  border: 1px solid var(--border); transition: 0.15s;
+}
+.nav-home-btn:hover { color: var(--blue); border-color: var(--blue); background: rgba(30,34,170,0.04); }
 .nav-signout {
   font-family: var(--mono);
   font-size: 9px; font-weight: 600;
@@ -304,7 +311,7 @@ body {
   <img src="logo_landing_hub/myHQ_logo_landing.png" alt="myHQ" class="brand-mark">
   <div class="topbar-right">
     <div class="nav-user">Logged in as <strong id="nav-username">—</strong></div>
-    <button class="nav-signout" onclick="signOut()">Sign out</button>
+    <a class="nav-home-btn" href="landing.html" title="Home"><i class="fa-solid fa-house"></i></a>
   </div>
 </div>
 
