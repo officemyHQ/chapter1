@@ -396,53 +396,23 @@ body {
       </div>
 
       <div class="field">
-        <label class="field-label" for="input-name">Full Name</label>
-        <input class="field-input" id="input-name" type="text" placeholder="Priya Sharma" autocomplete="name">
-        <div class="field-error" id="err-name">Enter your full name</div>
+        <label class="field-label" for="input-username">Username</label>
+        <input class="field-input" id="input-username" type="text" placeholder="Enter your username" autocomplete="username">
+        <div class="field-error" id="err-username">Enter your username</div>
       </div>
 
       <div class="field">
-        <label class="field-label" for="input-email">Work Email</label>
-        <input class="field-input" id="input-email" type="email" placeholder="you@myhq.in" autocomplete="email">
-        <div class="field-error" id="err-email" style="display:none;">Only @myhq.in addresses</div>
-        <div class="field-hint" id="email-hint">@myhq.in only</div>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Select Course</label>
-        <div class="radio-group">
-          <label class="radio-option">
-            <input type="radio" name="course" value="Beginner" id="course-beginner">
-            <span class="radio-label">
-              <span class="radio-num">01</span>
-              <span class="radio-text">Beginner</span>
-            </span>
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="course" value="Intermediate" id="course-intermediate">
-            <span class="radio-label">
-              <span class="radio-num">02</span>
-              <span class="radio-text">Intermediate</span>
-            </span>
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="course" value="Advanced" id="course-advanced">
-            <span class="radio-label">
-              <span class="radio-num">03</span>
-              <span class="radio-text">Advanced</span>
-            </span>
-          </label>
-        </div>
-        <div class="field-error" id="err-course">Select a course</div>
+        <label class="field-label" for="input-password">Password</label>
+        <input class="field-input" id="input-password" type="password" placeholder="Enter your password" autocomplete="current-password">
+        <div class="field-error" id="err-password">Enter your password</div>
       </div>
 
       <button class="btn-submit" id="submit-btn" onclick="handleSubmit()">
         <span class="btn-text">Log In &nbsp;→</span>
       </button>
 
-      <div class="api-error" id="api-error">
-        Couldn't save your details — you can still continue.
-        <br><br><span class="link" onclick="proceedAnyway()">Continue anyway →</span>
+      <div class="api-error" id="api-error" style="display:none;">
+        Invalid username or password. Please try again.
       </div>
     </div>
 
@@ -457,15 +427,12 @@ body {
 </div>
 
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymEPPPIHoXCJG_tMYPa742kXgsHEBnRLEoDFeRgv8WI2KO5nd6Pn7RJ2jRf_b9_fuJWg/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwX0Z5vx6DSwdwZwK26pKZL3V3U9XwEyWgPa9Ek_cFEH1_tpULnWNcn7RlgE-wT8M9M/exec';
 
-let registeredName = '';
-let registeredEmail = '';
+document.getElementById('input-username').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('input-password').focus(); });
+document.getElementById('input-password').addEventListener('keydown', e => { if (e.key === 'Enter') handleSubmit(); });
 
-function isMyhqEmail(v) { return v.trim().toLowerCase().endsWith('@myhq.in'); }
-function validName(v) { return v.trim().length >= 2; }
-
-function setError(inputId, errId, show, msg) {
+function setFieldError(inputId, errId, show, msg) {
   const input = document.getElementById(inputId);
   const err = document.getElementById(errId);
   if (show) {
@@ -478,93 +445,52 @@ function setError(inputId, errId, show, msg) {
   }
 }
 
-document.getElementById('input-name').addEventListener('input', function() {
-  if (this.value.trim().length >= 2) setError('input-name', 'err-name', false);
-});
-
-document.getElementById('input-email').addEventListener('input', function() {
-  const val = this.value.trim().toLowerCase();
-  const hint = document.getElementById('email-hint');
-  if (!val) { setError('input-email', 'err-email', false); hint.style.display = ''; return; }
-  if (val.includes('@') && !val.endsWith('@myhq.in')) {
-    setError('input-email', 'err-email', true, 'Only @myhq.in addresses'); hint.style.display = 'none';
-  } else if (isMyhqEmail(val)) {
-    setError('input-email', 'err-email', false); hint.style.display = 'none';
-  }
-});
-
-document.getElementById('input-email').addEventListener('keydown', e => { if (e.key === 'Enter') handleSubmit(); });
-document.getElementById('input-name').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('input-email').focus(); });
-
 async function handleSubmit() {
-  const name = document.getElementById('input-name').value.trim();
-  const email = document.getElementById('input-email').value.trim().toLowerCase();
-  const courseEl = document.querySelector('input[name="course"]:checked');
-  const course = courseEl ? courseEl.value : '';
-  let valid = true;
+  const username = document.getElementById('input-username').value.trim();
+  const password = document.getElementById('input-password').value.trim();
+  const apiError = document.getElementById('api-error');
+  apiError.style.display = 'none';
 
-  if (!validName(name)) { setError('input-name', 'err-name', true, 'Enter your full name'); valid = false; }
-  if (!email) { setError('input-email', 'err-email', true, 'Enter your work email'); valid = false; }
-  else if (!isMyhqEmail(email)) { setError('input-email', 'err-email', true, 'Only @myhq.in addresses'); valid = false; }
-  if (!course) {
-    const e = document.getElementById('err-course');
-    e.style.display = 'flex'; e.classList.add('visible'); valid = false;
-  } else {
-    const e = document.getElementById('err-course');
-    e.style.display = 'none'; e.classList.remove('visible');
-  }
+  let valid = true;
+  if (!username) { setFieldError('input-username', 'err-username', true, 'Enter your username'); valid = false; }
+  else setFieldError('input-username', 'err-username', false);
+  if (!password) { setFieldError('input-password', 'err-password', true, 'Enter your password'); valid = false; }
+  else setFieldError('input-password', 'err-password', false);
   if (!valid) return;
 
-  registeredName = name; registeredEmail = email;
   const btn = document.getElementById('submit-btn');
   btn.classList.add('loading'); btn.disabled = true;
-  saveToStorage(name, email, course);
+  btn.querySelector('.btn-text').textContent = 'Checking…';
 
   try {
-    await fetch(APPS_SCRIPT_URL, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'register', name, email, course })
-    });
-    showSuccess();
+    const res = await fetch(APPS_SCRIPT_URL + '?action=login&username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
+    const data = await res.json();
+    if (data.success) {
+      localStorage.setItem('myhq_name', data.name);
+      localStorage.setItem('myhq_email', data.email);
+      localStorage.setItem('myhq_registered_at', new Date().toISOString());
+      document.getElementById('success-name').textContent = data.name.split(' ')[0];
+      document.getElementById('form-panel').style.display = 'none';
+      document.getElementById('success-panel').classList.add('visible');
+    } else {
+      apiError.style.display = '';
+      btn.classList.remove('loading'); btn.disabled = false;
+      btn.querySelector('.btn-text').textContent = 'Log In  →';
+    }
   } catch {
+    apiError.textContent = 'Could not connect. Please try again.';
+    apiError.style.display = '';
     btn.classList.remove('loading'); btn.disabled = false;
-    document.getElementById('api-error').classList.add('visible');
+    btn.querySelector('.btn-text').textContent = 'Log In  →';
   }
-}
-
-function showSuccess() {
-  document.getElementById('success-name').textContent = registeredName.split(' ')[0];
-  document.getElementById('form-panel').style.display = 'none';
-  document.getElementById('success-panel').classList.add('visible');
-}
-
-function saveToStorage(name, email, course) {
-  localStorage.setItem('myhq_name', name);
-  localStorage.setItem('myhq_email', email);
-  if (course) localStorage.setItem('myhq_course', course);
-  localStorage.setItem('myhq_registered_at', new Date().toISOString());
-  sessionStorage.setItem('myhq_name', name);
-  sessionStorage.setItem('myhq_email', email);
-  if (course) sessionStorage.setItem('myhq_course', course);
 }
 
 function goToHub() { window.location.href = 'hub.html'; }
 
-function proceedAnyway() {
-  const courseEl = document.querySelector('input[name="course"]:checked');
-  saveToStorage(
-    registeredName || document.getElementById('input-name').value.trim(),
-    registeredEmail || document.getElementById('input-email').value.trim().toLowerCase(),
-    courseEl ? courseEl.value : ''
-  );
-  showSuccess();
-}
-
 window.addEventListener('DOMContentLoaded', () => {
   const n = localStorage.getItem('myhq_name');
   const e = localStorage.getItem('myhq_email');
-  if (n && e && e.endsWith('@myhq.in')) window.location.href = 'hub.html';
+  if (n && e) window.location.href = 'hub.html';
 });
 </script>
 </body>
