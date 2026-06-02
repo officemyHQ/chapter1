@@ -49,12 +49,9 @@ body {
   position: absolute; top: 0; left: 0; right: 0; height: 3px;
   background: var(--blue);
 }
-.brand-wordmark {
-  font-family: var(--sans);
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--blue);
+.brand-mark {
+  height: 36px; width: auto;
+  filter: brightness(0) saturate(100%) invert(10%) sepia(90%) saturate(1200%) hue-rotate(225deg);
 }
 .topbar-tag {
   font-family: var(--sans);
@@ -372,7 +369,7 @@ body {
 
 <div class="topbar">
   <div class="topbar-rule"></div>
-  <span class="brand-wordmark">myHQ</span>
+  <img src="logo_landing_hub/myHQ_logo_landing .png" alt="myHQ" class="brand-mark">
   <span class="topbar-tag">Your Training Buddy</span>
 </div>
 
