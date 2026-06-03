@@ -2732,6 +2732,15 @@ function onAnsInput(n) {
     status.classList.remove('done');
   }
   updateTracker();
+  saveDraft();
+}
+
+function saveDraft() {
+  const draft = {};
+  for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+    draft['q' + i] = document.getElementById('aq' + i + '-ans').value;
+  }
+  localStorage.setItem('myhq_ch1_answers', JSON.stringify(draft));
 }
 
 function updateTracker() {
@@ -2812,12 +2821,12 @@ function showSubmittedState() {
 }
 
 window.addEventListener('DOMContentLoaded', function initAssessment() {
+  const saved = JSON.parse(localStorage.getItem('myhq_ch1_answers') || '{}');
+  for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+    const ta = document.getElementById('aq' + i + '-ans');
+    if (ta && saved['q' + i]) { ta.value = saved['q' + i]; onAnsInput(i); }
+  }
   if (localStorage.getItem('myhq_ch1_submitted') === 'true') {
-    const saved = JSON.parse(localStorage.getItem('myhq_ch1_answers') || '{}');
-    for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
-      const ta = document.getElementById('aq' + i + '-ans');
-      if (ta && saved['q' + i]) ta.value = saved['q' + i];
-    }
     showSubmittedState();
   }
 });
