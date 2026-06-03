@@ -449,12 +449,12 @@ function updateHub() {
     if (ch2Complete) {
       card2.classList.add('completed');
       status2.textContent = 'Completed'; status2.className = 'badge badge-mint';
-      footer2.innerHTML = '<a class="card-cta cta-done" href="chapter2.html"><span>Review</span><span class="arrow">→</span></a>';
+      footer2.innerHTML = '<a class="card-cta cta-done" href="chapter2_book.html"><span>Review</span><span class="arrow">→</span></a>';
     } else {
       const label = ch2Progress > 0 ? 'In progress' : 'Unlocked';
       status2.textContent = label; status2.className = 'badge badge-blue';
       const ctaLabel = ch2Progress > 0 ? 'Continue' : 'Start';
-      footer2.innerHTML = `<a class="card-cta cta-primary" href="chapter2.html"><span>${ctaLabel}</span><span class="arrow">→</span></a>`;
+      footer2.innerHTML = `<a class="card-cta cta-primary" href="chapter2_book.html"><span>${ctaLabel}</span><span class="arrow">→</span></a>`;
     }
     unlockSec.style.display = 'none';
   } else {
