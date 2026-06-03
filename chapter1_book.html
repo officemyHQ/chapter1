@@ -2776,21 +2776,20 @@ function submitAssessment(e) {
     answers['q' + i] = document.getElementById('aq' + i + '-ans').value.trim();
   }
   localStorage.setItem('myhq_ch1_answers', JSON.stringify(answers));
+  localStorage.setItem('myhq_ch1_submitted', 'true');
+  localStorage.setItem('myhq_ch1_complete', 'true');
+  localStorage.setItem('myhq_ch2_unlocked', 'true');
+  showSubmittedState();
 
   // Apps Script doesn't return CORS headers on POST, so use no-cors.
-  // The request still lands in the sheet; we treat the fire-and-forget as success.
+  // Fire-and-forget — state is already saved above.
   fetch(SHEET_URL, {
     method: 'POST',
     mode: 'no-cors',
     headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify({ name, email, timestamp: new Date().toISOString(), ...answers })
   })
-  .then(() => {
-    localStorage.setItem('myhq_ch1_submitted', 'true');
-    localStorage.setItem('myhq_ch1_complete', 'true');
-    localStorage.setItem('myhq_ch2_unlocked', 'true');
-    showSubmittedState();
-  })
+  .then(() => {})
   .catch(err => {
     errEl.textContent = 'Submission failed: ' + err.message + '. Please try again.';
     errEl.style.display = '';
