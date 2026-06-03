@@ -2778,6 +2778,7 @@ function submitAssessment(e) {
   })
   .then(() => {
     localStorage.setItem('myhq_ch1_submitted', 'true');
+    localStorage.setItem('myhq_ch1_complete', 'true');
     localStorage.setItem('myhq_ch2_unlocked', 'true');
     showSubmittedState();
   })

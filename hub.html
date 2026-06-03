@@ -188,16 +188,15 @@ body {
 .card-backdrop::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.55) 100%);
+  background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0.85) 35%, rgba(255,255,255,0) 100%);
   pointer-events: none;
 }
 .card-backdrop .card-num,
 .card-backdrop .card-title,
 .card-backdrop .badge { position: relative; z-index: 1; }
 .card-backdrop .card-num {
-  color: #ffffff;
+  color: var(--blue-soft);
   margin-bottom: 4px;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
 }
 .card-backdrop .card-title { color: var(--blue); }
 
@@ -380,7 +379,7 @@ body {
     <!-- CHAPTER 2 -->
     <div class="course-card locked" id="card-ch2">
       <div class="card-top-bar"></div>
-      <div class="card-backdrop" style="background-image:url('logo_landing_hub/myHQ_logo_landing.png'); background-size:contain; background-repeat:no-repeat; background-position:center; background-color:#eef0fd;">
+      <div class="card-backdrop" style="background-image:url('logo_landing_hub/myHQ_logo_landing.png'); background-size:cover; background-position:center; background-color:#eef0fd;">
         <div class="card-head">
           <div class="card-num">Chapter 02</div>
           <div class="card-title">Who We Are</div>
