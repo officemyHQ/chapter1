@@ -254,13 +254,15 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 
 /* ── READ MODE ── */
 #read-mode { margin-top: 52px; }
-.r-layout { display: flex; max-width: 1160px; margin: 0 auto; padding: 0 24px 80px; align-items: flex-start; }
-.r-sidebar { width: 220px; flex-shrink: 0; position: sticky; top: 72px; padding: 32px 20px 0 0; max-height: calc(100vh - 72px); overflow-y: auto; }
+.r-layout { display: flex; max-width: 100%; margin: 0; padding: 0 48px 80px 0; align-items: flex-start; }
+.r-sidebar { width: 240px; flex-shrink: 0; position: sticky; top: 52px; padding: 32px 24px 0 24px; max-height: calc(100vh - 52px); overflow-y: auto; }
+.toc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 10px; }
+.toc-ref-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 14px 0 5px 10px; opacity: 0.6; }
 .r-toc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 10px; }
 .toc-link { display: block; font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; padding: 7px 10px; border-radius: 6px; margin-bottom: 2px; transition: all 0.15s; border-left: 2px solid transparent; }
 .toc-link:hover { color: var(--ink); background: rgba(0,0,0,0.04); }
 .toc-link.active { color: var(--blue); font-weight: 700; border-left-color: var(--blue); background: rgba(30,34,170,0.05); }
-.r-content { flex: 1; min-width: 0; padding: 40px 0 0 40px; }
+.r-content { flex: 1; min-width: 0; padding: 40px 0 0 48px; max-width: none; }
 
 .r-section { margin-bottom: 72px; }
 .r-section-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--blue); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
@@ -854,7 +856,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 
     <!-- SIDEBAR TOC -->
     <aside class="r-sidebar">
-      <div class="r-toc-label">Chapter 2</div>
+      <div class="toc-label">In this chapter</div>
       <a href="#r-intro"     class="toc-link" data-s="r-intro">Introduction</a>
       <a href="#r-timeline"  class="toc-link" data-s="r-timeline">01 · The Timeline</a>
       <a href="#r-verticals" class="toc-link" data-s="r-verticals">02 · Three Verticals</a>
