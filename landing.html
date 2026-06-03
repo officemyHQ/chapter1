@@ -491,6 +491,7 @@ async function handleSubmit() {
     if (data.success) {
       localStorage.setItem('myhq_name', data.name);
       localStorage.setItem('myhq_email', data.email);
+      localStorage.setItem('myhq_course', data.course || 'Beginner Course');
       localStorage.setItem('myhq_registered_at', new Date().toISOString());
       document.getElementById('success-name').textContent = data.name.split(' ')[0];
       document.getElementById('form-panel').style.display = 'none';

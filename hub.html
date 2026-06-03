@@ -56,7 +56,7 @@ body {
 .topbar-right { display: flex; align-items: center; gap: 24px; }
 .nav-user {
   font-family: var(--mono);
-  font-size: 9px; font-weight: 600;
+  font-size: 18px; font-weight: 600;
   letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--blue-soft);
 }
@@ -341,7 +341,7 @@ body {
   <div class="topbar-rule"></div>
   <img src="logo_landing_hub/myHQ_logo_landing.png" alt="myHQ" class="brand-mark">
   <div class="topbar-right">
-    <div class="nav-user">Beginner Course</div>
+    <div class="nav-user" id="nav-course"></div>
     <a onclick="window.location.href='https://krrishmyhq.github.io/chapter1/landing.html'" style="cursor:pointer;font-size:13px;font-weight:600;color:#1A1E9E;text-decoration:none;">Courses</a>
   </div>
 </div>
@@ -350,7 +350,7 @@ body {
 <!-- PAGE HEADER -->
 <div class="page-header">
   <div class="page-title">Hi, <span id="header-username">there</span></div>
-  <div class="page-subtitle">Here are the listed chapters for your course</div>
+  <div class="page-subtitle">Here are the listed chapters for <span id="subtitle-course"></span></div>
 </div>
 
 <!-- COURSES -->
@@ -407,6 +407,9 @@ window.addEventListener('DOMContentLoaded', function() {
   }
   const firstName = name.split(' ')[0];
   document.getElementById('header-username').textContent = firstName;
+  const course = localStorage.getItem('myhq_course') || 'Beginner Course';
+  document.getElementById('nav-course').textContent = course;
+  document.getElementById('subtitle-course').textContent = course;
   updateHub();
 });
 
