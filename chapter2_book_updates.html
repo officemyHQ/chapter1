@@ -816,6 +816,10 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 .book-team-meta-row { font-size: 12px; color: var(--muted); }
 .book-team-meta-row strong { color: var(--ink); font-weight: 600; }
 .book-team-tag { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 8px; border-radius: 4px; background: rgba(30,34,170,0.08); color: var(--blue); margin-bottom: 6px; }
+.book-team-avatar { width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--hairline); flex-shrink: 0; background: rgba(30,34,170,0.06); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; color: var(--blue); }
+.book-team-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.book-team-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.book-team-header-text { flex: 1; }
 
 /* Org pyramid — book style, widths stepped, all details shown */
 .book-org { display: flex; flex-direction: column; gap: 8px; margin: 24px 0; }
@@ -1099,14 +1103,19 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
         <div class="section-outcome"><span>Learning Outcome:</span> Who leads myHQ, what they did before, and why the team composition matters.</div>
         <div class="section-num">03</div>
         <h2 class="section-title">An entrepreneurial team using tech to disrupt commercial real estate.</h2>
-        <p class="section-body">myHQ is led by two IIT Delhi founders backed by a team of operators who've built and scaled businesses before. Every PnL head has domain depth. Every leader has skin in the game.</p>
+        <p class="section-body">myHQ is led by two IIT Delhi founders backed by a team of operators who've built and scaled businesses before. Every business head has domain depth. Every leader has skin in the game.</p>
 
         <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin:24px 0 12px;">Founders</div>
         <div class="book-team-grid">
           <div class="book-team-card">
             <div class="book-team-body">
-              <div class="book-team-name">Utkarsh Kawatra</div>
-              <div class="book-team-role">Co-Founder &amp; CEO</div>
+              <div class="book-team-header">
+                <div class="book-team-avatar"><img src="ch2_book_images/utkarsh.png" alt="Utkarsh Kawatra" onerror="this.style.display='none';this.parentElement.innerHTML='UK';"></div>
+                <div class="book-team-header-text">
+                  <div class="book-team-name">Utkarsh Kawatra</div>
+                  <div class="book-team-role">Co-Founder &amp; CEO</div>
+                </div>
+              </div>
               <div class="book-team-bio">Utkarsh co-founded myHQ in 2016 with one stubborn belief: professionals deserve the freedom to work from anywhere — at the cost of a coffee. He spent time at Helion Ventures before returning to that founding conviction. While still at IIT Delhi, he also co-founded BloodConnect, an NGO now operating across 10+ cities with a 300+ person volunteer team.</div>
               <div class="book-team-meta">
                 <div class="book-team-meta-row"><strong>Previous:</strong> Helion Ventures · Opera Solutions · BloodConnect</div>
@@ -1117,8 +1126,13 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
           </div>
           <div class="book-team-card">
             <div class="book-team-body">
-              <div class="book-team-name">Vinayak Aggarwal</div>
-              <div class="book-team-role">Co-Founder &amp; CTO</div>
+              <div class="book-team-header">
+                <div class="book-team-avatar"><img src="ch2_book_images/vinayak.jpeg" alt="Vinayak Aggarwal" onerror="this.style.display='none';this.parentElement.innerHTML='VA';"></div>
+                <div class="book-team-header-text">
+                  <div class="book-team-name">Vinayak Aggarwal</div>
+                  <div class="book-team-role">Co-Founder &amp; CTO</div>
+                </div>
+              </div>
               <div class="book-team-bio">Vinayak leads product, technology, and marketing at myHQ. Before co-founding myHQ, he worked at Goldman Sachs as a Quant &amp; Algorithmic Trading Strategist. He holds two patents in Machine Learning and Computer Vision. The technology platform that powers myHQ's inventory, transactions, and advisory tools is his.</div>
               <div class="book-team-meta">
                 <div class="book-team-meta-row"><strong>Previous:</strong> Goldman Sachs · Quant &amp; Algo Trading</div>
@@ -1129,13 +1143,18 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
           </div>
         </div>
 
-        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin:32px 0 12px;">PnL Leadership</div>
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin:32px 0 12px;">Business Heads</div>
         <div class="book-team-grid" style="grid-template-columns:repeat(2,1fr);">
           <div class="book-team-card">
             <div class="book-team-body">
               <div class="book-team-tag">Assisted Marketplace</div>
-              <div class="book-team-name">Manoj Kumar Yadav</div>
-              <div class="book-team-role">Business Head — Assisted Marketplace</div>
+              <div class="book-team-header">
+                <div class="book-team-avatar"><img src="ch2_book_images/manoj.jpeg" alt="Manoj Kumar Yadav" onerror="this.style.display='none';this.parentElement.innerHTML='MY';"></div>
+                <div class="book-team-header-text">
+                  <div class="book-team-name">Manoj Kumar Yadav</div>
+                  <div class="book-team-role">Business Head — Assisted Marketplace</div>
+                </div>
+              </div>
               <div class="book-team-bio">Manoj leads the Assisted Marketplace vertical at myHQ with 7+ years of deep experience in real estate. He started his entrepreneurial journey co-founding SchoolLog before pivoting into commercial real estate.</div>
               <div class="book-team-meta">
                 <div class="book-team-meta-row"><strong>Previous:</strong> Co-founder, SchoolLog</div>
@@ -1146,9 +1165,14 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
           </div>
           <div class="book-team-card">
             <div class="book-team-body">
-              <div class="book-team-tag" style="background:rgba(30,34,170,0.08);color:var(--blue);">Virtual Office</div>
-              <div class="book-team-name">Nitin Agarwal</div>
-              <div class="book-team-role">PnL Head — Virtual Office</div>
+              <div class="book-team-tag">Virtual Office</div>
+              <div class="book-team-header">
+                <div class="book-team-avatar"><img src="ch2_book_images/nitin.jpeg" alt="Nitin Agarwal" onerror="this.style.display='none';this.parentElement.innerHTML='NA';"></div>
+                <div class="book-team-header-text">
+                  <div class="book-team-name">Nitin Agarwal</div>
+                  <div class="book-team-role">Business Head — Virtual Office</div>
+                </div>
+              </div>
               <div class="book-team-bio">Nitin leads the Virtual Office vertical at myHQ. He is a serial entrepreneur — having co-founded Paavan and RunnerBee before joining myHQ. He brings deep product thinking to a vertical that handles compliance and registration for thousands of businesses across India.</div>
               <div class="book-team-meta">
                 <div class="book-team-meta-row"><strong>Previous:</strong> Co-founder Paavan · Co-founder RunnerBee</div>
@@ -1159,10 +1183,15 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
           </div>
           <div class="book-team-card">
             <div class="book-team-body">
-              <div class="book-team-tag" style="background:rgba(255,184,72,0.15);color:#c97d00;">On Demand / Intl.</div>
-              <div class="book-team-name">Judhajit Bal</div>
-              <div class="book-team-role">PnL Head — On Demand &amp; International</div>
-              <div class="book-team-bio">Judhajit leads On Demand and the International expansion at myHQ. He co-founded Maidaan and has a background in FMCG with Coca-Cola. He brings consumer-market instincts to a product that serves millions of individual workspace bookings a year — and is now taking that model global.</div>
+              <div class="book-team-tag">On Demand / Intl.</div>
+              <div class="book-team-header">
+                <div class="book-team-avatar"><img src="ch2_book_images/judhajit.jpeg" alt="Judhajit Bal" onerror="this.style.display='none';this.parentElement.innerHTML='JB';"></div>
+                <div class="book-team-header-text">
+                  <div class="book-team-name">Judhajit Bal</div>
+                  <div class="book-team-role">Business Head — Growth &amp; International</div>
+                </div>
+              </div>
+              <div class="book-team-bio">Judhajit leads growth and international expansion at myHQ. He co-founded Maidaan and has a background in FMCG with Coca-Cola. He brings consumer-market instincts to a product that serves millions of individual workspace bookings a year — and is now taking that model global.</div>
               <div class="book-team-meta">
                 <div class="book-team-meta-row"><strong>Previous:</strong> Co-founder Maidaan · Coca-Cola</div>
                 <div class="book-team-meta-row"><strong>Education:</strong> AIT Pune · MDI Gurgaon</div>
@@ -1172,9 +1201,14 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
           </div>
           <div class="book-team-card">
             <div class="book-team-body">
-              <div class="book-team-tag" style="background:rgba(190,229,194,0.3);color:#2a7a30;">Marketing</div>
-              <div class="book-team-name">Malvika Sankrityayan</div>
-              <div class="book-team-role">Marketing Head</div>
+              <div class="book-team-tag">Marketing</div>
+              <div class="book-team-header">
+                <div class="book-team-avatar"><img src="ch2_book_images/malvika.jpeg" alt="Malvika Sankrityayan" onerror="this.style.display='none';this.parentElement.innerHTML='MS';"></div>
+                <div class="book-team-header-text">
+                  <div class="book-team-name">Malvika Sankrityayan</div>
+                  <div class="book-team-role">Marketing Head</div>
+                </div>
+              </div>
               <div class="book-team-bio">Malvika leads marketing at myHQ, driving brand, demand generation, and content across all business verticals. She brings experience from Accredian and S&amp;P Global — where she developed deep expertise in B2B marketing, product positioning, and growth programs in fast-moving markets.</div>
               <div class="book-team-meta">
                 <div class="book-team-meta-row"><strong>Previous:</strong> Accredian · S&amp;P Global</div>
