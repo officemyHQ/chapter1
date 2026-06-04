@@ -9,9 +9,9 @@
 <body>
   <p>Redirecting… <a href="landing.html">click here if not redirected</a></p>
   <script>
-    // Clear all myhq_ keys so stale sessions don't bypass the login flow
-    Object.keys(localStorage).forEach(function(k) {
-      if (k.startsWith('myhq_')) localStorage.removeItem(k);
+    // Clear only session/identity keys — preserve progress and answers across logins
+    ['myhq_name','myhq_email','myhq_course','myhq_registered_at'].forEach(function(k) {
+      localStorage.removeItem(k);
     });
     window.location.replace('landing.html');
   </script>
