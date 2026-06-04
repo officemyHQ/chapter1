@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>myHQ Admin — Training Tracker</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #F4F5F7;
+      color: #1A1D2E;
+      min-height: 100vh;
+    }
+
+    /* Login screen */
+    #login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .login-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    .login-logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1A1D2E;
+      margin-bottom: 8px;
+      letter-spacing: -0.03em;
+    }
+
+    .login-sub {
+      font-size: 13px;
+      color: #6B7280;
+      margin-bottom: 36px;
+    }
+
+    .login-card label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .login-card input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 20px;
+    }
+
+    .login-card input:focus { border-color: #2563EB; }
+
+    .login-btn {
+      width: 100%;
+      padding: 13px;
+      background: #2563EB;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .login-btn:hover { background: #1D4ED8; }
+    .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .login-error {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #DC2626;
+      display: none;
+    }
+
+    /* Dashboard */
+    #dashboard { display: none; }
+
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid #E5E7EB;
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .topbar-brand {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #1A1D2E;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .refresh-btn {
+      padding: 7px 16px;
+      background: #F3F4F6;
+      border: 1px solid #E5E7EB;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #374151;
+      transition: background 0.15s;
+    }
+
+    .refresh-btn:hover { background: #E5E7EB; }
+
+    .logout-btn {
+      padding: 7px 16px;
+      background: none;
+      border: 1px solid #E5E7EB;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #6B7280;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .logout-btn:hover { border-color: #DC2626; color: #DC2626; }
+
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 24px;
+    }
+
+    /* Stats row */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #6B7280;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1A1D2E;
+      letter-spacing: -0.03em;
+    }
+
+    .stat-value.blue { color: #2563EB; }
+    .stat-value.green { color: #059669; }
+
+    /* Filters */
+    .filters {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-input {
+      padding: 9px 14px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      min-width: 220px;
+      transition: border-color 0.15s;
+    }
+
+    .filter-input:focus { border-color: #2563EB; }
+
+    .filter-select {
+      padding: 9px 14px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      background: #fff;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .filter-select:focus { border-color: #2563EB; }
+
+    /* Table */
+    .table-wrap {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: #F9FAFB;
+      border-bottom: 1px solid #E5E7EB;
+    }
+
+    th {
+      padding: 12px 20px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #6B7280;
+    }
+
+    td {
+      padding: 14px 20px;
+      font-size: 14px;
+      border-bottom: 1px solid #F3F4F6;
+      color: #374151;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #FAFAFA; }
+
+    .name-cell {
+      font-weight: 600;
+      color: #1A1D2E;
+    }
+
+    .email-cell {
+      color: #6B7280;
+      font-size: 13px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-done {
+      background: #D1FAE5;
+      color: #065F46;
+    }
+
+    .badge-pending {
+      background: #F3F4F6;
+      color: #9CA3AF;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .timestamp {
+      font-size: 12px;
+      color: #9CA3AF;
+    }
+
+    .empty-row td {
+      text-align: center;
+      padding: 48px;
+      color: #9CA3AF;
+      font-size: 14px;
+    }
+
+    .last-updated {
+      font-size: 12px;
+      color: #9CA3AF;
+      margin-top: 16px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login Screen -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">myHQ Admin</div>
+    <div class="login-sub">Training Completion Tracker — Internal Use Only</div>
+    <label for="admin-key">Admin Passphrase</label>
+    <input type="password" id="admin-key" placeholder="Enter passphrase" />
+    <button class="login-btn" id="login-btn" onclick="loadDashboard()">Access Dashboard</button>
+    <div class="login-error" id="login-error">Incorrect passphrase. Please try again.</div>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-brand">myHQ · Training Tracker</div>
+    <div class="topbar-right">
+      <button class="refresh-btn" onclick="refreshData()">↻ Refresh</button>
+      <button class="logout-btn" onclick="logout()">Log out</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">Total Users</div>
+        <div class="stat-value" id="stat-total">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Ch1 Submitted</div>
+        <div class="stat-value green" id="stat-ch1">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Ch2 Submitted</div>
+        <div class="stat-value blue" id="stat-ch2">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Not Started</div>
+        <div class="stat-value" id="stat-none">—</div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <input class="filter-input" type="text" id="search" placeholder="Search by name or email…" oninput="renderTable()" />
+      <select class="filter-select" id="filter-course" onchange="renderTable()">
+        <option value="">Course — All</option>
+      </select>
+      <select class="filter-select" id="filter-ch1" onchange="renderTable()">
+        <option value="">Chapter 1 — All</option>
+        <option value="done">Submitted</option>
+        <option value="pending">Not submitted</option>
+      </select>
+      <select class="filter-select" id="filter-ch2" onchange="renderTable()">
+        <option value="">Chapter 2 — All</option>
+        <option value="done">Submitted</option>
+        <option value="pending">Not submitted</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Course</th>
+            <th>Ch1 — Where We Play</th>
+            <th>Ch2 — Who We Are</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr class="empty-row"><td colspan="5">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="last-updated" id="last-updated"></div>
+  </div>
+</div>
+
+<script>
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwX0Z5vx6DSwdwZwK26pKZL3V3U9XwEyWgPa9Ek_cFEH1_tpULnWNcn7RlgE-wT8M9M/exec';
+  let allUsers = [];
+  let adminKey = '';
+
+  document.getElementById('admin-key').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') loadDashboard();
+  });
+
+  async function loadDashboard() {
+    const key = document.getElementById('admin-key').value.trim();
+    if (!key) return;
+    const btn = document.getElementById('login-btn');
+    const err = document.getElementById('login-error');
+    btn.disabled = true;
+    btn.textContent = 'Loading…';
+    err.style.display = 'none';
+
+    try {
+      const res = await fetch(APPS_SCRIPT_URL + '?action=admin&key=' + encodeURIComponent(key));
+      const data = await res.json();
+      if (!data.success) {
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Access Dashboard';
+        return;
+      }
+      adminKey = key;
+      allUsers = Object.values(data.users);
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      updateStats();
+      renderTable();
+      document.getElementById('last-updated').textContent = 'Last updated: ' + new Date().toLocaleString();
+    } catch (e) {
+      err.textContent = 'Could not connect. Check your internet connection.';
+      err.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Access Dashboard';
+    }
+  }
+
+  async function refreshData() {
+    const tbody = document.getElementById('table-body');
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">Refreshing…</td></tr>';
+    try {
+      const res = await fetch(APPS_SCRIPT_URL + '?action=admin&key=' + encodeURIComponent(adminKey));
+      const data = await res.json();
+      if (data.success) {
+        allUsers = Object.values(data.users);
+        updateStats();
+        renderTable();
+        document.getElementById('last-updated').textContent = 'Last updated: ' + new Date().toLocaleString();
+      }
+    } catch (e) {}
+  }
+
+  function updateStats() {
+    const total = allUsers.length;
+    const ch1 = allUsers.filter(u => u.ch1).length;
+    const ch2 = allUsers.filter(u => u.ch2).length;
+    const none = allUsers.filter(u => !u.ch1 && !u.ch2).length;
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-ch1').textContent = ch1;
+    document.getElementById('stat-ch2').textContent = ch2;
+    document.getElementById('stat-none').textContent = none;
+
+    // Populate course filter dynamically from actual data
+    const courses = [...new Set(allUsers.map(u => u.course).filter(Boolean))].sort();
+    const courseSelect = document.getElementById('filter-course');
+    const current = courseSelect.value;
+    courseSelect.innerHTML = '<option value="">Course — All</option>' +
+      courses.map(c => `<option value="${esc(c)}"${c === current ? ' selected' : ''}>${esc(c)}</option>`).join('');
+  }
+
+  function renderTable() {
+    const search = document.getElementById('search').value.toLowerCase();
+    const filterCourse = document.getElementById('filter-course').value;
+    const filterCh1 = document.getElementById('filter-ch1').value;
+    const filterCh2 = document.getElementById('filter-ch2').value;
+
+    let filtered = allUsers.filter(u => {
+      const matchSearch = !search || u.name.toLowerCase().includes(search) || (u.email || '').toLowerCase().includes(search);
+      const matchCourse = !filterCourse || u.course === filterCourse;
+      const matchCh1 = !filterCh1 || (filterCh1 === 'done' ? u.ch1 : !u.ch1);
+      const matchCh2 = !filterCh2 || (filterCh2 === 'done' ? u.ch2 : !u.ch2);
+      return matchSearch && matchCourse && matchCh1 && matchCh2;
+    });
+
+    const tbody = document.getElementById('table-body');
+    if (!filtered.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No users match your filters.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(u => `
+      <tr>
+        <td class="name-cell">${esc(u.name)}</td>
+        <td class="email-cell">${esc(u.email || '—')}</td>
+        <td>${esc(u.course || 'Beginner Course')}</td>
+        <td>
+          ${u.ch1
+            ? `<span class="badge badge-done"><span class="dot"></span>Submitted</span>
+               ${u.ch1_submitted_at ? '<div class="timestamp">' + formatDate(u.ch1_submitted_at) + '</div>' : ''}`
+            : `<span class="badge badge-pending"><span class="dot"></span>Not submitted</span>`}
+        </td>
+        <td>
+          ${u.ch2
+            ? `<span class="badge badge-done"><span class="dot"></span>Submitted</span>
+               ${u.ch2_submitted_at ? '<div class="timestamp">' + formatDate(u.ch2_submitted_at) + '</div>' : ''}`
+            : `<span class="badge badge-pending"><span class="dot"></span>Not submitted</span>`}
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function formatDate(ts) {
+    if (!ts) return '';
+    const d = new Date(ts);
+    return isNaN(d) ? ts : d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function esc(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function logout() {
+    adminKey = '';
+    allUsers = [];
+    document.getElementById('admin-key').value = '';
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+  }
+</script>
+</body>
+</html>
