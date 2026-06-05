@@ -185,7 +185,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 .s4-offices strong { color: var(--muted); font-weight: 400; }
 
 /* ── SCREEN 5: TEAM ── */
-.screen-team { background: var(--white); display: flex; flex-direction: column; justify-content: center; padding: clamp(28px,4.5vw,64px) clamp(32px,6vw,80px); gap: 28px; }
+.screen-team { background: var(--white); display: flex; flex-direction: column; justify-content: center; padding: clamp(28px,4.5vw,64px) clamp(32px,6vw,80px); gap: 28px; overflow: hidden; }
 .s5t-header { text-align: center; }
 .s5t-eyebrow { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--blue); margin-bottom: 10px; }
 .s5t-title { font-size: clamp(2rem,3.8vw,3.2rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
@@ -599,7 +599,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
       <h2 class="s5t-title">An entrepreneurial team using tech to disrupt commercial real estate.</h2>
       <p class="s5t-sub"></p>
     </div>
-    <img src="ch2_book_images/leadership.png" alt="Leadership Team & Background" id="img-team-slide" style="width:100%;max-height:calc(100% - 120px);object-fit:contain;display:block;">
+    <img src="ch2_book_images/leadership.png" alt="Leadership Team & Background" id="img-team-slide" style="width:100%;flex:1;min-height:0;object-fit:contain;display:block;">
     <button class="screen-next-btn" onclick="next()"><i class="fa-solid fa-arrow-right"></i></button>
   </div>
 
