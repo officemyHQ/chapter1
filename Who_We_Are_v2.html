@@ -237,7 +237,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 .s5t-logo-text.inst { font-size: 11px; font-weight: 700; color: var(--blue); text-align: center; }
 
 /* ── SCREEN 6: ORG PYRAMID ── */
-.screen-org { background: var(--white); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 8px clamp(24px,3vw,48px) 60px; gap: 10px; }
+.screen-org { background: var(--white); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: clamp(8px,1.5vw,24px) clamp(24px,3vw,48px) 60px; gap: 8px; overflow: hidden; }
 .s6-title { font-size: clamp(1.1rem,2vw,1.5rem); font-weight: 700; letter-spacing: -0.02em; color: var(--ink); text-align: center; }
 .s6-pyramid { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; max-width: 1000px; }
 .s6-tier { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; border-radius: 8px; padding: 24px 32px; text-align: center; }
@@ -658,14 +658,14 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
           <div class="oc-section oc-section--fn">Business Enablement Functions</div>
           <div class="oc-hier-wrap">
             <div class="oc-fn-hierarchy">
-              <div class="oc-fn-row"><div class="oc-fnnode">Tech &amp; Product</div></div>
-              <div class="oc-fn-row"><div class="oc-fnnode">Marketing</div></div>
-              <div class="oc-fn-row"><div class="oc-fnnode">Finance &amp; Legal</div></div>
-              <div class="oc-fn-row"><div class="oc-fnnode">HR &amp; People</div></div>
+              <div class="oc-fn-row"><div class="oc-fnnode">Tech &amp; Product</div><div class="oc-fn-desc">Builds and maintains the platform powering all three verticals.</div></div>
+              <div class="oc-fn-row"><div class="oc-fnnode">Marketing</div><div class="oc-fn-desc">Drives brand, demand generation, and operator partnerships.</div></div>
+              <div class="oc-fn-row"><div class="oc-fnnode">Finance &amp; Legal</div><div class="oc-fn-desc">Manages P&amp;L, compliance, contracts, and fundraising.</div></div>
+              <div class="oc-fn-row"><div class="oc-fnnode">HR &amp; People</div><div class="oc-fn-desc">Owns hiring, culture, and performance across the org.</div></div>
             </div>
             <div class="oc-h-row--l">
               <span class="oc-l-curve"></span>
-              <div class="oc-fnnode">IT &amp; Admin</div>
+              <div class="oc-fnnode">IT &amp; Admin</div><div class="oc-fn-desc">Keeps infrastructure, tools, and operations running smoothly.</div>
             </div>
           </div>
         </div>
@@ -740,6 +740,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
     .oc-hnode--3 { background:rgba(30,34,170,0.45); color:#fff; width:170px; }
     .oc-hnode--4 { background:rgba(30,34,170,0.25); color:var(--blue); width:150px; }
     .oc-hnode--5 { background:rgba(30,34,170,0.1); color:var(--blue); width:120px; }
+    .oc-fn-desc { font-size:10px; color:var(--muted); line-height:1.4; max-width:180px; padding-left:10px; }
     </style>
     <button class="screen-next-btn" onclick="next()"><i class="fa-solid fa-arrow-right"></i></button>
   </div>
