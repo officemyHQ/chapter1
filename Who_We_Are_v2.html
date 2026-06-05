@@ -185,7 +185,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 .s4-offices strong { color: var(--muted); font-weight: 400; }
 
 /* ── SCREEN 5: TEAM ── */
-.screen-team { background: var(--white); display: flex; flex-direction: column; justify-content: center; padding: clamp(28px,4.5vw,64px) clamp(32px,6vw,80px); gap: 28px; overflow: hidden; height: 100%; box-sizing: border-box; }
+.screen-team { background: var(--white); display: flex; flex-direction: column; justify-content: center; padding: clamp(28px,4.5vw,64px) clamp(32px,6vw,80px); gap: 16px; overflow: hidden; height: 100%; box-sizing: border-box; }
 .s5t-header { text-align: center; }
 .s5t-eyebrow { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--blue); margin-bottom: 10px; }
 .s5t-title { font-size: clamp(2rem,3.8vw,3.2rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
@@ -600,13 +600,11 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
       <p class="s5t-sub"></p>
     </div>
     <div class="s5t-two-panel" style="flex:1;min-height:0;">
-      <div class="s5t-panel" style="display:flex;flex-direction:column;min-height:0;">
-        <div class="s5t-panel-label">Leadership Team</div>
-        <img src="ch2_book_images/leadership.png" alt="Leadership Team" style="width:100%;flex:1;min-height:0;object-fit:contain;display:block;">
+      <div class="s5t-panel" style="display:flex;flex-direction:column;min-height:0;padding:0;">
+        <img src="ch2_book_images/leadership.png" alt="Leadership Team" style="width:100%;height:100%;object-fit:contain;display:block;">
       </div>
-      <div class="s5t-panel" style="display:flex;flex-direction:column;min-height:0;">
-        <div class="s5t-panel-label">Their Background</div>
-        <img src="ch2_book_images/background.png" alt="Their Background" style="width:100%;flex:1;min-height:0;object-fit:contain;display:block;">
+      <div class="s5t-panel" style="display:flex;flex-direction:column;min-height:0;padding:0;">
+        <img src="ch2_book_images/background.png" alt="Their Background" style="width:100%;height:100%;object-fit:contain;display:block;">
       </div>
     </div>
     <button class="screen-next-btn" onclick="next()"><i class="fa-solid fa-arrow-right"></i></button>
