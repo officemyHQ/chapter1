@@ -653,10 +653,10 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
         <!-- RIGHT: BUSINESS ENABLEMENT FUNCTIONS -->
         <div class="oc-col">
           <div class="oc-stem"></div>
-          <div style="display:flex;flex-direction:column;align-items:flex-start;width:100%;padding-left:24px;border-left:2px solid rgba(30,34,170,0.3);">
-          <div class="oc-section oc-section--fn" style="margin-left:-2px;">Business Enablement Functions</div>
-          <div class="oc-hier-wrap" style="border-left:none;">
-            <div class="oc-fn-hierarchy" style="padding-top:0;margin-top:0;border-left:none;">
+          <div class="oc-fn-connected">
+          <div class="oc-section oc-section--fn">Business Enablement Functions</div>
+          <div class="oc-hier-wrap">
+            <div class="oc-fn-hierarchy">
               <div class="oc-fn-row"><div class="oc-fnnode">Tech &amp; Product</div><div class="oc-fn-desc">Builds and maintains the platform powering all three verticals.</div></div>
               <div class="oc-fn-row"><div class="oc-fnnode">Marketing</div><div class="oc-fn-desc">Drives brand, demand generation, and operator partnerships.</div></div>
               <div class="oc-fn-row"><div class="oc-fnnode">Finance &amp; Legal</div><div class="oc-fn-desc">Manages P&amp;L, compliance, contracts, and fundraising.</div></div>
@@ -710,7 +710,9 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
     .oc-vnode { border:1.5px solid var(--blue); color:var(--blue); font-size:14px; font-weight:600; padding:10px 12px; border-radius:8px; text-align:center; flex:1; display:flex; align-items:center; justify-content:center; min-height:52px; }
 
     /* fn-hierarchy: mirrors oc-hierarchy */
-    .oc-fn-hierarchy { display:flex; flex-direction:column; align-items:flex-start; border-left:2px solid rgba(30,34,170,0.3); padding-top:0; padding-bottom:0; gap:0; width:fit-content; min-width:200px; margin-top:-1px; }
+    .oc-fn-connected { display:flex; flex-direction:column; align-items:flex-start; border-left:2px solid rgba(30,34,170,0.3); padding-left:20px; }
+    .oc-fn-connected .oc-section { margin-left:-2px; }
+    .oc-fn-hierarchy { display:flex; flex-direction:column; align-items:flex-start; border-left:none; padding-top:0; padding-bottom:0; gap:0; width:fit-content; min-width:200px; }
     .oc-fn-row { display:flex; align-items:center; padding:12px 0; position:relative; }
     .oc-fn-row::before { content:''; display:block; width:20px; height:1.5px; background:rgba(30,34,170,0.3); flex-shrink:0; }
     .oc-fn-row .oc-fnnode { margin-left:6px; }
@@ -719,9 +721,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 
     /* hierarchy with arrows — centered under dashed box */
     /* hierarchy wrapper — aligns border column and L-row at same left edge */
-    .oc-hier-wrap { display:flex; flex-direction:column; align-items:flex-start; margin:0 auto; width:fit-content; border-left:2px solid rgba(30,34,170,0.3); padding-left:0; }
-    .oc-hier-wrap > .oc-fn-hierarchy { border-left:none; }
-    .oc-hier-wrap > .oc-hierarchy { border-left:none; }
+    .oc-hier-wrap { display:flex; flex-direction:column; align-items:flex-start; margin:0 auto; width:fit-content; }
     .oc-hierarchy { display:flex; flex-direction:column; align-items:flex-start; border-left:2px solid rgba(30,34,170,0.3); padding-bottom:0; gap:0; width:fit-content; min-width:200px; }
     .oc-h-row { display:flex; align-items:center; padding:8px 0; position:relative; }
     .oc-h-row::before { content:''; display:block; width:20px; height:1.5px; background:rgba(30,34,170,0.3); flex-shrink:0; }
