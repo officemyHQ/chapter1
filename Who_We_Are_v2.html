@@ -239,7 +239,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 
 /* ── SCREEN 6: ORG PYRAMID ── */
 .screen-org { background: var(--white); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: clamp(8px,1.5vw,24px) clamp(24px,3vw,48px) 60px; gap: 8px; overflow: hidden; }
-.s6-title { font-size: clamp(1.6rem,2.8vw,2.2rem); font-weight: 700; letter-spacing: -0.02em; color: var(--ink); text-align: center; }
+.s6-title { font-size: clamp(1.8rem,3.5vw,3rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); text-align: center; }
 .s6-pyramid { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; max-width: 1000px; }
 .s6-tier { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; border-radius: 8px; padding: 24px 32px; text-align: center; }
 .s6-tier--1 { width: 35%; background: #1E22AA; }
@@ -251,18 +251,45 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 .s6-tier-meta  { font-size: 15px; font-weight: 700; color: var(--green); }
 
 /* ── SCREEN 7: SCALE & CLIENTS ── */
-.screen-scale { background: var(--white); display: flex; flex-direction: column; justify-content: flex-start; padding: clamp(40px,5vw,64px) clamp(32px,5vw,64px) 56px; gap: 10px; overflow-y: auto; }
+.screen-scale { background: var(--white); display: flex; flex-direction: column; justify-content: flex-start; padding: clamp(16px,2vw,28px) clamp(24px,4vw,48px) 16px; gap: 6px; overflow: hidden; }
 .s7-eyebrow { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--blue); display: flex; align-items: center; gap: 10px; }
 .s7-eyebrow::before { content: ''; width: 9px; height: 9px; background: var(--blue); border-radius: 50%; display: block; }
-.s7-title { font-size: clamp(1.6rem,3vw,2.4rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
-.s7-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; width: 100%; }
-.s7-stat { border: 1px solid var(--hairline); border-radius: var(--radius); background: #f7f8ff; display: flex; align-items: flex-start; gap: 10px; padding: 12px 12px; }
-.s7-stat-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; width: 32px; text-align: center; }
-.s7-stat-num { font-size: 1.15rem; font-weight: 800; color: var(--blue); letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 2px; }
-.s7-stat-lbl { font-size: 12px; color: var(--body); line-height: 1.4; font-weight: 500; }
+.s7-title { font-size: clamp(1.1rem,2vw,1.6rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); flex-shrink: 0; }
+.s7-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; width: 100%; flex-shrink: 0; }
+.s7-stat { border: 1px solid var(--hairline); border-radius: var(--radius); background: #f7f8ff; display: flex; align-items: flex-start; gap: 8px; padding: 14px 12px; min-height: 72px; }
+.s7-stat-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; width: 26px; text-align: center; }
+.s7-stat-num { font-size: 1.15rem; font-weight: 800; color: var(--blue); letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 1px; }
+.s7-stat-lbl { font-size: 12px; color: var(--body); line-height: 1.3; font-weight: 500; }
 .s7-img-row { display: flex; align-items: flex-start; gap: 16px; width: 100%; }
-.s7-img-panel { border: 1px solid var(--hairline); border-radius: var(--radius); overflow: hidden; display: inline-flex; }
+.s7-img-panel { border: 1px solid var(--hairline); border-radius: var(--radius); overflow: hidden; display: inline-flex; padding: 16px; }
 .s7-img-panel img { width: 100%; height: auto; max-height: 43.7vh; display: block; object-fit: contain; }
+
+/* ── SCREEN 7: LOGO GRID ── */
+.s7-logo-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; flex: 0 0 auto; max-height: 68vh; min-height: 0; align-items: stretch; margin-top: 20px; }
+.s7-logo-panel { border: 1px solid var(--hairline); border-radius: var(--radius); padding: 14px 16px 16px; background: #fff; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.s7-lp-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; flex-shrink: 0; }
+.s7-lp-title { font-size: clamp(0.95rem,1.3vw,1.15rem); font-weight: 800; color: var(--blue); letter-spacing: -0.02em; }
+.s7-lp-sub { font-size: 10px; color: var(--body); margin-bottom: 8px; font-weight: 500; flex-shrink: 0; }
+.s7-lp-divider { width: 100%; height: 1.5px; background: repeating-linear-gradient(90deg, var(--blue) 0, var(--blue) 6px, transparent 6px, transparent 12px); margin-bottom: 10px; opacity: 0.35; flex-shrink: 0; }
+.s7-lp-myHQ-icon { width: 30px; height: 30px; object-fit: contain; }
+.s7-sub-panels { display: grid; gap: 8px; flex: 1; min-height: 0; align-items: stretch; }
+.s7-sub-panels--clientele { grid-template-columns: 7fr 5fr; }
+.s7-sub-panels--partners { grid-template-columns: 1fr 1fr; }
+.s7-sub-panel { border: 1px solid rgba(30,34,170,0.18); border-radius: 8px; padding: 2px 12px 10px; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.s7-sp-label { font-size: 13px; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; flex-shrink: 0; }
+.s7-logo-grid { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; flex: 1; align-content: space-around; }
+.s7-logo-img { height: 42px; width: auto; max-width: 120px; object-fit: contain; }
+.s7-logo-img--lg { height: 46px; max-width: 140px; }
+.s7-logo-img--xl { height: 52px; max-width: 170px; }
+.s7-sub-panels--partners-right { grid-template-rows: 1fr 1fr; }
+.s7-partner-grid { display: grid; gap: 8px; }
+.s7-partner-grid--cw { grid-template-columns: 1fr 1fr; }
+.s7-partner-grid--right { grid-template-rows: 1fr 1fr; }
+.s7-enterprises-grid { display: grid; grid-template-columns: repeat(3,1fr); row-gap: 1px; align-items: center; justify-items: center; flex: 1; align-content: flex-start; }
+.s7-enterprises-grid .s7-logo-img { height: 42px; max-width: 120px; }
+.s7-gccs-row { display: flex; align-items: center; flex-wrap: wrap; flex: 1; align-content: center; justify-content: space-around; width: 100%; }
+.s7-gccs-row .s7-logo-img { height: 48px; max-width: 160px; }
+.s7-logo-badge { font-size: 11px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; border: 1px solid var(--hairline); border-radius: 4px; padding: 3px 8px; white-space: nowrap; }
 
 /* ── SCREEN 8: AMBITION ── */
 .screen-ambition { background: var(--white); display: flex; flex-direction: column; justify-content: center; align-items: stretch; padding: clamp(28px,4vw,52px) clamp(32px,6vw,72px) 72px; gap: 20px; }
@@ -598,12 +625,103 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
     <div class="s5t-header">
       <h2 class="s5t-title">An entrepreneurial team using tech to disrupt commercial real estate.</h2>
     </div>
+
+    <div class="s5t-two-panel" style="height:450px;align-items:stretch;">
+
+      <!-- LEFT: LEADERSHIP TEAM -->
+      <div class="s5t-panel" style="flex:1.15;flex-direction:column;padding:24px 28px;display:flex;">
+        <div style="font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--blue);margin-bottom:18px;">Leadership Team</div>
+        <div class="s5t-people-grid" style="flex:1;gap:22px;align-content:start;">
+
+          <!-- Utkarsh -->
+          <div class="s5t-person" style="gap:14px;align-items:center;">
+            <div class="s5t-photo" style="width:82px;height:82px;flex-shrink:0;"><img src="ch2_book_images/utkarsh.png" alt="Utkarsh" onerror="this.style.display='none';this.parentElement.innerHTML='UK';"></div>
+            <div>
+              <div class="s5t-person-name" style="font-size:20px;">Utkarsh Kawatra</div>
+              <div class="s5t-person-role" style="font-size:13px;">CEO</div>
+              <div class="s5t-person-prev" style="font-size:14px;">Ex: Helion VC, Opera Solutions<br>IIT Delhi · Cofounder, BloodConnect</div>
+            </div>
+          </div>
+
+          <!-- Vinayak -->
+          <div class="s5t-person" style="gap:14px;align-items:center;">
+            <div class="s5t-photo" style="width:82px;height:82px;flex-shrink:0;"><img src="ch2_book_images/vinayak.jpeg" alt="Vinayak" onerror="this.style.display='none';this.parentElement.innerHTML='VA';"></div>
+            <div>
+              <div class="s5t-person-name" style="font-size:20px;">Vinayak Agrawal</div>
+              <div class="s5t-person-role" style="font-size:13px;">CTO</div>
+              <div class="s5t-person-prev" style="font-size:14px;">Ex: Goldman Sachs<br>IIT Delhi · 2X Patent Holder</div>
+            </div>
+          </div>
+
+          <!-- Manoj -->
+          <div class="s5t-person" style="gap:14px;align-items:center;">
+            <div class="s5t-photo" style="width:82px;height:82px;flex-shrink:0;"><img src="ch2_book_images/manoj.jpeg" alt="Manoj" onerror="this.style.display='none';this.parentElement.innerHTML='MY';"></div>
+            <div>
+              <div class="s5t-person-name" style="font-size:20px;">Manoj Yadav</div>
+              <div class="s5t-person-role" style="font-size:13px;">Vertical Head</div>
+              <div class="s5t-person-prev" style="font-size:14px;">Ex: Founder – SchoolLog<br>IIT Delhi</div>
+            </div>
+          </div>
+
+          <!-- Judhajit -->
+          <div class="s5t-person" style="gap:14px;align-items:center;">
+            <div class="s5t-photo" style="width:82px;height:82px;flex-shrink:0;"><img src="ch2_book_images/judhajit.jpeg" alt="Judhajit" onerror="this.style.display='none';this.parentElement.innerHTML='JB';"></div>
+            <div>
+              <div class="s5t-person-name" style="font-size:20px;">Judhajit Bal</div>
+              <div class="s5t-person-role" style="font-size:13px;">Vertical Head</div>
+              <div class="s5t-person-prev" style="font-size:14px;">Ex: Founder – Maidaan, Coca-Cola<br>MDI Gurgaon</div>
+            </div>
+          </div>
+
+          <!-- Nitin -->
+          <div class="s5t-person" style="gap:14px;align-items:center;">
+            <div class="s5t-photo" style="width:82px;height:82px;flex-shrink:0;"><img src="ch2_book_images/nitin.jpeg" alt="Nitin" onerror="this.style.display='none';this.parentElement.innerHTML='NA';"></div>
+            <div>
+              <div class="s5t-person-name" style="font-size:20px;">Nitin Agrawal</div>
+              <div class="s5t-person-role" style="font-size:13px;">Vertical Head</div>
+              <div class="s5t-person-prev" style="font-size:14px;">Ex: Founder – Paavn, YoloBus<br>IIT Delhi</div>
+            </div>
+          </div>
+
+          <!-- Malvika -->
+          <div class="s5t-person" style="gap:14px;align-items:center;">
+            <div class="s5t-photo" style="width:82px;height:82px;flex-shrink:0;"><img src="ch2_book_images/malvika.jpeg" alt="Malvika" onerror="this.style.display='none';this.parentElement.innerHTML='MS';"></div>
+            <div>
+              <div class="s5t-person-name" style="font-size:20px;">Malvika Sankrityayan</div>
+              <div class="s5t-person-role" style="font-size:13px;">Marketing Head</div>
+              <div class="s5t-person-prev" style="font-size:14px;">Ex: Accredian, S&amp;P Global<br>NMIMS Mumbai</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: THEIR BACKGROUND -->
+      <div class="s5t-panel" style="flex:0.85;flex-direction:column;padding:24px 28px;display:flex;gap:0;justify-content:flex-start;">
+        <div style="font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--blue);margin-bottom:20px;">Their Background</div>
+
+        <!-- All 9 logos in a unified 3x3 grid filling the box -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:repeat(3,1fr);gap:16px;flex:1;">
+          <div style="display:flex;align-items:center;justify-content:center;"><img src="ch2_book_images/Photos_Training/Picture 1.png" alt="Goldman Sachs" style="max-height:58px;max-width:100%;object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img src="ch2_book_images/Photos_Training/Picture 2.png" alt="Helion" style="max-height:58px;max-width:100%;object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img src="ch2_book_images/Photos_Training/Picture 3.png" alt="Coca-Cola" style="max-height:38px;max-width:100%;object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img src="ch2_book_images/Photos_Training/Picture 4.jpg" alt="Microsoft Research" style="max-height:38px;max-width:100%;object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img src="ch2_book_images/Photos_Training/Picture 5.png" alt="Adobe" style="max-height:38px;max-width:100%;object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img src="ch2_book_images/Photos_Training/Picture 6.png" alt="S&P Global" style="max-height:38px;max-width:100%;object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img src="ch2_book_images/Photos_Training/Picture 7.png" alt="IIT Delhi" style="max-height:48px;max-width:100%;object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img src="ch2_book_images/Photos_Training/Picture 8.jpg" alt="MDI Gurgaon" style="max-height:48px;max-width:100%;object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img src="ch2_book_images/Photos_Training/Picture 9.png" alt="IIM Calcutta" style="max-height:48px;max-width:100%;object-fit:contain;"></div>
+        </div>
+
+      </div>
+    </div>
+
     <button class="screen-next-btn" onclick="next()"><i class="fa-solid fa-arrow-right"></i></button>
   </div>
 
   <!-- SCREEN 6: ORG MINDMAP -->
   <div class="screen screen-org">
-    <div class="s6-title">Our Organizational Structure</div>
+    <div class="s6-title">Organizational Structure</div>
     <div class="org-chart" id="img-org-mindmap">
 
       <!-- ROOT -->
@@ -614,9 +732,11 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
       <div class="oc-cols">
 
         <!-- LEFT: BUSINESS VERTICALS -->
-        <div class="oc-col">
-          <div class="oc-stem"></div>
-          <div class="oc-section oc-section--biz">Business Verticals</div>
+        <div class="oc-col" style="position:relative;">
+          <!-- horizontal connector going right to divider -->
+          <div style="position:absolute;top:0;left:50%;right:-8px;height:1.5px;background:rgba(30,34,170,0.3);z-index:0;"></div>
+          <div class="oc-stem" style="position:relative;z-index:1;"></div>
+          <div class="oc-section oc-section--biz" style="position:relative;z-index:1;">Business Verticals</div>
           <div class="oc-stem"></div>
 
           <!-- Three verticals in dashed container -->
@@ -641,18 +761,46 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
           </div>
         </div>
 
+        <!-- DIVIDER -->
+        <div style="width:1px;border-left:2px dashed rgba(30,34,170,0.25);margin:0 8px;align-self:stretch;"></div>
+
         <!-- RIGHT: BUSINESS ENABLEMENT FUNCTIONS -->
-        <div class="oc-col">
-          <div class="oc-stem"></div>
-          <div class="oc-fn-connected">
-          <div class="oc-section oc-section--fn">Business Enablement Functions</div>
-          <div class="oc-fn-hierarchy">
-            <div class="oc-fn-row"><div class="oc-fnnode">Tech &amp; Product</div><div class="oc-fn-desc">Builds and maintains the platform powering all three verticals.</div></div>
-            <div class="oc-fn-row"><div class="oc-fnnode">Marketing</div><div class="oc-fn-desc">Drives brand, demand generation, and operator partnerships.</div></div>
-            <div class="oc-fn-row"><div class="oc-fnnode">Finance &amp; Legal</div><div class="oc-fn-desc">Manages P&amp;L, compliance, contracts, and fundraising.</div></div>
-            <div class="oc-fn-row"><div class="oc-fnnode">HR &amp; People</div><div class="oc-fn-desc">Owns hiring, culture, and performance across the org.</div></div>
-            <div class="oc-fn-row oc-fn-row--last"><div class="oc-fnnode">IT &amp; Admin</div><div class="oc-fn-desc">Keeps infrastructure, tools, and operations running smoothly.</div></div>
-          </div>
+        <div class="oc-col" style="position:relative;">
+          <!-- horizontal connector going left to divider -->
+          <div style="position:absolute;top:0;right:50%;left:-8px;height:1.5px;background:rgba(30,34,170,0.3);z-index:0;"></div>
+          <div class="oc-stem" style="position:relative;z-index:1;"></div>
+          <div class="oc-section oc-section--fn" style="position:relative;z-index:1;">Business Enablement Functions</div>
+          <div style="margin-top:40px;display:grid;grid-template-columns:1fr 1fr;row-gap:45px;column-gap:45px;width:100%;max-width:520px;">
+            <!-- Technology: Blue -->
+            <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(30,34,170,0.08);border-color:#1E22AA;color:#1E22AA;">
+              <i class="fa-solid fa-microchip" style="font-size:18px;"></i>
+              <span>Technology</span>
+            </div>
+            <!-- Product & Design: Coral -->
+            <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(255,115,81,0.08);border-color:#FF7351;color:#FF7351;">
+              <i class="fa-solid fa-pen-ruler" style="font-size:18px;"></i>
+              <span>Product &amp; Design</span>
+            </div>
+            <!-- Marketing: Amber -->
+            <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(255,184,72,0.12);border-color:#FFB848;color:#a06800;">
+              <i class="fa-solid fa-bullhorn" style="font-size:18px;"></i>
+              <span>Marketing</span>
+            </div>
+            <!-- Finance & Legal: Ink -->
+            <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(11,15,44,0.06);border-color:#0B0F2C;color:#0B0F2C;">
+              <i class="fa-solid fa-scale-balanced" style="font-size:18px;"></i>
+              <span>Finance &amp; Legal</span>
+            </div>
+            <!-- HR & People: Green -->
+            <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(190,229,194,0.25);border-color:#5aaa60;color:#2a7a30;">
+              <i class="fa-solid fa-people-group" style="font-size:18px;"></i>
+              <span>HR &amp; People</span>
+            </div>
+            <!-- IT & Admin: Coral-tint -->
+            <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(30,34,170,0.04);border-color:rgba(30,34,170,0.4);color:#1E22AA;">
+              <i class="fa-solid fa-screwdriver-wrench" style="font-size:18px;"></i>
+              <span>IT &amp; Admin</span>
+            </div>
           </div>
         </div>
 
@@ -668,13 +816,13 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 
     /* stems */
     .oc-stem { width:1px; background:rgba(30,34,170,0.3); height:18px; }
-    .oc-stem--root { height:16px; }
+    .oc-stem--root { height:18px; }
     .oc-stem--long { height:22px; }
 
     /* split row */
     /* two columns */
     .oc-cols { display:flex; width:100%; align-items:flex-start; gap:0; position:relative; }
-    .oc-cols::before { content:''; position:absolute; top:0; left:25%; right:25%; height:1.5px; background:rgba(30,34,170,0.3); }
+    .oc-cols::before { display:none; }
     .oc-col { flex:1; display:flex; flex-direction:column; align-items:center; padding:0 12px; }
 
     /* section headers */
@@ -781,16 +929,133 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
       </div>
     </div>
 
-    <div class="s7-img-row">
-      <div class="s7-img-panel">
-        <img src="ch2_book_images/clientele.png" alt="Our Esteemed Clientele" id="img-clientele">
-      </div>
-      <div class="s7-img-panel">
-        <img src="ch2_book_images/supply_partners.png" alt="Our Space Partners" id="img-partners">
-      </div>
-    </div>
+    <!-- CODED LOGO GRID replacing static images -->
+    <div class="s7-logo-panels">
 
-    <button class="screen-next-btn" onclick="next()"><i class="fa-solid fa-arrow-right"></i></button>
+      <!-- LEFT: Our Esteemed Clientele -->
+      <div class="s7-logo-panel">
+        <div class="s7-lp-header">
+          <div class="s7-lp-title">Our Esteemed Clientele</div>
+        </div>
+        <div class="s7-lp-sub">Serving modern age companies for their various business needs across different products</div>
+        <div class="s7-lp-divider"></div>
+
+        <!-- 3 stacked rows: GCCs → Start-Ups → Enterprises -->
+        <div style="display:flex;flex-direction:column;gap:8px;flex:1;min-height:0;">
+
+          <!-- GCCs -->
+          <div class="s7-sub-panel">
+            <div class="s7-sp-label">GCCs</div>
+            <div class="s7-gccs-row">
+              <img src="logos_clientele_supply/komatsu.png" alt="Komatsu" class="s7-logo-img s7-logo-img--xl" style="height:68px;max-width:210px;">
+              <img src="logos_clientele_supply/acsendion.png" alt="Ascendion" class="s7-logo-img s7-logo-img--lg" style="height:58px;max-width:180px;">
+              <img src="logos_clientele_supply/nachi.png" alt="NACHI" class="s7-logo-img s7-logo-img--xl">
+            </div>
+          </div>
+
+          <!-- Start-Ups + New Age Brands -->
+          <div class="s7-sub-panel" style="flex:3;">
+            <div class="s7-sp-label">Start-Ups + New Age Brands</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);row-gap:1px;align-items:center;justify-items:center;flex:1;align-content:flex-start;">
+              <img src="logos_clientele_supply/zomato.png" alt="Zomato" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/flipkart.png" alt="Flipkart" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/keka.png" alt="Keka" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/credgenics.png" alt="Credgenics" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/cars24.png" alt="Cars24" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/signzy.png" alt="Signzy" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/tvf.jpg" alt="TVF" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/jiosaavn.png" alt="JioSaavn" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/rebel.png" alt="Rebel Foods" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/angleone.png" alt="AngelOne" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/yulu.jpg" alt="Yulu" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/mpl.png" alt="MPL" class="s7-logo-img s7-logo-img--lg">
+            </div>
+          </div>
+
+          <!-- Enterprises -->
+          <div class="s7-sub-panel" style="flex:3;">
+            <div class="s7-sp-label">Enterprises</div>
+            <div class="s7-enterprises-grid" style="grid-template-columns:repeat(4,1fr);">
+              <img src="logos_clientele_supply/marriot.png" alt="Marriott" class="s7-logo-img">
+              <img src="logos_clientele_supply/axis.png" alt="Axis Bank" class="s7-logo-img" style="height:56px;max-width:160px;">
+              <img src="logos_clientele_supply/tatacliq.png" alt="Tata CliQ" class="s7-logo-img">
+              <img src="logos_clientele_supply/philips.png" alt="Philip Morris" class="s7-logo-img">
+              <img src="logos_clientele_supply/ouylok.png" alt="Outlook" class="s7-logo-img">
+              <img src="logos_clientele_supply/adity.png" alt="Aditya Birla" class="s7-logo-img">
+              <img src="logos_clientele_supply/uni.png" alt="UNICEF" class="s7-logo-img">
+              <img src="logos_clientele_supply/io.png" alt="IndianOil" class="s7-logo-img">
+              <img src="logos_clientele_supply/emami.png" alt="Emami" class="s7-logo-img">
+              <img src="logos_clientele_supply/taj.png" alt="TAJ" class="s7-logo-img">
+              <img src="logos_clientele_supply/mahi.png" alt="Mahindra Lifespaces" class="s7-logo-img">
+              <img src="logos_clientele_supply/teamlease.png" alt="TeamLease" class="s7-logo-img" style="height:64px;max-width:180px;">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: Our Space Partners -->
+      <div class="s7-logo-panel">
+        <div class="s7-lp-header">
+          <div class="s7-lp-title">Our Space Partners</div>
+        </div>
+        <div class="s7-lp-sub">Largest network of flex, commercial real estate players in India; Now expanding the platform internationally</div>
+        <div class="s7-lp-divider"></div>
+
+        <!-- 3 stacked rows: Grade A → Managed → Coworking -->
+        <div style="display:flex;flex-direction:column;gap:8px;flex:1;min-height:0;">
+
+          <!-- Grade A Developers -->
+          <div class="s7-sub-panel">
+            <div class="s7-sp-label">Grade A Developers</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;align-items:center;justify-items:center;flex:1;align-content:center;">
+              <img src="logos_clientele_supply/m3m.jpg" alt="M3M" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/embassy.png" alt="Embassy" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/unitech.png" alt="Unitech" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/vamsimran.jpg" alt="Vamsimran" class="s7-logo-img s7-logo-img--lg" style="height:58px;max-width:180px;">
+            </div>
+          </div>
+
+          <!-- Managed Office Brands -->
+          <div class="s7-sub-panel" style="flex:2.5;">
+            <div class="s7-sp-label">Managed Office Brands</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);row-gap:1px;align-items:center;justify-items:center;flex:1;align-content:flex-start;">
+              <img src="logos_clientele_supply/smartworks.png" alt="Smartworks" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/indi.png" alt="IndiQube" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/tablespac.png" alt="Table Space" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/urbanvault.png" alt="Urban Vault" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+              <img src="logos_clientele_supply/devx.png" alt="DevX" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/isprout.jpg" alt="iSprout" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/headquarters.png" alt="The Headquarters" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/simpli.jpg" alt="Simpliwork" class="s7-logo-img s7-logo-img--lg">
+            </div>
+          </div>
+
+          <!-- Coworking Brands -->
+          <div class="s7-sub-panel" style="flex:4;">
+            <div class="s7-sp-label">Coworking Brands</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);row-gap:1px;align-items:center;justify-items:center;flex:1;align-content:flex-start;">
+              <img src="logos_clientele_supply/wework.png" alt="WeWork" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/awfis.png" alt="Awfis" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/innox8.png" alt="Innov8" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/bhive.png" alt="Bhive" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+              <img src="logos_clientele_supply/efc.png" alt="EFC" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+              <img src="logos_clientele_supply/springhouse.png" alt="Spring House" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/regus.png" alt="Regus" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/coworks.png" alt="Cowrks" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/91sb.png" alt="91Springboard" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+              <img src="logos_clientele_supply/exec_centre.png" alt="The Executive Centre" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+              <img src="logos_clientele_supply/vatika.jpg" alt="Vatika" class="s7-logo-img s7-logo-img--lg">
+              <img src="logos_clientele_supply/altf.png" alt="alt.f" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /s7-logo-panels -->
+
+    <button class="screen-next-btn" onclick="next()" style="position:static;align-self:flex-end;margin-top:4px;"><i class="fa-solid fa-arrow-right"></i></button>
   </div>
 
   <!-- SCREEN 8: THE AMBITION -->
@@ -1072,6 +1337,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
             <div class="btl-dot"></div>
             <div class="btl-year">2015 · Phase 1 begins</div>
             <div class="btl-title">One question. Why can't people work from wherever they want?</div>
+            <img src="ch2_book_images/spark.jpg" alt="The Spark" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:cover;max-height:240px;">
             <div class="btl-body">Utkarsh Kawatra and Vinayak Aggarwal were IIT Delhi Alumni who'd gone their separate ways — Utkarsh to Helion Ventures, Vinayak to Goldman Sachs. They ended up back in NCR at the same time, frustrated by the same thing: good professionals wasting hours commuting to offices they didn't need to be in. The question wasn't complicated. The answer would take a decade to build.</div>
             <div class="btl-badges"><span class="tl-badge badge-teal">The Insight</span></div>
           </div>
@@ -1080,6 +1346,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
             <div class="btl-dot"></div>
             <div class="btl-year">Apr 2016 · Founded</div>
             <div class="btl-title">A friend's café. Empty chairs every morning. That became the first supply on the platform.</div>
+            <img src="ch2_book_images/move.png" alt="The Move — First Café" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:cover;max-height:240px;">
             <div class="btl-body">A friend ran a café that stayed empty before noon — chairs up, tables empty, burning rent before the evening rush. Utkarsh and Vinayak saw something no one else was seeing: <strong>idle real estate is wasted potential.</strong> They started converting cafés and lounges into long-hour working spaces — WiFi, free coffee, discounted menus. Show up, work, leave. No deposit, no commitment. myHQ was born.</div>
             <div class="btl-badges"><span class="tl-badge badge-mint">Founded</span></div>
           </div>
@@ -1088,6 +1355,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
             <div class="btl-dot"></div>
             <div class="btl-year">2016–17 · Proof of Concept</div>
             <div class="btl-title">100+ bookings a day. 20+ cafés. Startups were hooked.</div>
+            <img src="ch2_book_images/founded.png" alt="Proof of Concept" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:cover;max-height:240px;">
             <div class="btl-body">Startups and freelancers loved the model — no lock-in, no security deposit, just show up and get to work. Word spread fast. Within months, myHQ was clocking 100+ daily bookings across 20+ cafés in NCR. The idea worked. Now it needed capital to grow.</div>
             <div class="btl-funding">
               <div>
@@ -1109,6 +1377,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
             <div class="btl-dot"></div>
             <div class="btl-year">2018 · Phase 2 begins</div>
             <div class="btl-title">Businesses started asking for dedicated space. Assisted Marketplace was born.</div>
+            <img src="ch2_book_images/first_legs.jpeg" alt="First Legs — Assisted Marketplace" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:cover;max-height:240px;">
             <div class="btl-body">The On Demand product was growing — but businesses using the platform were asking for something more. They needed dedicated, long-term workspace. myHQ built it: <strong>Assisted Marketplace</strong>, a platform-led advisory for businesses finding office space. Over 100 coworking spaces were onboarded. A new product category was live.</div>
             <div class="btl-funding">
               <div>
@@ -1123,6 +1392,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
             <div class="btl-dot"></div>
             <div class="btl-year">2019 · Three products taking shape</div>
             <div class="btl-title">Virtual Office launched from a Shopify store. Series A followed.</div>
+            <img src="ch2_book_images/growing_up.png" alt="Growing Up — Three Products" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:cover;max-height:240px;">
             <div class="btl-body">Businesses needed more than a desk — they needed an address for office &amp; GST registration. myHQ launched <strong>Virtual Office</strong>, initially from a Shopify website. It was scrappy, but it worked. Three products were now live — On Demand, Assisted Marketplace, Virtual Office — and India Quotient backed the platform with a Series A.</div>
             <div class="btl-funding">
               <div>
@@ -1138,7 +1408,6 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
             <div class="btl-year">2020 · COVID</div>
             <div class="btl-title">Offices shut overnight. The business went dark. Buyout offers came in. They said no to every one.</div>
             <div class="btl-body">COVID didn't ease myHQ into a downturn — it turned the lights off. Overnight. Revenue dropped. The future looked bleak. Multiple acquirers came with buyout offers. <strong>The founders turned every single one down.</strong> They believed in what they were building. They were waiting for the right partner — not a distressed exit.</div>
-
             <div class="btl-badges"><span class="tl-badge badge-white">Refused every offer</span></div>
           </div>
 
@@ -1146,6 +1415,9 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
             <div class="btl-dot"></div>
             <div class="btl-year">2022 · Phase 3 begins</div>
             <div class="btl-title">Powered by ANAROCK. Brand stays. Founders stay. Mission stays.</div>
+            <div style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;overflow:hidden;border:1px solid var(--hairline);">
+              <img src="ch2_book_images/new_ch.png" alt="Logo Transition" style="width:100%;height:200px;display:block;object-fit:cover;object-position:center;">
+            </div>
             <div class="btl-body">Recognizing myHQ's strong technology foundation and scalable business model, ANAROCK became a strategic investor. This wasn't a rescue. It was the right fit. ANAROCK understood commercial real estate at the deepest level, and they wanted myHQ to keep operating as myHQ. The brand was retained. The founders stayed on board. The business verticals were now fully live across metro cities, backed by institutional credibility that opened enterprise doors that hadn't been reachable before.</div>
             <div class="btl-funding">
               <div>
@@ -1160,6 +1432,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
             <div class="btl-dot"></div>
             <div class="btl-year">2024 · WeWork Partnership &amp; Investment</div>
             <div class="btl-title">myHQ becomes WeWork India's exclusive tech, marketing &amp; distribution partner.</div>
+            <img src="ch1_book_images/myhq_wework.png" alt="myHQ + WeWork" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:contain;max-height:200px;background:#fafbff;border:1px solid var(--hairline);">
             <div class="btl-body">WeWork invested in myHQ, making it WeWork India's exclusive partner for On Demand and Virtual Office products. The power of India's largest flex operator combined with myHQ's platform. A partnership that added significant inventory and institutional scale overnight.</div>
             <div class="btl-badges"><span class="tl-badge badge-blue">WeWork · Exclusive Partner</span></div>
           </div>
@@ -1168,6 +1441,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
             <div class="btl-dot"></div>
             <div class="btl-year">2025–26 · Going global</div>
             <div class="btl-title">Virtual Office in Dubai. Assisted Marketplace in London. Same model. New geographies.</div>
+            <img src="ch2_book_images/today.jpeg" alt="myHQ Today — Going Global" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:cover;max-height:240px;">
             <div class="btl-body">myHQ is now beyond India. Virtual Office launched in Dubai. Assisted Marketplace is expanding into London. The same operator-agnostic, platform-led model that worked in Delhi NCR is now being applied internationally through <strong>myhqspaces.com</strong>. The ambition is no longer domestic — it's global.</div>
             <div class="btl-badges"><span class="tl-badge badge-mint">Dubai · London</span><span class="tl-badge badge-blue">myhqspaces.com</span></div>
           </div>
@@ -1176,6 +1450,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
             <div class="btl-dot"></div>
             <div class="btl-year">2030 · The target</div>
             <div class="btl-title">35X in 3 years. 10X more by 2030. ₹5,000 Cr in transactions.</div>
+            <img src="logo_landing_hub/who_we_are_BG.png" alt="Who We Are — 2030 Vision" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:cover;max-height:240px;">
             <div class="btl-body">From ₹20 Cr in FY22 to ₹1,200 Cr in FY26 — that's 35X in three years. The next chapter ends at <strong>₹5,000 Cr in transactions and ₹500 Cr in revenue by FY30.</strong> Same platform. Same mission. The market for flexible commercial real estate in India alone is massive — and myHQ has barely scratched the surface of it.</div>
             <div class="btl-badges"><span class="tl-badge badge-blue">₹5,000 Cr Target</span><span class="tl-badge badge-mint">FY30</span></div>
           </div>
@@ -1269,7 +1544,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
           </div>
         </div>
 
-        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin:32px 0 12px;">Business Heads</div>
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin:32px 0 12px;">Vertical Heads</div>
         <div class="book-team-grid" style="grid-template-columns:repeat(2,1fr);">
           <div class="book-team-card">
             <div class="book-team-body">
@@ -1278,7 +1553,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
                 <div class="book-team-avatar"><img src="ch2_book_images/manoj.jpeg" alt="Manoj Kumar Yadav" onerror="this.style.display='none';this.parentElement.innerHTML='MY';"></div>
                 <div class="book-team-header-text">
                   <div class="book-team-name">Manoj Kumar Yadav</div>
-                  <div class="book-team-role">Business Head</div>
+                  <div class="book-team-role">Vertical Head</div>
                 </div>
               </div>
               <div class="book-team-bio">Manoj leads the Assisted Marketplace vertical at myHQ with 7+ years of deep experience in real estate. He started his entrepreneurial journey co-founding SchoolLog before pivoting into commercial real estate.</div>
@@ -1296,7 +1571,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
                 <div class="book-team-avatar"><img src="ch2_book_images/nitin.jpeg" alt="Nitin Agarwal" onerror="this.style.display='none';this.parentElement.innerHTML='NA';"></div>
                 <div class="book-team-header-text">
                   <div class="book-team-name">Nitin Agarwal</div>
-                  <div class="book-team-role">Business Head</div>
+                  <div class="book-team-role">Vertical Head</div>
                 </div>
               </div>
               <div class="book-team-bio">Nitin leads the Virtual Office vertical at myHQ. He is a serial entrepreneur — having co-founded Paavan and RunnerBee before joining myHQ. He brings deep product thinking to a vertical that handles compliance and registration for thousands of businesses across India.</div>
@@ -1314,7 +1589,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
                 <div class="book-team-avatar"><img src="ch2_book_images/judhajit.jpeg" alt="Judhajit Bal" onerror="this.style.display='none';this.parentElement.innerHTML='JB';"></div>
                 <div class="book-team-header-text">
                   <div class="book-team-name">Judhajit Bal</div>
-                  <div class="book-team-role">Business Head</div>
+                  <div class="book-team-role">Vertical Head</div>
                 </div>
               </div>
               <div class="book-team-bio">Judhajit leads growth and international expansion at myHQ. He co-founded Maidaan and has a background in FMCG with Coca-Cola. He brings consumer-market instincts to a product that serves millions of individual workspace bookings a year — and is now taking that model global.</div>
@@ -1359,18 +1634,29 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 
         <div style="margin-top:24px;">
           <div class="org-chart" style="max-width:100%;">
+
+            <!-- ROOT -->
             <div class="oc-root">myHQ</div>
             <div class="oc-stem oc-stem--root"></div>
+
+            <!-- TWO COLUMNS -->
             <div class="oc-cols">
-              <div class="oc-col">
+
+              <!-- LEFT: BUSINESS VERTICALS -->
+              <div class="oc-col" style="position:relative;">
+                <div style="position:absolute;top:0;left:50%;right:-8px;height:1.5px;background:rgba(30,34,170,0.3);z-index:0;"></div>
+                <div class="oc-stem" style="position:relative;z-index:1;"></div>
+                <div class="oc-section oc-section--biz" style="position:relative;z-index:1;">Business Verticals</div>
                 <div class="oc-stem"></div>
-                <div class="oc-section oc-section--biz">Business Verticals</div>
-                <div class="oc-stem"></div>
+
+                <!-- Three verticals in dashed container -->
                 <div class="oc-vbox">
                   <div class="oc-vnode">Assisted Marketplace</div>
                   <div class="oc-vnode">On Demand</div>
                   <div class="oc-vnode">Virtual Office</div>
                 </div>
+
+                <!-- Hierarchy -->
                 <div class="oc-hier-wrap">
                   <div class="oc-hierarchy" style="padding-top:18px;">
                     <div class="oc-h-row"><div class="oc-hnode oc-hnode--1">Individual Contributors</div></div>
@@ -1384,22 +1670,49 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
                   </div>
                 </div>
               </div>
-              <div class="oc-col">
-                <div class="oc-stem"></div>
-                <div class="oc-section oc-section--fn">Business Enablement Functions</div>
-                <div class="oc-hier-wrap">
-                  <div class="oc-fn-hierarchy">
-                    <div class="oc-fn-row"><div class="oc-fnnode">Tech &amp; Product</div></div>
-                    <div class="oc-fn-row"><div class="oc-fnnode">Marketing</div></div>
-                    <div class="oc-fn-row"><div class="oc-fnnode">Finance &amp; Legal</div></div>
-                    <div class="oc-fn-row"><div class="oc-fnnode">HR &amp; People</div></div>
+
+              <!-- DIVIDER -->
+              <div style="width:1px;border-left:2px dashed rgba(30,34,170,0.25);margin:0 8px;align-self:stretch;"></div>
+
+              <!-- RIGHT: BUSINESS ENABLEMENT FUNCTIONS -->
+              <div class="oc-col" style="position:relative;">
+                <div style="position:absolute;top:0;right:50%;left:-8px;height:1.5px;background:rgba(30,34,170,0.3);z-index:0;"></div>
+                <div class="oc-stem" style="position:relative;z-index:1;"></div>
+                <div class="oc-section oc-section--fn" style="position:relative;z-index:1;">Business Enablement Functions</div>
+                <div style="margin-top:40px;display:grid;grid-template-columns:1fr 1fr;row-gap:45px;column-gap:45px;width:100%;max-width:520px;">
+                  <!-- Technology: Blue -->
+                  <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(30,34,170,0.08);border-color:#1E22AA;color:#1E22AA;">
+                    <i class="fa-solid fa-microchip" style="font-size:18px;"></i>
+                    <span>Technology</span>
                   </div>
-                  <div class="oc-h-row--l">
-                    <span class="oc-l-curve"></span>
-                    <div class="oc-fnnode">IT &amp; Admin</div>
+                  <!-- Product & Design: Coral -->
+                  <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(255,115,81,0.08);border-color:#FF7351;color:#FF7351;">
+                    <i class="fa-solid fa-pen-ruler" style="font-size:18px;"></i>
+                    <span>Product &amp; Design</span>
+                  </div>
+                  <!-- Marketing: Amber -->
+                  <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(255,184,72,0.12);border-color:#FFB848;color:#a06800;">
+                    <i class="fa-solid fa-bullhorn" style="font-size:18px;"></i>
+                    <span>Marketing</span>
+                  </div>
+                  <!-- Finance & Legal: Ink -->
+                  <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(11,15,44,0.06);border-color:#0B0F2C;color:#0B0F2C;">
+                    <i class="fa-solid fa-scale-balanced" style="font-size:18px;"></i>
+                    <span>Finance &amp; Legal</span>
+                  </div>
+                  <!-- HR & People: Green -->
+                  <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(190,229,194,0.25);border-color:#5aaa60;color:#2a7a30;">
+                    <i class="fa-solid fa-people-group" style="font-size:18px;"></i>
+                    <span>HR &amp; People</span>
+                  </div>
+                  <!-- IT & Admin: Blue-tint -->
+                  <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(30,34,170,0.04);border-color:rgba(30,34,170,0.4);color:#1E22AA;">
+                    <i class="fa-solid fa-screwdriver-wrench" style="font-size:18px;"></i>
+                    <span>IT &amp; Admin</span>
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
@@ -1416,32 +1729,132 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
         <h2 class="section-title">The Human Engine behind myHQ</h2>
         <p class="section-body">Each vertical at myHQ runs like a focused business unit — with its own leadership structure, business leads, and functional specialists. These are the people who turn strategy into execution every single day.</p>
 
-        <!-- AM: Business Leadership -->
-        <div style="margin-top:32px;display:flex;justify-content:center;">
-          <div style="width:80%;border:1px solid var(--hairline);border-radius:var(--radius);overflow:hidden;background:#fff;">
-            <img src="ch2_book_images/AM_busines_leadership.png" alt="AM Business Leadership" style="width:100%;display:block;object-fit:contain;">
-          </div>
-        </div>
+        <style>
+        .he-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; margin-top: 32px; }
+        .he-card { display: flex; flex-direction: column; align-items: center; text-align: center; background: #fafbff; border: 1px solid var(--hairline); border-radius: 12px; padding: 24px 16px 20px; gap: 12px; }
+        .he-photo { width: 88px; height: 88px; border-radius: 50%; background: rgba(30,34,170,0.08); border: 3px solid rgba(30,34,170,0.18); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .he-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+        .he-photo-initials { font-size: 1.8rem; font-weight: 800; color: var(--blue); }
+        .he-name { font-size: 15px; font-weight: 800; color: var(--ink); letter-spacing: -0.02em; line-height: 1.2; }
+        .he-role { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue); }
+        .he-dept { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: -4px; }
+        .he-quote { font-size: 12px; color: var(--body); line-height: 1.55; font-style: italic; border-top: 1px solid var(--hairline); padding-top: 10px; margin-top: 4px; width: 100%; }
+        .he-quote::before { content: '"'; }
+        .he-quote::after { content: '"'; }
+        </style>
 
-        <!-- AM: Functional Leadership -->
-        <div style="margin-top:24px;display:flex;justify-content:center;">
-          <div style="width:80%;border:1px solid var(--hairline);border-radius:var(--radius);overflow:hidden;background:#fff;">
-            <img src="ch2_book_images/AM_functional_leadership.png" alt="AM Functional Leadership" style="width:100%;display:block;object-fit:contain;">
-          </div>
-        </div>
+        <div class="he-grid">
 
-        <!-- On Demand: Leadership -->
-        <div style="margin-top:24px;display:flex;justify-content:center;">
-          <div style="width:80%;border:1px solid var(--hairline);border-radius:var(--radius);overflow:hidden;background:#fff;">
-            <img src="ch2_book_images/OD_leadership.png" alt="On Demand Leadership" style="width:100%;display:block;object-fit:contain;">
+          <!-- Placeholder 1 -->
+          <div class="he-card">
+            <div class="he-photo"><div class="he-photo-initials">?</div></div>
+            <div>
+              <div class="he-name">Name Here</div>
+              <div class="he-role">Role / Title</div>
+              <div class="he-dept">Department</div>
+            </div>
+            <div class="he-quote">Their quote goes here — something they said about work, culture, or growth at myHQ.</div>
           </div>
-        </div>
 
-        <!-- Virtual Office: Leadership -->
-        <div style="margin-top:24px;display:flex;justify-content:center;">
-          <div style="width:80%;border:1px solid var(--hairline);border-radius:var(--radius);overflow:hidden;background:#fff;">
-            <img src="ch2_book_images/VO_leadership.png" alt="Virtual Office Leadership" style="width:100%;display:block;object-fit:contain;">
+          <!-- Placeholder 2 -->
+          <div class="he-card">
+            <div class="he-photo"><div class="he-photo-initials">?</div></div>
+            <div>
+              <div class="he-name">Name Here</div>
+              <div class="he-role">Role / Title</div>
+              <div class="he-dept">Department</div>
+            </div>
+            <div class="he-quote">Their quote goes here — something they said about work, culture, or growth at myHQ.</div>
           </div>
+
+          <!-- Placeholder 3 -->
+          <div class="he-card">
+            <div class="he-photo"><div class="he-photo-initials">?</div></div>
+            <div>
+              <div class="he-name">Name Here</div>
+              <div class="he-role">Role / Title</div>
+              <div class="he-dept">Department</div>
+            </div>
+            <div class="he-quote">Their quote goes here — something they said about work, culture, or growth at myHQ.</div>
+          </div>
+
+          <!-- Placeholder 4 -->
+          <div class="he-card">
+            <div class="he-photo"><div class="he-photo-initials">?</div></div>
+            <div>
+              <div class="he-name">Name Here</div>
+              <div class="he-role">Role / Title</div>
+              <div class="he-dept">Department</div>
+            </div>
+            <div class="he-quote">Their quote goes here — something they said about work, culture, or growth at myHQ.</div>
+          </div>
+
+          <!-- Placeholder 5 -->
+          <div class="he-card">
+            <div class="he-photo"><div class="he-photo-initials">?</div></div>
+            <div>
+              <div class="he-name">Name Here</div>
+              <div class="he-role">Role / Title</div>
+              <div class="he-dept">Department</div>
+            </div>
+            <div class="he-quote">Their quote goes here — something they said about work, culture, or growth at myHQ.</div>
+          </div>
+
+          <!-- Placeholder 6 -->
+          <div class="he-card">
+            <div class="he-photo"><div class="he-photo-initials">?</div></div>
+            <div>
+              <div class="he-name">Name Here</div>
+              <div class="he-role">Role / Title</div>
+              <div class="he-dept">Department</div>
+            </div>
+            <div class="he-quote">Their quote goes here — something they said about work, culture, or growth at myHQ.</div>
+          </div>
+
+          <!-- Placeholder 7 -->
+          <div class="he-card">
+            <div class="he-photo"><div class="he-photo-initials">?</div></div>
+            <div>
+              <div class="he-name">Name Here</div>
+              <div class="he-role">Role / Title</div>
+              <div class="he-dept">Department</div>
+            </div>
+            <div class="he-quote">Their quote goes here — something they said about work, culture, or growth at myHQ.</div>
+          </div>
+
+          <!-- Placeholder 8 -->
+          <div class="he-card">
+            <div class="he-photo"><div class="he-photo-initials">?</div></div>
+            <div>
+              <div class="he-name">Name Here</div>
+              <div class="he-role">Role / Title</div>
+              <div class="he-dept">Department</div>
+            </div>
+            <div class="he-quote">Their quote goes here — something they said about work, culture, or growth at myHQ.</div>
+          </div>
+
+          <!-- Placeholder 9 -->
+          <div class="he-card">
+            <div class="he-photo"><div class="he-photo-initials">?</div></div>
+            <div>
+              <div class="he-name">Name Here</div>
+              <div class="he-role">Role / Title</div>
+              <div class="he-dept">Department</div>
+            </div>
+            <div class="he-quote">Their quote goes here — something they said about work, culture, or growth at myHQ.</div>
+          </div>
+
+          <!-- Placeholder 10 -->
+          <div class="he-card">
+            <div class="he-photo"><div class="he-photo-initials">?</div></div>
+            <div>
+              <div class="he-name">Name Here</div>
+              <div class="he-role">Role / Title</div>
+              <div class="he-dept">Department</div>
+            </div>
+            <div class="he-quote">Their quote goes here — something they said about work, culture, or growth at myHQ.</div>
+          </div>
+
         </div>
 
         <div class="takeaway">These aren't org charts on paper — they're the people you'll work with, escalate to, and learn from. Know the structure; build the relationships.</div>
@@ -1457,28 +1870,172 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
         <h2 class="section-title">Scale &amp; Reach</h2>
         <p class="section-body">myHQ is India's #1 online platform for commercial workspace — and it is growing at 15% month-on-month. The numbers below reflect platform depth, market trust, and the scale at which myHQ operates across all verticals.</p>
 
-        <div class="book-stats" style="grid-template-columns:repeat(5,1fr);">
-          <div class="book-stat"><div class="book-stat-num">50,000 Clients</div><div class="book-stat-lbl">Corporates, SMEs, Startups</div></div>
-          <div class="book-stat"><div class="book-stat-num">30K Virtual Offices</div><div class="book-stat-lbl">Helping companies register in every state</div></div>
-          <div class="book-stat"><div class="book-stat-num">2M+ sq ft</div><div class="book-stat-lbl">Leased annually in flex</div></div>
-          <div class="book-stat"><div class="book-stat-num">5L+ On Demand</div><div class="book-stat-lbl">For hybrid companies &amp; end users</div></div>
-          <div class="book-stat"><div class="book-stat-num">500Cr+ GMV</div><div class="book-stat-lbl">Value of transactions done annually</div></div>
-        </div>
-        <div class="book-stats" style="grid-template-columns:repeat(5,1fr);margin-top:0;border-top:none;border-radius:0 0 var(--radius) var(--radius);">
-          <div class="book-stat"><div class="book-stat-num">30 Cities</div><div class="book-stat-lbl">Covered with ground presence in 10 of them</div></div>
-          <div class="book-stat"><div class="book-stat-num">150 RMs</div><div class="book-stat-lbl">Working with corporates for all their needs</div></div>
-          <div class="book-stat"><div class="book-stat-num">10,000+ Listings</div><div class="book-stat-lbl">Verified on the platform</div></div>
-          <div class="book-stat"><div class="book-stat-num">5L+ Downloads</div><div class="book-stat-lbl">For hybrid companies &amp; end users</div></div>
-          <div class="book-stat"><div class="book-stat-num">2.5M+ Traffic</div><div class="book-stat-lbl">On Website (Annually)</div></div>
+        <!-- Stats row with icons — matching slide -->
+        <div class="s7-stats" style="margin:20px 0;">
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-handshake" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">50,000 Clients</div><div class="s7-stat-lbl">Corporates, SMEs, Startups</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-envelope" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">30K Virtual Offices</div><div class="s7-stat-lbl">Helping companies register in every state</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-building" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">2M+ sq ft</div><div class="s7-stat-lbl">Leased annually in flex</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-chair" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">5L+ On Demand</div><div class="s7-stat-lbl">For hybrid companies &amp; end users</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-indian-rupee-sign" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">500Cr+ GMV</div><div class="s7-stat-lbl">Value of transactions done annually</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-map-location-dot" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">30 Cities</div><div class="s7-stat-lbl">Covered with ground presence in 10 of them</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-user-tie" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">150 RMs</div><div class="s7-stat-lbl">Working with corporates for all their needs</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-list-check" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">10,000+ Listings</div><div class="s7-stat-lbl">Verified on the platform</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-mobile-screen" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">5L+ Downloads</div><div class="s7-stat-lbl">For hybrid companies &amp; end users</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-globe" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">2.5M+ Traffic</div><div class="s7-stat-lbl">On Website (Annually)</div></div>
+          </div>
         </div>
 
-        <div class="visual" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;width:115%;margin-left:-7.5%;">
-          <div style="border:1px solid var(--hairline);border-radius:var(--radius);overflow:hidden;">
-            <img src="ch2_book_images/clientele.png" alt="Our Clients" style="width:100%;display:block;object-fit:contain;background:#fff;">
+        <!-- Logo panels — exact same as slide -->
+        <div class="s7-logo-panels" style="margin-top:20px;max-height:none;min-height:0;height:auto;">
+
+          <!-- LEFT: Our Esteemed Clientele -->
+          <div class="s7-logo-panel" style="overflow:visible;height:auto;">
+            <div class="s7-lp-header">
+              <div class="s7-lp-title">Our Esteemed Clientele</div>
+            </div>
+            <div class="s7-lp-sub">Serving modern age companies for their various business needs across different products</div>
+            <div class="s7-lp-divider"></div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;">
+
+              <!-- GCCs -->
+              <div class="s7-sub-panel" style="overflow:visible;padding:8px 12px 12px;">
+                <div class="s7-sp-label">GCCs</div>
+                <div class="s7-gccs-row" style="padding:8px 0;">
+                  <img src="logos_clientele_supply/komatsu.png" alt="Komatsu" class="s7-logo-img s7-logo-img--xl" style="height:68px;max-width:210px;">
+                  <img src="logos_clientele_supply/acsendion.png" alt="Ascendion" class="s7-logo-img s7-logo-img--lg" style="height:58px;max-width:180px;">
+                  <img src="logos_clientele_supply/nachi.png" alt="NACHI" class="s7-logo-img s7-logo-img--xl">
+                </div>
+              </div>
+
+              <!-- Start-Ups + New Age Brands -->
+              <div class="s7-sub-panel" style="overflow:visible;padding:8px 12px 12px;">
+                <div class="s7-sp-label">Start-Ups + New Age Brands</div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 8px;align-items:center;justify-items:center;padding:8px 0;">
+                  <img src="logos_clientele_supply/zomato.png" alt="Zomato" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/flipkart.png" alt="Flipkart" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/keka.png" alt="Keka" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/credgenics.png" alt="Credgenics" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/cars24.png" alt="Cars24" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/signzy.png" alt="Signzy" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/tvf.jpg" alt="TVF" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/jiosaavn.png" alt="JioSaavn" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/rebel.png" alt="Rebel Foods" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/angleone.png" alt="AngelOne" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/yulu.jpg" alt="Yulu" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/mpl.png" alt="MPL" class="s7-logo-img s7-logo-img--lg">
+                </div>
+              </div>
+
+              <!-- Enterprises -->
+              <div class="s7-sub-panel" style="overflow:visible;padding:8px 12px 12px;">
+                <div class="s7-sp-label">Enterprises</div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 8px;align-items:center;justify-items:center;padding:8px 0;">
+                  <img src="logos_clientele_supply/marriot.png" alt="Marriott" class="s7-logo-img">
+                  <img src="logos_clientele_supply/axis.png" alt="Axis Bank" class="s7-logo-img" style="height:56px;max-width:160px;">
+                  <img src="logos_clientele_supply/tatacliq.png" alt="Tata CliQ" class="s7-logo-img">
+                  <img src="logos_clientele_supply/philips.png" alt="Philip Morris" class="s7-logo-img">
+                  <img src="logos_clientele_supply/ouylok.png" alt="Outlook" class="s7-logo-img">
+                  <img src="logos_clientele_supply/adity.png" alt="Aditya Birla" class="s7-logo-img">
+                  <img src="logos_clientele_supply/uni.png" alt="UNICEF" class="s7-logo-img">
+                  <img src="logos_clientele_supply/io.png" alt="IndianOil" class="s7-logo-img">
+                  <img src="logos_clientele_supply/emami.png" alt="Emami" class="s7-logo-img">
+                  <img src="logos_clientele_supply/taj.png" alt="TAJ" class="s7-logo-img">
+                  <img src="logos_clientele_supply/mahi.png" alt="Mahindra Lifespaces" class="s7-logo-img">
+                  <img src="logos_clientele_supply/teamlease.png" alt="TeamLease" class="s7-logo-img" style="height:64px;max-width:180px;">
+                </div>
+              </div>
+
+            </div>
           </div>
-          <div style="border:1px solid var(--hairline);border-radius:var(--radius);overflow:hidden;">
-            <img src="ch2_book_images/supply_partners.png" alt="Our Space Partners" style="width:100%;display:block;object-fit:contain;background:#fff;">
+
+          <!-- RIGHT: Our Space Partners -->
+          <div class="s7-logo-panel" style="overflow:visible;height:auto;">
+            <div class="s7-lp-header">
+              <div class="s7-lp-title">Our Space Partners</div>
+            </div>
+            <div class="s7-lp-sub">Largest network of flex, commercial real estate players in India; Now expanding the platform internationally</div>
+            <div class="s7-lp-divider"></div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;">
+
+              <!-- Grade A Developers -->
+              <div class="s7-sub-panel" style="overflow:visible;padding:8px 12px 12px;">
+                <div class="s7-sp-label">Grade A Developers</div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 8px;align-items:center;justify-items:center;padding:8px 0;">
+                  <img src="logos_clientele_supply/m3m.jpg" alt="M3M" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/embassy.png" alt="Embassy" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/unitech.png" alt="Unitech" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/vamsimran.jpg" alt="Vamsimran" class="s7-logo-img s7-logo-img--lg" style="height:58px;max-width:180px;">
+                </div>
+              </div>
+
+              <!-- Managed Office Brands -->
+              <div class="s7-sub-panel" style="overflow:visible;padding:8px 12px 12px;">
+                <div class="s7-sp-label">Managed Office Brands</div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 8px;align-items:center;justify-items:center;padding:8px 0;">
+                  <img src="logos_clientele_supply/smartworks.png" alt="Smartworks" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/indi.png" alt="IndiQube" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/tablespac.png" alt="Table Space" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/urbanvault.png" alt="Urban Vault" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+                  <img src="logos_clientele_supply/devx.png" alt="DevX" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/isprout.jpg" alt="iSprout" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/headquarters.png" alt="The Headquarters" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/simpli.jpg" alt="Simpliwork" class="s7-logo-img s7-logo-img--lg">
+                </div>
+              </div>
+
+              <!-- Coworking Brands -->
+              <div class="s7-sub-panel" style="overflow:visible;padding:8px 12px 12px;">
+                <div class="s7-sp-label">Coworking Brands</div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 8px;align-items:center;justify-items:center;padding:8px 0;">
+                  <img src="logos_clientele_supply/wework.png" alt="WeWork" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/awfis.png" alt="Awfis" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/innox8.png" alt="Innov8" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/bhive.png" alt="Bhive" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+                  <img src="logos_clientele_supply/efc.png" alt="EFC" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+                  <img src="logos_clientele_supply/springhouse.png" alt="Spring House" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/regus.png" alt="Regus" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/coworks.png" alt="Cowrks" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/91sb.png" alt="91Springboard" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+                  <img src="logos_clientele_supply/exec_centre.png" alt="The Executive Centre" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+                  <img src="logos_clientele_supply/vatika.jpg" alt="Vatika" class="s7-logo-img s7-logo-img--lg">
+                  <img src="logos_clientele_supply/altf.png" alt="alt.f" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+                </div>
+              </div>
+
+            </div>
           </div>
+
         </div>
 
         <div class="takeaway">The logos above aren't decoration — they're proof. Tata, Wipro, PhonePe, and hundreds of other organisations have trusted myHQ with their workspace needs.</div>
