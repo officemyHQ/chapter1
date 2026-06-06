@@ -251,44 +251,40 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 .s6-tier-meta  { font-size: 15px; font-weight: 700; color: var(--green); }
 
 /* ── SCREEN 7: SCALE & CLIENTS ── */
-.screen-scale { background: var(--white); display: flex; flex-direction: column; justify-content: flex-start; padding: clamp(8px,1.2vh,20px) clamp(16px,3vw,48px) clamp(8px,1.2vh,16px); gap: clamp(4px,0.6vh,8px); overflow: hidden; }
-.s7-eyebrow { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--blue); display: flex; align-items: center; gap: 10px; }
-.s7-eyebrow::before { content: ''; width: 9px; height: 9px; background: var(--blue); border-radius: 50%; display: block; }
-.s7-title { font-size: clamp(0.9rem,1.5vw,1.6rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); flex-shrink: 0; }
-.s7-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(4px,0.6vw,12px); width: 100%; flex-shrink: 0; }
-.s7-stat { border: 1px solid var(--hairline); border-radius: var(--radius); background: #f7f8ff; display: flex; align-items: flex-start; gap: clamp(4px,0.5vw,8px); padding: clamp(6px,1vh,14px) clamp(6px,0.8vw,12px); min-height: 0; }
-.s7-stat-icon { font-size: clamp(0.8rem,1.1vw,1.1rem); flex-shrink: 0; margin-top: 2px; width: 22px; text-align: center; }
-.s7-stat-num { font-size: clamp(0.75rem,1vw,1.15rem); font-weight: 800; color: var(--blue); letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 1px; }
-.s7-stat-lbl { font-size: clamp(9px,0.75vw,12px); color: var(--body); line-height: 1.3; font-weight: 500; }
-.s7-img-row { display: flex; align-items: flex-start; gap: 16px; width: 100%; }
-.s7-img-panel { border: 1px solid var(--hairline); border-radius: var(--radius); overflow: hidden; display: inline-flex; padding: 16px; }
-.s7-img-panel img { width: 100%; height: auto; max-height: 43.7vh; display: block; object-fit: contain; }
+.screen-scale { background: var(--white); overflow: hidden; position: relative; }
+.s7-canvas { width: 1440px; height: 860px; flex-shrink: 0; transform-origin: top left; display: flex; flex-direction: column; padding: 28px 48px 20px; gap: 8px; box-sizing: border-box; position: absolute; top: 0; left: 0; }
+.s7-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); flex-shrink: 0; }
+.s7-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; width: 100%; flex-shrink: 0; }
+.s7-stat { border: 1px solid var(--hairline); border-radius: var(--radius); background: #f7f8ff; display: flex; align-items: flex-start; gap: 8px; padding: 14px 12px; }
+.s7-stat-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; width: 26px; text-align: center; }
+.s7-stat-num { font-size: 1.15rem; font-weight: 800; color: var(--blue); letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 1px; }
+.s7-stat-lbl { font-size: 12px; color: var(--body); line-height: 1.3; font-weight: 500; }
 
 /* ── SCREEN 7: LOGO GRID ── */
-.s7-logo-panels { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(6px,0.8vw,12px); width: 100%; flex: 1; min-height: 0; align-items: stretch; margin-top: clamp(4px,0.6vh,10px); }
-.s7-logo-panel { border: 1px solid var(--hairline); border-radius: var(--radius); padding: clamp(8px,1vh,14px) clamp(10px,1.2vw,16px); background: #fff; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
-.s7-lp-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; flex-shrink: 0; }
-.s7-lp-title { font-size: clamp(0.8rem,1.1vw,1.15rem); font-weight: 800; color: var(--blue); letter-spacing: -0.02em; }
-.s7-lp-sub { font-size: clamp(8px,0.65vw,10px); color: var(--body); margin-bottom: clamp(4px,0.5vh,8px); font-weight: 500; flex-shrink: 0; }
-.s7-lp-divider { width: 100%; height: 1.5px; background: repeating-linear-gradient(90deg, var(--blue) 0, var(--blue) 6px, transparent 6px, transparent 12px); margin-bottom: clamp(4px,0.5vh,10px); opacity: 0.35; flex-shrink: 0; }
+.s7-logo-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; flex: 1; min-height: 0; align-items: stretch; }
+.s7-logo-panel { border: 1px solid var(--hairline); border-radius: var(--radius); padding: 14px 16px 16px; background: #fff; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.s7-lp-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; flex-shrink: 0; }
+.s7-lp-title { font-size: 1.15rem; font-weight: 800; color: var(--blue); letter-spacing: -0.02em; }
+.s7-lp-sub { font-size: 10px; color: var(--body); margin-bottom: 8px; font-weight: 500; flex-shrink: 0; }
+.s7-lp-divider { width: 100%; height: 1.5px; background: repeating-linear-gradient(90deg, var(--blue) 0, var(--blue) 6px, transparent 6px, transparent 12px); margin-bottom: 10px; opacity: 0.35; flex-shrink: 0; }
 .s7-lp-myHQ-icon { width: 30px; height: 30px; object-fit: contain; }
 .s7-sub-panels { display: grid; gap: 8px; flex: 1; min-height: 0; align-items: stretch; }
 .s7-sub-panels--clientele { grid-template-columns: 7fr 5fr; }
 .s7-sub-panels--partners { grid-template-columns: 1fr 1fr; }
-.s7-sub-panel { border: 1px solid rgba(30,34,170,0.18); border-radius: 8px; padding: clamp(2px,0.3vh,4px) clamp(6px,0.8vw,12px) clamp(4px,0.6vh,10px); display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
-.s7-sp-label { font-size: clamp(9px,0.75vw,13px); font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; flex-shrink: 0; }
-.s7-logo-grid { display: flex; flex-wrap: wrap; align-items: center; gap: clamp(4px,0.5vh,10px) clamp(6px,0.8vw,16px); flex: 1; align-content: space-around; }
-.s7-logo-img { height: clamp(22px,3.2vh,42px); width: auto; max-width: 110px; object-fit: contain; }
-.s7-logo-img--lg { height: clamp(26px,3.6vh,46px); max-width: 130px; }
-.s7-logo-img--xl { height: clamp(30px,4vh,52px); max-width: 155px; }
+.s7-sub-panel { border: 1px solid rgba(30,34,170,0.18); border-radius: 8px; padding: 2px 12px 10px; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.s7-sp-label { font-size: 13px; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; flex-shrink: 0; }
+.s7-logo-grid { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; flex: 1; align-content: space-around; }
+.s7-logo-img { height: 42px; width: auto; max-width: 120px; object-fit: contain; }
+.s7-logo-img--lg { height: 46px; max-width: 140px; }
+.s7-logo-img--xl { height: 52px; max-width: 170px; }
 .s7-sub-panels--partners-right { grid-template-rows: 1fr 1fr; }
 .s7-partner-grid { display: grid; gap: 8px; }
 .s7-partner-grid--cw { grid-template-columns: 1fr 1fr; }
 .s7-partner-grid--right { grid-template-rows: 1fr 1fr; }
 .s7-enterprises-grid { display: grid; grid-template-columns: repeat(3,1fr); row-gap: 1px; align-items: center; justify-items: center; flex: 1; align-content: flex-start; }
-.s7-enterprises-grid .s7-logo-img { height: clamp(20px,2.8vh,42px); max-width: 110px; }
+.s7-enterprises-grid .s7-logo-img { height: 42px; max-width: 120px; }
 .s7-gccs-row { display: flex; align-items: center; flex-wrap: wrap; flex: 1; align-content: center; justify-content: space-around; width: 100%; }
-.s7-gccs-row .s7-logo-img { height: clamp(28px,4vh,68px); max-width: 160px; }
+.s7-gccs-row .s7-logo-img { height: 48px; max-width: 160px; }
 .s7-logo-badge { font-size: 11px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; border: 1px solid var(--hairline); border-radius: 4px; padding: 3px 8px; white-space: nowrap; }
 
 /* ── SCREEN 8: AMBITION ── */
@@ -882,6 +878,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 
   <!-- SCREEN 7: SCALE, CLIENTELE & PARTNERS -->
   <div class="screen screen-scale">
+    <div class="s7-canvas" id="s7-canvas">
     <div class="s7-title">India's #1 online platform — and growing 15% MoM.</div>
 
     <div class="s7-stats">
@@ -947,8 +944,8 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
           <div class="s7-sub-panel">
             <div class="s7-sp-label">GCCs</div>
             <div class="s7-gccs-row">
-              <img src="logos_clientele_supply/komatsu.png" alt="Komatsu" class="s7-logo-img s7-logo-img--xl" style="height:clamp(30px,5vh,68px);max-width:210px;">
-              <img src="logos_clientele_supply/acsendion.png" alt="Ascendion" class="s7-logo-img s7-logo-img--lg" style="height:clamp(26px,4.2vh,58px);max-width:180px;">
+              <img src="logos_clientele_supply/komatsu.png" alt="Komatsu" class="s7-logo-img s7-logo-img--xl" style="height:68px;max-width:210px;">
+              <img src="logos_clientele_supply/acsendion.png" alt="Ascendion" class="s7-logo-img s7-logo-img--lg" style="height:58px;max-width:180px;">
               <img src="logos_clientele_supply/nachi.png" alt="NACHI" class="s7-logo-img s7-logo-img--xl">
             </div>
           </div>
@@ -977,7 +974,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
             <div class="s7-sp-label">Enterprises</div>
             <div class="s7-enterprises-grid" style="grid-template-columns:repeat(4,1fr);">
               <img src="logos_clientele_supply/marriot.png" alt="Marriott" class="s7-logo-img">
-              <img src="logos_clientele_supply/axis.png" alt="Axis Bank" class="s7-logo-img" style="height:clamp(24px,4vh,56px);max-width:160px;">
+              <img src="logos_clientele_supply/axis.png" alt="Axis Bank" class="s7-logo-img" style="height:56px;max-width:160px;">
               <img src="logos_clientele_supply/tatacliq.png" alt="Tata CliQ" class="s7-logo-img">
               <img src="logos_clientele_supply/philips.png" alt="Philip Morris" class="s7-logo-img">
               <img src="logos_clientele_supply/ouylok.png" alt="Outlook" class="s7-logo-img">
@@ -987,7 +984,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
               <img src="logos_clientele_supply/emami.png" alt="Emami" class="s7-logo-img">
               <img src="logos_clientele_supply/taj.png" alt="TAJ" class="s7-logo-img">
               <img src="logos_clientele_supply/mahi.png" alt="Mahindra Lifespaces" class="s7-logo-img">
-              <img src="logos_clientele_supply/teamlease.png" alt="TeamLease" class="s7-logo-img" style="height:clamp(28px,4.6vh,64px);max-width:180px;">
+              <img src="logos_clientele_supply/teamlease.png" alt="TeamLease" class="s7-logo-img" style="height:64px;max-width:180px;">
             </div>
           </div>
 
@@ -1012,7 +1009,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
               <img src="logos_clientele_supply/m3m.jpg" alt="M3M" class="s7-logo-img s7-logo-img--lg">
               <img src="logos_clientele_supply/embassy.png" alt="Embassy" class="s7-logo-img s7-logo-img--lg">
               <img src="logos_clientele_supply/unitech.png" alt="Unitech" class="s7-logo-img s7-logo-img--lg">
-              <img src="logos_clientele_supply/vamsimran.jpg" alt="Vamsimran" class="s7-logo-img s7-logo-img--lg" style="height:clamp(26px,4.2vh,58px);max-width:180px;">
+              <img src="logos_clientele_supply/vamsimran.jpg" alt="Vamsimran" class="s7-logo-img s7-logo-img--lg" style="height:58px;max-width:180px;">
             </div>
           </div>
 
@@ -1023,7 +1020,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
               <img src="logos_clientele_supply/smartworks.png" alt="Smartworks" class="s7-logo-img s7-logo-img--lg">
               <img src="logos_clientele_supply/indi.png" alt="IndiQube" class="s7-logo-img s7-logo-img--lg">
               <img src="logos_clientele_supply/tablespac.png" alt="Table Space" class="s7-logo-img s7-logo-img--lg">
-              <img src="logos_clientele_supply/urbanvault.png" alt="Urban Vault" class="s7-logo-img s7-logo-img--lg" style="height:clamp(28px,4.6vh,64px);max-width:180px;">
+              <img src="logos_clientele_supply/urbanvault.png" alt="Urban Vault" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
               <img src="logos_clientele_supply/devx.png" alt="DevX" class="s7-logo-img s7-logo-img--lg">
               <img src="logos_clientele_supply/isprout.jpg" alt="iSprout" class="s7-logo-img s7-logo-img--lg">
               <img src="logos_clientele_supply/headquarters.png" alt="The Headquarters" class="s7-logo-img s7-logo-img--lg">
@@ -1038,15 +1035,15 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
               <img src="logos_clientele_supply/wework.png" alt="WeWork" class="s7-logo-img s7-logo-img--lg">
               <img src="logos_clientele_supply/awfis.png" alt="Awfis" class="s7-logo-img s7-logo-img--lg">
               <img src="logos_clientele_supply/innox8.png" alt="Innov8" class="s7-logo-img s7-logo-img--lg">
-              <img src="logos_clientele_supply/bhive.png" alt="Bhive" class="s7-logo-img s7-logo-img--lg" style="height:clamp(28px,4.6vh,64px);max-width:180px;">
-              <img src="logos_clientele_supply/efc.png" alt="EFC" class="s7-logo-img s7-logo-img--lg" style="height:clamp(28px,4.6vh,64px);max-width:180px;">
+              <img src="logos_clientele_supply/bhive.png" alt="Bhive" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+              <img src="logos_clientele_supply/efc.png" alt="EFC" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
               <img src="logos_clientele_supply/springhouse.png" alt="Spring House" class="s7-logo-img s7-logo-img--lg">
               <img src="logos_clientele_supply/regus.png" alt="Regus" class="s7-logo-img s7-logo-img--lg">
               <img src="logos_clientele_supply/coworks.png" alt="Cowrks" class="s7-logo-img s7-logo-img--lg">
-              <img src="logos_clientele_supply/91sb.png" alt="91Springboard" class="s7-logo-img s7-logo-img--lg" style="height:clamp(28px,4.6vh,64px);max-width:180px;">
-              <img src="logos_clientele_supply/exec_centre.png" alt="The Executive Centre" class="s7-logo-img s7-logo-img--lg" style="height:clamp(28px,4.6vh,64px);max-width:180px;">
+              <img src="logos_clientele_supply/91sb.png" alt="91Springboard" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+              <img src="logos_clientele_supply/exec_centre.png" alt="The Executive Centre" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
               <img src="logos_clientele_supply/vatika.jpg" alt="Vatika" class="s7-logo-img s7-logo-img--lg">
-              <img src="logos_clientele_supply/altf.png" alt="alt.f" class="s7-logo-img s7-logo-img--lg" style="height:clamp(28px,4.6vh,64px);max-width:180px;">
+              <img src="logos_clientele_supply/altf.png" alt="alt.f" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
             </div>
           </div>
 
@@ -1056,6 +1053,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
     </div><!-- /s7-logo-panels -->
 
     <button class="screen-next-btn" onclick="next()" style="position:static;align-self:flex-end;margin-top:4px;"><i class="fa-solid fa-arrow-right"></i></button>
+    </div><!-- /s7-canvas -->
   </div>
 
   <!-- SCREEN 8: THE AMBITION -->
@@ -1931,8 +1929,8 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
               <div class="s7-sub-panel" style="overflow:visible;padding:8px 12px 12px;">
                 <div class="s7-sp-label">GCCs</div>
                 <div class="s7-gccs-row" style="padding:8px 0;">
-                  <img src="logos_clientele_supply/komatsu.png" alt="Komatsu" class="s7-logo-img s7-logo-img--xl" style="height:clamp(30px,5vh,68px);max-width:210px;">
-                  <img src="logos_clientele_supply/acsendion.png" alt="Ascendion" class="s7-logo-img s7-logo-img--lg" style="height:clamp(26px,4.2vh,58px);max-width:180px;">
+                  <img src="logos_clientele_supply/komatsu.png" alt="Komatsu" class="s7-logo-img s7-logo-img--xl" style="height:68px;max-width:210px;">
+                  <img src="logos_clientele_supply/acsendion.png" alt="Ascendion" class="s7-logo-img s7-logo-img--lg" style="height:58px;max-width:180px;">
                   <img src="logos_clientele_supply/nachi.png" alt="NACHI" class="s7-logo-img s7-logo-img--xl">
                 </div>
               </div>
@@ -1961,7 +1959,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
                 <div class="s7-sp-label">Enterprises</div>
                 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 8px;align-items:center;justify-items:center;padding:8px 0;">
                   <img src="logos_clientele_supply/marriot.png" alt="Marriott" class="s7-logo-img">
-                  <img src="logos_clientele_supply/axis.png" alt="Axis Bank" class="s7-logo-img" style="height:clamp(24px,4vh,56px);max-width:160px;">
+                  <img src="logos_clientele_supply/axis.png" alt="Axis Bank" class="s7-logo-img" style="height:56px;max-width:160px;">
                   <img src="logos_clientele_supply/tatacliq.png" alt="Tata CliQ" class="s7-logo-img">
                   <img src="logos_clientele_supply/philips.png" alt="Philip Morris" class="s7-logo-img">
                   <img src="logos_clientele_supply/ouylok.png" alt="Outlook" class="s7-logo-img">
@@ -1971,7 +1969,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
                   <img src="logos_clientele_supply/emami.png" alt="Emami" class="s7-logo-img">
                   <img src="logos_clientele_supply/taj.png" alt="TAJ" class="s7-logo-img">
                   <img src="logos_clientele_supply/mahi.png" alt="Mahindra Lifespaces" class="s7-logo-img">
-                  <img src="logos_clientele_supply/teamlease.png" alt="TeamLease" class="s7-logo-img" style="height:clamp(28px,4.6vh,64px);max-width:180px;">
+                  <img src="logos_clientele_supply/teamlease.png" alt="TeamLease" class="s7-logo-img" style="height:64px;max-width:180px;">
                 </div>
               </div>
 
@@ -1995,7 +1993,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
                   <img src="logos_clientele_supply/m3m.jpg" alt="M3M" class="s7-logo-img s7-logo-img--lg">
                   <img src="logos_clientele_supply/embassy.png" alt="Embassy" class="s7-logo-img s7-logo-img--lg">
                   <img src="logos_clientele_supply/unitech.png" alt="Unitech" class="s7-logo-img s7-logo-img--lg">
-                  <img src="logos_clientele_supply/vamsimran.jpg" alt="Vamsimran" class="s7-logo-img s7-logo-img--lg" style="height:clamp(26px,4.2vh,58px);max-width:180px;">
+                  <img src="logos_clientele_supply/vamsimran.jpg" alt="Vamsimran" class="s7-logo-img s7-logo-img--lg" style="height:58px;max-width:180px;">
                 </div>
               </div>
 
@@ -2006,7 +2004,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
                   <img src="logos_clientele_supply/smartworks.png" alt="Smartworks" class="s7-logo-img s7-logo-img--lg">
                   <img src="logos_clientele_supply/indi.png" alt="IndiQube" class="s7-logo-img s7-logo-img--lg">
                   <img src="logos_clientele_supply/tablespac.png" alt="Table Space" class="s7-logo-img s7-logo-img--lg">
-                  <img src="logos_clientele_supply/urbanvault.png" alt="Urban Vault" class="s7-logo-img s7-logo-img--lg" style="height:clamp(28px,4.6vh,64px);max-width:180px;">
+                  <img src="logos_clientele_supply/urbanvault.png" alt="Urban Vault" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
                   <img src="logos_clientele_supply/devx.png" alt="DevX" class="s7-logo-img s7-logo-img--lg">
                   <img src="logos_clientele_supply/isprout.jpg" alt="iSprout" class="s7-logo-img s7-logo-img--lg">
                   <img src="logos_clientele_supply/headquarters.png" alt="The Headquarters" class="s7-logo-img s7-logo-img--lg">
@@ -2021,15 +2019,15 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
                   <img src="logos_clientele_supply/wework.png" alt="WeWork" class="s7-logo-img s7-logo-img--lg">
                   <img src="logos_clientele_supply/awfis.png" alt="Awfis" class="s7-logo-img s7-logo-img--lg">
                   <img src="logos_clientele_supply/innox8.png" alt="Innov8" class="s7-logo-img s7-logo-img--lg">
-                  <img src="logos_clientele_supply/bhive.png" alt="Bhive" class="s7-logo-img s7-logo-img--lg" style="height:clamp(28px,4.6vh,64px);max-width:180px;">
-                  <img src="logos_clientele_supply/efc.png" alt="EFC" class="s7-logo-img s7-logo-img--lg" style="height:clamp(28px,4.6vh,64px);max-width:180px;">
+                  <img src="logos_clientele_supply/bhive.png" alt="Bhive" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+                  <img src="logos_clientele_supply/efc.png" alt="EFC" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
                   <img src="logos_clientele_supply/springhouse.png" alt="Spring House" class="s7-logo-img s7-logo-img--lg">
                   <img src="logos_clientele_supply/regus.png" alt="Regus" class="s7-logo-img s7-logo-img--lg">
                   <img src="logos_clientele_supply/coworks.png" alt="Cowrks" class="s7-logo-img s7-logo-img--lg">
-                  <img src="logos_clientele_supply/91sb.png" alt="91Springboard" class="s7-logo-img s7-logo-img--lg" style="height:clamp(28px,4.6vh,64px);max-width:180px;">
-                  <img src="logos_clientele_supply/exec_centre.png" alt="The Executive Centre" class="s7-logo-img s7-logo-img--lg" style="height:clamp(28px,4.6vh,64px);max-width:180px;">
+                  <img src="logos_clientele_supply/91sb.png" alt="91Springboard" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
+                  <img src="logos_clientele_supply/exec_centre.png" alt="The Executive Centre" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
                   <img src="logos_clientele_supply/vatika.jpg" alt="Vatika" class="s7-logo-img s7-logo-img--lg">
-                  <img src="logos_clientele_supply/altf.png" alt="alt.f" class="s7-logo-img s7-logo-img--lg" style="height:clamp(28px,4.6vh,64px);max-width:180px;">
+                  <img src="logos_clientele_supply/altf.png" alt="alt.f" class="s7-logo-img s7-logo-img--lg" style="height:64px;max-width:180px;">
                 </div>
               </div>
 
@@ -2404,7 +2402,21 @@ window.addEventListener('DOMContentLoaded', () => {
   buildDots();
   document.querySelectorAll('.screen')[0].classList.add('active');
   updateCounter();
+  scaleS7Canvas();
 });
+
+function scaleS7Canvas() {
+  const canvas = document.getElementById('s7-canvas');
+  if (!canvas) return;
+  const screen = canvas.closest('.screen-scale');
+  const sw = screen.clientWidth;
+  const sh = screen.clientHeight;
+  const scale = Math.min(sw / 1440, sh / 860);
+  const tx = (sw - 1440 * scale) / 2;
+  const ty = (sh - 860 * scale) / 2;
+  canvas.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
+}
+window.addEventListener('resize', scaleS7Canvas);
 
 /* ── ASSESSMENT ── */
 const SHEET_URL_CH2 = 'https://script.google.com/macros/s/AKfycbwX0Z5vx6DSwdwZwK26pKZL3V3U9XwEyWgPa9Ek_cFEH1_tpULnWNcn7RlgE-wT8M9M/exec';
