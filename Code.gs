@@ -202,10 +202,7 @@ function doPost(e) {
 }
 
 function nowIST() {
-  var now = new Date();
-  // IST is UTC+5:30
-  var ist = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
-  return Utilities.formatDate(ist, 'Asia/Kolkata', 'dd MMM yyyy, hh:mm a');
+  return Utilities.formatDate(new Date(), 'Asia/Kolkata', 'dd MMM yyyy, hh:mm a');
 }
 
 function upsertUserProgress(ss, email, name, course) {
