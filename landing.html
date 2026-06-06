@@ -490,6 +490,10 @@ async function handleSubmit() {
     const res = await fetch(APPS_SCRIPT_URL + '?action=login&username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
     const data = await res.json();
     if (data.success) {
+      // Clear all progress keys first so a new user on a shared device starts clean
+      ['myhq_ch1_answers','myhq_ch1_submitted','myhq_ch1_complete',
+       'myhq_ch2_answers','myhq_ch2_submitted','myhq_ch2_complete','myhq_ch2_unlocked'].forEach(k => localStorage.removeItem(k));
+
       localStorage.setItem('myhq_name', data.name);
       localStorage.setItem('myhq_email', data.email);
       localStorage.setItem('myhq_course', data.course || 'Beginner Course');
