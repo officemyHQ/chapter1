@@ -2351,6 +2351,7 @@ function goTo(index) {
   dots[current].classList.add('active');
   updateCounter();
   const keyHint = document.getElementById('keyHint'); if (keyHint) keyHint.classList.add('hidden');
+  if (current === 7) setTimeout(scaleS7Canvas, 50);
   setTimeout(() => animating = false, 520);
 }
 
@@ -2402,7 +2403,6 @@ window.addEventListener('DOMContentLoaded', () => {
   buildDots();
   document.querySelectorAll('.screen')[0].classList.add('active');
   updateCounter();
-  scaleS7Canvas();
 });
 
 function scaleS7Canvas() {
