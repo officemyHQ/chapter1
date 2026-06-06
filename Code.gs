@@ -17,10 +17,17 @@ function doGet(e) {
 
     for (var i = 1; i < data.length; i++) {
       if (data[i][0] === username && String(data[i][1]) === String(password)) {
+        var name = data[i][2] || username;
+        var email = data[i][0];
+        var course = data[i][3] || 'Beginner Course';
+
+        upsertUserProgress(ss, email, name, course);
+
         return ContentService.createTextOutput(JSON.stringify({
           success: true,
-          name: data[i][2] || username,
-          email: data[i][0]
+          name: name,
+          email: email,
+          course: course
         })).setMimeType(ContentService.MimeType.JSON);
       }
     }
@@ -37,12 +44,9 @@ function doGet(e) {
 
     var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-    // Check Chapter 2
     var ch2Sheet = ss.getSheetByName('Chapter 2 Responses');
     if (ch2Sheet) {
       var ch2Data = ch2Sheet.getDataRange().getValues();
-      // Columns: Timestamp(0), Name(1), Email(2), Q1(3), Q2(4), Q3(5), Q4(6)
-      // Scan bottom-up to get the most recent submission
       for (var i = ch2Data.length - 1; i >= 1; i--) {
         if (String(ch2Data[i][2]).toLowerCase() === String(email).toLowerCase()) {
           return ContentService.createTextOutput(JSON.stringify({
@@ -59,11 +63,9 @@ function doGet(e) {
       }
     }
 
-    // Check Chapter 1
     var ch1Sheet = ss.getSheetByName('Chapter 1 Responses');
     if (ch1Sheet) {
       var ch1Data = ch1Sheet.getDataRange().getValues();
-      // Columns: Timestamp(0), Name(1), Email(2), Q1(3), Q2(4), Q3(5), Q4(6), Q5(7)
       for (var j = ch1Data.length - 1; j >= 1; j--) {
         if (String(ch1Data[j][2]).toLowerCase() === String(email).toLowerCase()) {
           return ContentService.createTextOutput(JSON.stringify({
@@ -94,8 +96,6 @@ function doGet(e) {
 
     var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-    // Build user map from username sheet
-    // Columns: A=email/username, B=password, C=display name
     var userSheet = ss.getSheetByName('username');
     var userData = userSheet.getDataRange().getValues();
     var users = {};
@@ -113,7 +113,6 @@ function doGet(e) {
       };
     }
 
-    // Mark Ch1 submissions
     var ch1Sheet = ss.getSheetByName('Chapter 1 Responses');
     if (ch1Sheet) {
       var ch1Data = ch1Sheet.getDataRange().getValues();
@@ -126,7 +125,6 @@ function doGet(e) {
       }
     }
 
-    // Mark Ch2 submissions
     var ch2Sheet = ss.getSheetByName('Chapter 2 Responses');
     if (ch2Sheet) {
       var ch2Data = ch2Sheet.getDataRange().getValues();
@@ -175,8 +173,60 @@ function doPost(e) {
     if (sheetName === 'Chapter 1 Responses') row.push(data.q5 || '');
 
     sheet.appendRow(row);
+
+    // Update User Progress tab
+    if (data.email && data.email !== '—') {
+      var progressSheet = getOrCreateProgressSheet(ss);
+      var progressData = progressSheet.getDataRange().getValues();
+      var emailLower = String(data.email).toLowerCase().trim();
+      var userRow = -1;
+      for (var i = 1; i < progressData.length; i++) {
+        if (String(progressData[i][0]).toLowerCase().trim() === emailLower) {
+          userRow = i + 1; // 1-indexed sheet row
+          break;
+        }
+      }
+      var now = new Date().toISOString();
+      if (userRow > 0) {
+        if (sheetName === 'Chapter 1 Responses') {
+          progressSheet.getRange(userRow, 5).setValue('Submitted'); // Ch1 Status
+          progressSheet.getRange(userRow, 6).setValue(now);         // Ch1 Submitted At
+        } else {
+          progressSheet.getRange(userRow, 7).setValue('Submitted'); // Ch2 Status
+          progressSheet.getRange(userRow, 8).setValue(now);         // Ch2 Submitted At
+        }
+      }
+    }
+
     return ContentService.createTextOutput('OK');
   } catch(err) {
     return ContentService.createTextOutput('Error: ' + err.message);
   }
+}
+
+function upsertUserProgress(ss, email, name, course) {
+  var sheet = getOrCreateProgressSheet(ss);
+  var data = sheet.getDataRange().getValues();
+  var emailLower = String(email).toLowerCase().trim();
+  var now = new Date().toISOString();
+
+  for (var i = 1; i < data.length; i++) {
+    if (String(data[i][0]).toLowerCase().trim() === emailLower) {
+      // Existing user — update Last Login only
+      sheet.getRange(i + 1, 4).setValue(now);
+      return;
+    }
+  }
+
+  // New user — append row with blank chapter statuses
+  sheet.appendRow([email, name, course, now, 'Not submitted', '', 'Not submitted', '']);
+}
+
+function getOrCreateProgressSheet(ss) {
+  var sheet = ss.getSheetByName('User Progress');
+  if (!sheet) {
+    sheet = ss.insertSheet('User Progress');
+    sheet.appendRow(['Email', 'Name', 'Course', 'Last Login', 'Ch1 Status', 'Ch1 Submitted At', 'Ch2 Status', 'Ch2 Submitted At']);
+  }
+  return sheet;
 }
