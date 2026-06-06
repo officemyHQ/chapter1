@@ -251,8 +251,9 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 .s6-tier-meta  { font-size: 15px; font-weight: 700; color: var(--green); }
 
 /* ── SCREEN 7: SCALE & CLIENTS ── */
-.screen-scale { background: var(--white); display: flex; flex-direction: column; justify-content: flex-start; padding: clamp(16px,2vw,28px) clamp(24px,4vw,48px) 16px; gap: 6px; overflow: hidden; }
-.s7-title { font-size: clamp(1.1rem,2vw,1.6rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); flex-shrink: 0; }
+.screen-scale { background: var(--white); overflow: hidden; position: relative; }
+.s7-canvas { width: 1440px; height: 860px; position: absolute; top: 0; left: 0; transform-origin: 0 0; display: flex; flex-direction: column; padding: 28px 48px 20px; gap: 8px; box-sizing: border-box; }
+.s7-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); flex-shrink: 0; }
 .s7-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; width: 100%; flex-shrink: 0; }
 .s7-stat { border: 1px solid var(--hairline); border-radius: var(--radius); background: #f7f8ff; display: flex; align-items: flex-start; gap: 8px; padding: 14px 12px; }
 .s7-stat-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; width: 26px; text-align: center; }
@@ -876,7 +877,8 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
   </div>
 
   <!-- SCREEN 7: SCALE, CLIENTELE & PARTNERS -->
-  <div class="screen screen-scale">
+  <div class="screen screen-scale" id="screen-scale">
+    <div class="s7-canvas" id="s7-canvas">
     <div class="s7-title">India's #1 online platform — and growing 15% MoM.</div>
 
     <div class="s7-stats">
@@ -1049,8 +1051,9 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
       </div>
 
     </div><!-- /s7-logo-panels -->
+    </div><!-- /s7-canvas -->
 
-    <button class="screen-next-btn" onclick="next()" style="position:static;align-self:flex-end;margin-top:4px;"><i class="fa-solid fa-arrow-right"></i></button>
+    <button class="screen-next-btn" onclick="next()"><i class="fa-solid fa-arrow-right"></i></button>
   </div>
 
   <!-- SCREEN 8: THE AMBITION -->
@@ -2348,6 +2351,7 @@ function goTo(index) {
   dots[current].classList.add('active');
   updateCounter();
   const keyHint = document.getElementById('keyHint'); if (keyHint) keyHint.classList.add('hidden');
+  if (current === 7) requestAnimationFrame(scaleS7Canvas);
   setTimeout(() => animating = false, 520);
 }
 
@@ -2516,6 +2520,22 @@ window.addEventListener('DOMContentLoaded', function initAssessment() {
   if (localStorage.getItem('myhq_ch2_submitted') === 'true') {
     showSubmittedState();
   }
+});
+
+function scaleS7Canvas() {
+  const canvas = document.getElementById('s7-canvas');
+  const scr = document.getElementById('screen-scale');
+  if (!canvas || !scr) return;
+  const sw = scr.clientWidth;
+  const sh = scr.clientHeight;
+  if (!sw || !sh) return;
+  const scale = Math.min(sw / 1440, sh / 860);
+  const tx = (sw - 1440 * scale) / 2;
+  const ty = (sh - 860 * scale) / 2;
+  canvas.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
+}
+window.addEventListener('resize', function() {
+  if (current === 7) scaleS7Canvas();
 });
 </script>
 </body>
