@@ -494,6 +494,22 @@ async function handleSubmit() {
       localStorage.setItem('myhq_email', data.email);
       localStorage.setItem('myhq_course', data.course || 'Beginner Course');
       localStorage.setItem('myhq_registered_at', new Date().toISOString());
+
+      // Restore submitted progress from Sheet so it survives new devices/browsers
+      try {
+        const progRes = await fetch(APPS_SCRIPT_URL + '?action=getProgress&email=' + encodeURIComponent(data.email));
+        const prog = await progRes.json();
+        if (prog.found) {
+          const prefix = prog.chapter === 'Chapter 2' ? 'myhq_ch2' : 'myhq_ch1';
+          localStorage.setItem(prefix + '_answers', JSON.stringify(prog.answers));
+          localStorage.setItem(prefix + '_submitted', 'true');
+          localStorage.setItem(prefix + '_complete', 'true');
+          if (prog.chapter === 'Chapter 1') {
+            localStorage.setItem('myhq_ch2_unlocked', 'true');
+          }
+        }
+      } catch (_) { /* non-fatal — progress restore fails silently */ }
+
       document.getElementById('success-name').textContent = data.name.split(' ')[0];
       document.getElementById('form-panel').style.display = 'none';
       document.getElementById('success-panel').classList.add('visible');
