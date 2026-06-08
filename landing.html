@@ -544,7 +544,7 @@ function signOut() {
 }
 
 function unlockCourseCards(course) {
-  const level = (course || '').toLowerCase();
+  const level = (course || '').toLowerCase().trim().split(' ')[0];
   const intermediate = document.getElementById('course-intermediate');
   const advanced = document.getElementById('course-advanced');
   if (level === 'intermediate' || level === 'advanced') {

@@ -612,7 +612,7 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 function updateHub() {
-  const course = (localStorage.getItem('myhq_course') || 'Beginner').toLowerCase();
+  const course = (localStorage.getItem('myhq_course') || 'Beginner').toLowerCase().trim().split(' ')[0];
   const isIntermediate = course === 'intermediate' || course === 'advanced';
   const isAdvanced = course === 'advanced';
 
