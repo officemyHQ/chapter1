@@ -433,15 +433,15 @@ a.course-list-item:hover { background: #e4e7ff; }
           <span class="course-list-name">Beginner</span>
           <span class="course-list-arrow">→</span>
         </a>
-        <div class="course-list-item locked">
+        <div class="course-list-item locked" id="course-intermediate">
           <span class="course-list-num">02</span>
           <span class="course-list-name">Intermediate</span>
-          <span class="course-list-lock">🔒</span>
+          <span class="course-list-lock" id="course-intermediate-icon">🔒</span>
         </div>
-        <div class="course-list-item locked">
+        <div class="course-list-item locked" id="course-advanced">
           <span class="course-list-num">03</span>
           <span class="course-list-name">Advanced</span>
-          <span class="course-list-lock">🔒</span>
+          <span class="course-list-lock" id="course-advanced-icon">🔒</span>
         </div>
       </div>
       <button class="signout-btn" onclick="signOut()">Sign out</button>
@@ -514,6 +514,7 @@ async function handleSubmit() {
       }
 
       document.getElementById('success-name').textContent = data.name.split(' ')[0];
+      unlockCourseCards(data.course || 'Beginner');
       document.getElementById('form-panel').style.display = 'none';
       document.getElementById('success-panel').classList.add('visible');
     } else {
@@ -542,11 +543,30 @@ function signOut() {
   document.getElementById('input-password').value = '';
 }
 
+function unlockCourseCards(course) {
+  const level = (course || '').toLowerCase();
+  const intermediate = document.getElementById('course-intermediate');
+  const advanced = document.getElementById('course-advanced');
+  if (level === 'intermediate' || level === 'advanced') {
+    intermediate.classList.remove('locked');
+    intermediate.innerHTML = '<span class="course-list-num">02</span><span class="course-list-name">Intermediate</span><span class="course-list-arrow">→</span>';
+    intermediate.style.cursor = 'pointer';
+    intermediate.onclick = () => { window.location.href = 'hub.html'; };
+  }
+  if (level === 'advanced') {
+    advanced.classList.remove('locked');
+    advanced.innerHTML = '<span class="course-list-num">03</span><span class="course-list-name">Advanced</span><span class="course-list-arrow">→</span>';
+    advanced.style.cursor = 'pointer';
+    advanced.onclick = () => { window.location.href = 'hub.html'; };
+  }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   const n = localStorage.getItem('myhq_name');
   const e = localStorage.getItem('myhq_email');
   if (n && e) {
     document.getElementById('success-name').textContent = n.split(' ')[0];
+    unlockCourseCards(localStorage.getItem('myhq_course') || 'Beginner');
     document.getElementById('form-panel').style.display = 'none';
     document.getElementById('success-panel').classList.add('visible');
     return;

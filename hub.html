@@ -612,9 +612,13 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 function updateHub() {
+  const course = (localStorage.getItem('myhq_course') || 'Beginner').toLowerCase();
+  const isIntermediate = course === 'intermediate' || course === 'advanced';
+  const isAdvanced = course === 'advanced';
+
   const ch1Progress = parseInt(localStorage.getItem('myhq_ch1_progress') || '0');
   const ch1Complete = localStorage.getItem('myhq_ch1_complete') === 'true';
-  const ch2Unlocked = localStorage.getItem('myhq_ch2_unlocked') === 'true';
+  const ch2Unlocked = localStorage.getItem('myhq_ch2_unlocked') === 'true' || isIntermediate;
   const ch2Progress = parseInt(localStorage.getItem('myhq_ch2_progress') || '0');
   const ch2Complete = localStorage.getItem('myhq_ch2_complete') === 'true';
 
@@ -656,6 +660,21 @@ function updateHub() {
     unlockSec.style.display = 'none';
   } else {
     document.getElementById('hint-ch2').textContent = 'Complete Chapter 1 and submit your answers to unlock Chapter 2.';
+  }
+
+  // AM chapters — unlock for Intermediate and Advanced
+  if (isIntermediate) {
+    document.querySelectorAll('.courses-wrap').forEach(wrap => {
+      if (wrap.querySelector('.card-num') && wrap.querySelector('.card-num').textContent.includes('AM')) return;
+    });
+    document.querySelectorAll('[id^="card-am"], .course-card.locked').forEach(card => {
+      const numEl = card.querySelector('.card-num');
+      if (numEl && numEl.textContent.includes('AM')) {
+        card.classList.remove('locked'); card.classList.add('unlocked');
+        const badge = card.querySelector('.badge-locked');
+        if (badge) { badge.textContent = 'Coming Soon'; badge.className = 'badge badge-blue'; }
+      }
+    });
   }
 }
 
