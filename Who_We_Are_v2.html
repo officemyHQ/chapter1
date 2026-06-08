@@ -2360,7 +2360,7 @@ function submitAssessment(e) {
     fetch(SHEET_URL_CH2, {
       method: 'POST', mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ chapter: 'Chapter 2', chapterName: 'Who We Are', name, email, timestamp: new Date().toISOString(), ...answers })
+      body: JSON.stringify({ chapter: 'Chapter 2', chapterName: 'Who We Are', status: 'Completed', name, email, timestamp: new Date().toISOString(), ...answers })
     }).catch(err => {
       errEl.textContent = 'Submission failed: ' + err.message + '. Please try again.';
       errEl.style.display = '';
