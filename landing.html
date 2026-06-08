@@ -487,10 +487,9 @@ async function handleSubmit() {
   btn.querySelector('.btn-text').textContent = 'Checking…';
 
   try {
-    const res = await fetch(APPS_SCRIPT_URL + '?action=login&username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
+    const res = await fetch(APPS_SCRIPT_URL + '?action=loginWithProgress&username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
     const data = await res.json();
     if (data.success) {
-      // Clear all progress keys first so a new user on a shared device starts clean
       ['myhq_ch1_answers','myhq_ch1_submitted','myhq_ch1_complete',
        'myhq_ch2_answers','myhq_ch2_submitted','myhq_ch2_complete','myhq_ch2_unlocked'].forEach(k => localStorage.removeItem(k));
 
@@ -499,24 +498,20 @@ async function handleSubmit() {
       localStorage.setItem('myhq_course', data.course || 'Beginner Course');
       localStorage.setItem('myhq_registered_at', new Date().toISOString());
 
-      // Restore submitted progress from Sheet so it survives new devices/browsers
-      try {
-        const progRes = await fetch(APPS_SCRIPT_URL + '?action=getProgress&email=' + encodeURIComponent(data.email));
-        const prog = await progRes.json();
-        if (prog.found) {
-          if (prog.ch1) {
-            localStorage.setItem('myhq_ch1_answers', JSON.stringify(prog.ch1));
-            localStorage.setItem('myhq_ch1_submitted', 'true');
-            localStorage.setItem('myhq_ch1_complete', 'true');
-            localStorage.setItem('myhq_ch2_unlocked', 'true');
-          }
-          if (prog.ch2) {
-            localStorage.setItem('myhq_ch2_answers', JSON.stringify(prog.ch2));
-            localStorage.setItem('myhq_ch2_submitted', 'true');
-            localStorage.setItem('myhq_ch2_complete', 'true');
-          }
+      const prog = data.progress;
+      if (prog && prog.found) {
+        if (prog.ch1) {
+          localStorage.setItem('myhq_ch1_answers', JSON.stringify(prog.ch1));
+          localStorage.setItem('myhq_ch1_submitted', 'true');
+          localStorage.setItem('myhq_ch1_complete', 'true');
+          localStorage.setItem('myhq_ch2_unlocked', 'true');
         }
-      } catch (_) { /* non-fatal — progress restore fails silently */ }
+        if (prog.ch2) {
+          localStorage.setItem('myhq_ch2_answers', JSON.stringify(prog.ch2));
+          localStorage.setItem('myhq_ch2_submitted', 'true');
+          localStorage.setItem('myhq_ch2_complete', 'true');
+        }
+      }
 
       document.getElementById('success-name').textContent = data.name.split(' ')[0];
       document.getElementById('form-panel').style.display = 'none';
