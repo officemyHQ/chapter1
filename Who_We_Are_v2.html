@@ -297,15 +297,22 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 .s7-logo-badge { font-size: clamp(9px,0.95vw,11px); font-weight: 700; color: var(--ink); letter-spacing: -0.01em; border: 1px solid var(--hairline); border-radius: 4px; padding: 3px 8px; white-space: nowrap; }
 
 /* ── SCREEN 8: AMBITION ── */
-.screen-ambition { background: var(--white); display: grid; grid-template-rows: auto auto 1fr; align-items: start; padding: clamp(16px,2.2vw,36px) clamp(28px,5vw,64px) clamp(36px,4vw,56px); gap: clamp(6px,0.8vw,12px); overflow: hidden; }
-.s5-headline { font-size: clamp(16px,1.9vw,28px); font-weight: 800; letter-spacing: -0.02em; color: var(--ink); line-height: 1.25; }
+.screen-ambition { background: var(--white); display: flex; flex-direction: column; padding: clamp(16px,2.2vw,36px) clamp(28px,5vw,64px) clamp(16px,2vw,28px); gap: clamp(6px,0.8vw,12px); overflow: hidden; }
+.s5-headline { font-size: clamp(16px,1.9vw,28px); font-weight: 800; letter-spacing: -0.02em; color: var(--ink); line-height: 1.25; flex-shrink: 0; }
 .s5-headline span { color: var(--blue); }
-.s5-subtext { font-size: clamp(12px,1.2vw,18px); color: var(--body); line-height: 1.55; }
+.s5-subtext { font-size: clamp(12px,1.2vw,18px); color: var(--body); line-height: 1.55; flex-shrink: 0; }
 .s5-subtext strong { color: var(--ink); font-weight: 800; }
 .s5-subtext em { font-style: italic; color: var(--blue); font-weight: 600; }
-.s5-body { display: grid; grid-template-columns: 1fr clamp(140px,16vw,220px); gap: clamp(12px,2vw,24px); align-items: start; height: 100%; min-height: 0; overflow: hidden; }
-.s5-growth { height: 100%; min-height: 0; overflow: hidden; }
-.s5-growth svg { display: block; width: 100%; height: 100%; max-height: 100%; object-fit: contain; }
+.s5-body { display: grid; grid-template-columns: 1fr clamp(140px,16vw,220px); gap: clamp(12px,2vw,24px); align-items: center; flex: 1; min-height: 0; overflow: visible; }
+.s5-growth { overflow: visible; }
+.ambition-chart { width: 100%; position: relative; font-family: Manrope,system-ui,sans-serif; overflow: visible; }
+.ambition-bar-row { display: flex; align-items: flex-end; width: 100%; gap: 0.8%; overflow: visible; }
+.ambition-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; }
+.ambition-val { width: 100%; text-align: center; font-size: clamp(7px,0.85vw,12px); line-height: 1.2; margin-bottom: 0.2vw; white-space: nowrap; }
+.ambition-bar { width: 100%; border-radius: 3px 3px 0 0; box-sizing: border-box; }
+.ambition-label-row { display: flex; width: 100%; gap: 0.8%; margin-top: 0.3vw; }
+.ambition-label { flex: 1; text-align: center; font-size: clamp(7px,0.85vw,12px); }
+.ambition-canvas { position: absolute; top: 0; left: 0; width: 100%; pointer-events: none; }
 .s5-driven { border: 1.5px solid var(--hairline); border-radius: var(--radius); padding: clamp(10px,1.4vw,18px) clamp(10px,1.2vw,16px); display: flex; flex-direction: column; gap: clamp(8px,1.1vw,14px); }
 .s5-driven-title { font-size: clamp(11px,1.1vw,14px); font-weight: 800; color: var(--ink); }
 .s5-driven-item { display: flex; align-items: center; gap: 12px; }
@@ -1083,39 +1090,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
           Actual bars: FY22–FY26 (i=0–4). Projected dashed: FY27–FY30 (i=5–8) — but FY30 is the target.
           Arrow path through all bar tops.
         -->
-        <svg viewBox="0 0 660 340" xmlns="http://www.w3.org/2000/svg" font-family="Manrope,system-ui,sans-serif" style="width:100%;height:auto;display:block;">
-          <line x1="24" y1="300" x2="636" y2="300" stroke="#e8e8f0" stroke-width="1"/>
-          <line x1="24" y1="237" x2="636" y2="237" stroke="#e8e8f0" stroke-width="1" stroke-dasharray="4,3"/>
-          <line x1="24" y1="175" x2="636" y2="175" stroke="#e8e8f0" stroke-width="1" stroke-dasharray="4,3"/>
-          <line x1="24" y1="118" x2="636" y2="118" stroke="#e8e8f0" stroke-width="1" stroke-dasharray="4,3"/>
-          <line x1="24" y1="40"  x2="636" y2="40"  stroke="#e8e8f0" stroke-width="1" stroke-dasharray="4,3"/>
-          <rect x="24"  y="299" width="52" height="1"   rx="3" fill="#1E22AA"/>
-          <rect x="94"  y="290" width="52" height="10"  rx="3" fill="#1E22AA"/>
-          <rect x="164" y="279" width="52" height="21"  rx="3" fill="#1E22AA"/>
-          <rect x="234" y="264" width="52" height="36"  rx="3" fill="#1E22AA"/>
-          <rect x="304" y="238" width="52" height="62"  rx="3" fill="#1E22AA"/>
-          <rect x="374" y="212" width="52" height="88"  rx="3" fill="rgba(30,34,170,0.08)" stroke="#1E22AA" stroke-width="1.5" stroke-dasharray="5,4"/>
-          <rect x="444" y="176" width="52" height="124" rx="3" fill="rgba(30,34,170,0.08)" stroke="#1E22AA" stroke-width="1.5" stroke-dasharray="5,4"/>
-          <rect x="514" y="118" width="52" height="182" rx="3" fill="rgba(30,34,170,0.08)" stroke="#1E22AA" stroke-width="1.5" stroke-dasharray="5,4"/>
-          <rect x="584" y="40"  width="52" height="260" rx="3" fill="rgba(30,100,60,0.06)" stroke="#2e7d36" stroke-width="2" stroke-dasharray="6,4"/>
-          <text x="50"  y="294" text-anchor="middle" fill="#1E22AA" font-size="9"  font-weight="700">20 Cr</text>
-          <text x="120" y="285" text-anchor="middle" fill="#1E22AA" font-size="9"  font-weight="700">200 Cr</text>
-          <text x="190" y="274" text-anchor="middle" fill="#1E22AA" font-size="9"  font-weight="700">400 Cr</text>
-          <text x="260" y="259" text-anchor="middle" fill="#1E22AA" font-size="9"  font-weight="700">700 Cr</text>
-          <text x="330" y="233" text-anchor="middle" fill="#1E22AA" font-size="10" font-weight="700">1200 Cr</text>
-          <text x="610" y="35"  text-anchor="middle" fill="#2e7d36" font-size="11" font-weight="800">5000 Cr</text>
-          <path d="M 50,299 C 80,295 100,291 120,290 C 145,288 158,280 190,279 C 215,278 228,266 260,264 C 285,262 300,240 330,238 C 355,236 368,215 400,212 C 425,210 438,178 470,176 C 495,174 508,120 540,118 C 565,116 580,44 610,40" fill="none" stroke="#1E22AA" stroke-width="2.5" stroke-linecap="round"/>
-          <polygon points="610,40 600,54 620,54" fill="#1E22AA"/>
-          <text x="50"  y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 22</text>
-          <text x="120" y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 23</text>
-          <text x="190" y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 24</text>
-          <text x="260" y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 25</text>
-          <text x="330" y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 26</text>
-          <text x="400" y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 27</text>
-          <text x="470" y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 28</text>
-          <text x="540" y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 29</text>
-          <text x="610" y="315" text-anchor="middle" fill="#2e7d36" font-size="10" font-weight="700">FY 30</text>
-        </svg>
+        <div class="ambition-chart" id="ambitionChart"></div>
       </div>
 
       <!-- Driven by box -->
@@ -1986,39 +1961,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
         <div class="book-ambition-chart">
           <div style="display:grid;grid-template-columns:1fr clamp(140px,18vw,220px);gap:clamp(16px,2.5vw,28px);align-items:start;">
             <div>
-              <svg viewBox="0 0 660 340" xmlns="http://www.w3.org/2000/svg" font-family="Manrope,system-ui,sans-serif" style="width:100%;height:auto;display:block;">
-                <line x1="24" y1="300" x2="636" y2="300" stroke="#e8e8f0" stroke-width="1"/>
-                <line x1="24" y1="237" x2="636" y2="237" stroke="#e8e8f0" stroke-width="1" stroke-dasharray="4,3"/>
-                <line x1="24" y1="175" x2="636" y2="175" stroke="#e8e8f0" stroke-width="1" stroke-dasharray="4,3"/>
-                <line x1="24" y1="118" x2="636" y2="118" stroke="#e8e8f0" stroke-width="1" stroke-dasharray="4,3"/>
-                <line x1="24" y1="40"  x2="636" y2="40"  stroke="#e8e8f0" stroke-width="1" stroke-dasharray="4,3"/>
-                <rect x="24"  y="299" width="52" height="1"   rx="3" fill="#1E22AA"/>
-                <rect x="94"  y="290" width="52" height="10"  rx="3" fill="#1E22AA"/>
-                <rect x="164" y="279" width="52" height="21"  rx="3" fill="#1E22AA"/>
-                <rect x="234" y="264" width="52" height="36"  rx="3" fill="#1E22AA"/>
-                <rect x="304" y="238" width="52" height="62"  rx="3" fill="#1E22AA"/>
-                <rect x="374" y="212" width="52" height="88"  rx="3" fill="rgba(30,34,170,0.08)" stroke="#1E22AA" stroke-width="1.5" stroke-dasharray="5,4"/>
-                <rect x="444" y="176" width="52" height="124" rx="3" fill="rgba(30,34,170,0.08)" stroke="#1E22AA" stroke-width="1.5" stroke-dasharray="5,4"/>
-                <rect x="514" y="118" width="52" height="182" rx="3" fill="rgba(30,34,170,0.08)" stroke="#1E22AA" stroke-width="1.5" stroke-dasharray="5,4"/>
-                <rect x="584" y="40"  width="52" height="260" rx="3" fill="rgba(30,100,60,0.06)" stroke="#2e7d36" stroke-width="2" stroke-dasharray="6,4"/>
-                <text x="50"  y="294" text-anchor="middle" fill="#1E22AA" font-size="9"  font-weight="700">20 Cr</text>
-                <text x="120" y="285" text-anchor="middle" fill="#1E22AA" font-size="9"  font-weight="700">200 Cr</text>
-                <text x="190" y="274" text-anchor="middle" fill="#1E22AA" font-size="9"  font-weight="700">400 Cr</text>
-                <text x="260" y="259" text-anchor="middle" fill="#1E22AA" font-size="9"  font-weight="700">700 Cr</text>
-                <text x="330" y="233" text-anchor="middle" fill="#1E22AA" font-size="10" font-weight="700">1200 Cr</text>
-                <text x="610" y="35"  text-anchor="middle" fill="#2e7d36" font-size="11" font-weight="800">5000 Cr</text>
-                <path d="M 50,299 C 80,295 100,291 120,290 C 145,288 158,280 190,279 C 215,278 228,266 260,264 C 285,262 300,240 330,238 C 355,236 368,215 400,212 C 425,210 438,178 470,176 C 495,174 508,120 540,118 C 565,116 580,44 610,40" fill="none" stroke="#1E22AA" stroke-width="2.5" stroke-linecap="round"/>
-                <polygon points="610,40 600,54 620,54" fill="#1E22AA"/>
-                <text x="50"  y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 22</text>
-                <text x="120" y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 23</text>
-                <text x="190" y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 24</text>
-                <text x="260" y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 25</text>
-                <text x="330" y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 26</text>
-                <text x="400" y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 27</text>
-                <text x="470" y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 28</text>
-                <text x="540" y="315" text-anchor="middle" fill="#94909C" font-size="10" font-weight="600">FY 29</text>
-                <text x="610" y="315" text-anchor="middle" fill="#2e7d36" font-size="10" font-weight="700">FY 30</text>
-              </svg>
+              <div class="ambition-chart" id="ambitionChartRead"></div>
             </div>
             <div style="border:1.5px solid var(--hairline);border-radius:var(--radius);padding:20px 18px;display:flex;flex-direction:column;gap:16px;">
               <div style="font-size:15px;font-weight:800;color:var(--ink);">Driven by:</div>
@@ -2462,167 +2405,148 @@ function showSubmittedState() {
   const MAX_VAL = 5000;
   const BLUE = '#1E22AA';
   const GREEN = '#2e7d36';
+  const MAX_H = '41vh'; // tallest bar height — vh keeps chart within screen at any zoom level
 
-  function drawChart(canvas) {
-    const dpr = window.devicePixelRatio || 1;
-    const w = canvas.offsetWidth;
-    const ASPECT = 660 / 340;
-    const h = Math.round(w / ASPECT);
-    canvas.width  = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-    canvas.style.height = h + 'px';
-    const ctx = canvas.getContext('2d');
-    ctx.scale(dpr, dpr);
+  function buildChart(container) {
+    container.innerHTML = '';
 
-    const padL = w * 0.036, padR = w * 0.036;
-    const padT = h * 0.12,  padB = h * 0.14;
-    const chartW = w - padL - padR;
-    const chartH = h - padT - padB;
+    const barRow = document.createElement('div');
+    barRow.className = 'ambition-bar-row';
+    barRow.style.height = MAX_H;
+    barRow.style.position = 'relative';
+    barRow.style.paddingTop = '2vw'; // room for arrowhead + value labels above tallest bar
+    container.appendChild(barRow);
 
-    const n = BARS.length;
-    const barW  = chartW / (n * 1.45);
-    const gap   = (chartW - barW * n) / (n - 1);
-    const baseY = padT + chartH;
-    const scaleY = chartH / MAX_VAL;
+    const labelRow = document.createElement('div');
+    labelRow.className = 'ambition-label-row';
+    container.appendChild(labelRow);
 
-    function barX(i) { return padL + i * (barW + gap); }
-    function barCX(i) { return barX(i) + barW / 2; }
-    function valY(v) { return baseY - v * scaleY; }
+    BARS.forEach((bar) => {
 
-    ctx.clearRect(0, 0, w, h);
+      const col = document.createElement('div');
+      col.className = 'ambition-bar-col';
 
-    // Gridlines
-    const gridVals = [0, 1200, 2400, 3500, 5000];
-    const gridY    = gridVals.map(v => valY(v));
-    ctx.strokeStyle = '#e8e8f0';
-    ctx.lineWidth   = 1;
-    gridY.forEach((y, i) => {
-      ctx.beginPath();
-      if (i === 0) { ctx.setLineDash([]); }
-      else         { ctx.setLineDash([4, 3]); }
-      ctx.moveTo(padL, y);
-      ctx.lineTo(w - padR, y);
-      ctx.stroke();
-    });
-    ctx.setLineDash([]);
+      const valLabel = document.createElement('div');
+      valLabel.className = 'ambition-val';
+      valLabel.style.fontWeight = bar.target ? '800' : '700';
+      valLabel.style.color = bar.target ? GREEN : BLUE;
+      if (bar.actual || bar.target) valLabel.textContent = bar.value + ' Cr';
+      else valLabel.innerHTML = '&nbsp;';
 
-    // Bars
-    const fontSize = Math.max(8, Math.round(w * 0.016));
-    ctx.font = `700 ${fontSize}px Manrope,system-ui,sans-serif`;
-
-    BARS.forEach((bar, i) => {
-      const x = barX(i);
-      const bh = Math.max(2, bar.value * scaleY);
-      const by = baseY - bh;
-      const r  = Math.min(3, barW * 0.06);
-
+      const barEl = document.createElement('div');
+      barEl.className = 'ambition-bar';
+      barEl.style.height = ((bar.value / MAX_VAL) * 41).toFixed(3) + 'vh';
       if (bar.target) {
-        ctx.fillStyle = 'rgba(30,100,60,0.06)';
-        ctx.strokeStyle = GREEN;
-        ctx.lineWidth = Math.max(1.5, w * 0.003);
-        ctx.setLineDash([Math.max(4, w*0.009), Math.max(3, w*0.006)]);
+        barEl.style.background = 'rgba(30,100,60,0.06)';
+        barEl.style.border = '1.5px dashed ' + GREEN;
       } else if (bar.actual) {
-        ctx.fillStyle = BLUE;
-        ctx.strokeStyle = 'transparent';
-        ctx.lineWidth = 0;
-        ctx.setLineDash([]);
+        barEl.style.background = BLUE;
       } else {
-        ctx.fillStyle = 'rgba(30,34,170,0.08)';
-        ctx.strokeStyle = BLUE;
-        ctx.lineWidth = Math.max(1, w * 0.002);
-        ctx.setLineDash([Math.max(4, w*0.008), Math.max(3, w*0.005)]);
+        barEl.style.background = 'rgba(30,34,170,0.08)';
+        barEl.style.border = '1.5px dashed ' + BLUE;
       }
 
-      ctx.beginPath();
-      ctx.moveTo(x + r, by);
-      ctx.lineTo(x + barW - r, by);
-      ctx.quadraticCurveTo(x + barW, by, x + barW, by + r);
-      ctx.lineTo(x + barW, baseY);
-      ctx.lineTo(x, baseY);
-      ctx.lineTo(x, by + r);
-      ctx.quadraticCurveTo(x, by, x + r, by);
-      ctx.closePath();
-      ctx.fill();
-      if (ctx.lineWidth > 0 && ctx.strokeStyle !== 'transparent') ctx.stroke();
+      col.appendChild(valLabel);
+      col.appendChild(barEl);
+      barRow.appendChild(col);
+
+      const fyEl = document.createElement('div');
+      fyEl.className = 'ambition-label';
+      fyEl.style.fontWeight = bar.target ? '700' : '600';
+      fyEl.style.color = bar.target ? GREEN : '#94909C';
+      fyEl.textContent = bar.label;
+      labelRow.appendChild(fyEl);
+    });
+
+    // Canvas for curve — CSS sized to match barRow, redrawn on resize
+    const cvs = document.createElement('canvas');
+    cvs.className = 'ambition-canvas';
+    cvs.style.height = MAX_H;
+    barRow.appendChild(cvs);
+    redrawCanvas(cvs);
+  }
+
+  function redrawCanvas(cvs) {
+    requestAnimationFrame(() => {
+      const W = cvs.offsetWidth;
+      const H = cvs.offsetHeight;
+      if (!W || !H) return;
+      const dpr = window.devicePixelRatio || 1;
+      cvs.width = Math.round(W * dpr);
+      cvs.height = Math.round(H * dpr);
+      const ctx = cvs.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      const n = BARS.length;
+      const gapFrac = 0.008;
+      const colW = (W - gapFrac * W * (n - 1)) / n;
+
+      const pts = BARS.map((bar, i) => ({
+        x: i * (colW + gapFrac * W) + colW / 2,
+        y: H - (bar.value / MAX_VAL) * H,
+      }));
+
+      // Gridlines
+      [0, 1200, 2400, 3500, 5000].forEach((v, idx) => {
+        const y = H - (v / MAX_VAL) * H;
+        ctx.strokeStyle = '#e8e8f0';
+        ctx.lineWidth = 1;
+        ctx.setLineDash(idx === 0 ? [] : [4, 3]);
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+      });
       ctx.setLineDash([]);
 
-      // Value labels (actual + target)
-      if (bar.actual || bar.target) {
-        ctx.fillStyle = bar.target ? GREEN : BLUE;
-        ctx.font = `${bar.target ? 800 : 700} ${bar.target ? fontSize+1 : fontSize}px Manrope,system-ui,sans-serif`;
-        ctx.textAlign = 'center';
-        ctx.fillText(bar.value >= 1000 ? (bar.value/1000 * 1000) + ' Cr' : bar.value + ' Cr',
-          barCX(i), by - fontSize * 0.4);
+      // Curve
+      ctx.strokeStyle = BLUE;
+      ctx.lineWidth = Math.max(1.5, W * 0.004);
+      ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (let i = 0; i < pts.length - 1; i++) {
+        const mx = (pts[i].x + pts[i + 1].x) / 2;
+        ctx.bezierCurveTo(mx, pts[i].y, mx, pts[i + 1].y, pts[i + 1].x, pts[i + 1].y);
       }
-    });
+      ctx.stroke();
 
-    // Curve through bar tops
-    const pts = BARS.map((bar, i) => ({ x: barCX(i), y: valY(bar.value) }));
-    ctx.beginPath();
-    ctx.strokeStyle = BLUE;
-    ctx.lineWidth   = Math.max(1.5, w * 0.004);
-    ctx.lineJoin    = 'round';
-    ctx.lineCap     = 'round';
-    ctx.setLineDash([]);
-    ctx.moveTo(pts[0].x, pts[0].y);
-    for (let i = 0; i < pts.length - 1; i++) {
-      const cp1x = pts[i].x   + (pts[i+1].x - pts[i].x) * 0.5;
-      const cp1y = pts[i].y;
-      const cp2x = pts[i].x   + (pts[i+1].x - pts[i].x) * 0.5;
-      const cp2y = pts[i+1].y;
-      ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, pts[i+1].x, pts[i+1].y);
-    }
-    ctx.stroke();
-
-    // Arrowhead at last point
-    const tip = pts[pts.length - 1];
-    const aSize = Math.max(7, w * 0.013);
-    ctx.fillStyle = BLUE;
-    ctx.beginPath();
-    ctx.moveTo(tip.x, tip.y - aSize);
-    ctx.lineTo(tip.x - aSize * 0.7, tip.y + aSize * 0.3);
-    ctx.lineTo(tip.x + aSize * 0.7, tip.y + aSize * 0.3);
-    ctx.closePath();
-    ctx.fill();
-
-    // FY labels
-    const fySize = Math.max(8, Math.round(w * 0.015));
-    BARS.forEach((bar, i) => {
-      ctx.fillStyle   = bar.target ? GREEN : '#94909C';
-      ctx.font        = `${bar.target ? 700 : 600} ${fySize}px Manrope,system-ui,sans-serif`;
-      ctx.textAlign   = 'center';
-      ctx.fillText(bar.label, barCX(i), baseY + fySize * 1.6);
+      // Arrowhead
+      const tip = pts[pts.length - 1];
+      const a = Math.max(5, W * 0.011);
+      ctx.fillStyle = BLUE;
+      ctx.beginPath();
+      ctx.moveTo(tip.x, tip.y - a);
+      ctx.lineTo(tip.x - a * 0.6, tip.y + a * 0.35);
+      ctx.lineTo(tip.x + a * 0.6, tip.y + a * 0.35);
+      ctx.closePath(); ctx.fill();
     });
   }
 
-  function initCanvas(id) {
-    const canvas = document.getElementById(id);
-    if (!canvas) return;
-    const ro = new ResizeObserver(() => {
-      if (canvas.offsetWidth > 0) drawChart(canvas);
-    });
-    ro.observe(canvas.parentElement);
-    // draw immediately if already visible, else wait for first non-zero width
-    if (canvas.offsetWidth > 0) drawChart(canvas);
+  function initChart(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const ro = new ResizeObserver(() => { if (el.offsetWidth > 0) buildChart(el); });
+    ro.observe(el);
+    if (el.offsetWidth > 0) buildChart(el);
   }
 
   window.redrawAmbitionChart = function() {
-    ['ambitionChart', 'ambitionChartRead'].forEach(id => {
-      const c = document.getElementById(id);
-      if (c && c.offsetWidth > 0) drawChart(c);
+    ['ambitionChart','ambitionChartRead'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.offsetWidth > 0) buildChart(el);
     });
   };
 
+  // On zoom, only the canvas needs redrawing — bars are vw-sized CSS, browser handles them
+  window.addEventListener('resize', () => {
+    document.querySelectorAll('.ambition-canvas').forEach(cvs => redrawCanvas(cvs));
+  });
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      initCanvas('ambitionChart');
-      initCanvas('ambitionChartRead');
-    });
+    document.addEventListener('DOMContentLoaded', () => { initChart('ambitionChart'); initChart('ambitionChartRead'); });
   } else {
-    initCanvas('ambitionChart');
-    initCanvas('ambitionChartRead');
+    initChart('ambitionChart'); initChart('ambitionChartRead');
   }
 })();
+
 
 window.addEventListener('DOMContentLoaded', function initAssessment() {
   const saved = JSON.parse(localStorage.getItem('myhq_ch2_answers') || '{}');
