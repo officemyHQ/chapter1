@@ -1147,8 +1147,8 @@ function acceptAllFields() {
 }
 
 function rejectAllFields() {
-  changedFields.forEach(id => { fieldAccepted[id] = false; delete draftData[id]; });
-  // Delete entire draft doc — nothing remains to review
+  changedFields.forEach(id => { fieldAccepted[id] = false; });
+  draftData = {};
   db.collection('content-drafts').doc(currentChapterId).delete();
   updatePillStatus(currentChapterId, false, null);
   showEditorView();
@@ -1182,7 +1182,12 @@ async function pushLive() {
   acceptedIds.forEach(k => delete draftData[k]);
   rejectedIds.forEach(k => delete draftData[k]);
 
-  // If pending fields remain, rewrite draft doc with only those; else delete the whole doc
+  // Strip any remaining keys that are no longer different from live (stale entries)
+  Object.keys(draftData).forEach(k => {
+    if (liveData[k] === draftData[k]) delete draftData[k];
+  });
+
+  // If genuinely pending fields remain, rewrite draft doc; else delete entirely
   const remainingKeys = Object.keys(draftData);
   if (remainingKeys.length > 0) {
     const remaining = { _draftStatus: 'pending' };
