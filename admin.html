@@ -354,11 +354,19 @@ function switchTab(tab) {
 
 /* ── Search user ── */
 async function searchUser() {
-  const email = document.getElementById('search-input').value.trim().toLowerCase();
-  if (!email) return;
-  const snap = await db.collection('users').where('email', '==', email).limit(1).get();
-  if (snap.empty) { alert('No user found with that email.'); return; }
-  loadUserResult(snap.docs[0]);
+  const query = document.getElementById('search-input').value.trim().toLowerCase();
+  if (!query) return;
+  // First try exact email match
+  let snap = await db.collection('users').where('email', '==', query).limit(1).get();
+  if (!snap.empty) { loadUserResult(snap.docs[0]); return; }
+  // Fall back: load all users and find first match by name or email contains query
+  const all = await db.collection('users').get();
+  const match = all.docs.find(doc => {
+    const d = doc.data();
+    return (d.email || '').toLowerCase().includes(query) || (d.name || '').toLowerCase().includes(query);
+  });
+  if (!match) { alert('No user found matching "' + query + '".'); return; }
+  loadUserResult(match);
 }
 
 function loadUserResult(doc) {
