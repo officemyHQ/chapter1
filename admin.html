@@ -1115,6 +1115,13 @@ function toggleFieldAccept(fieldId, accept) {
       updatePillStatus(currentChapterId, false, null);
     }
     row.style.display = 'none';
+    // If all changed fields are now rejected (no visible rows), go back to editor
+    const allDecided = [...changedFields].every(id => fieldAccepted[id] === false);
+    if (allDecided) {
+      draftData = {};
+      showEditorView();
+      return;
+    }
     updatePushButton();
     return;
   }
