@@ -935,23 +935,39 @@ function rejectAllFields() {
 async function pushLive() {
   const def = CHAPTER_DEFS[currentChapterId];
   const toWrite = {};
+  const draftCleanup = {};
+
   def.fields.forEach(f => {
     if (fieldAccepted[f.id] === true) {
-      // Use draft-input value if it was edited in-diff, else draft-text
       const inputEl = document.getElementById('draft-input-' + f.id);
       const textEl  = document.getElementById('draft-text-' + f.id);
       toWrite[f.id] = (inputEl && inputEl.style.display === 'block') ? inputEl.value : (textEl ? textEl.textContent : (draftData[f.id] || ''));
+      // Remove accepted field from draft — it's now live
+      draftCleanup[f.id] = firebase.firestore.FieldValue.delete();
+    } else if (fieldAccepted[f.id] === false) {
+      // Rejected — remove from draft so it doesn't show up again next review
+      draftCleanup[f.id] = firebase.firestore.FieldValue.delete();
     }
-    // Rejected fields: keep live value — don't overwrite
+    // Pending fields: left alone in draft for next review
   });
+
   const btn = document.getElementById('push-live-btn');
   btn.disabled = true;
   btn.textContent = 'Pushing…';
-  await db.collection('content').doc(currentChapterId).set(toWrite, { merge: true });
+
+  const writes = [db.collection('content').doc(currentChapterId).set(toWrite, { merge: true })];
+  if (Object.keys(draftCleanup).length) {
+    writes.push(db.collection('content-drafts').doc(currentChapterId).update(draftCleanup));
+  }
+  await Promise.all(writes);
+
   liveData = { ...liveData, ...toWrite };
+  // Remove cleaned-up fields from local draftData too
+  Object.keys(draftCleanup).forEach(k => { delete draftData[k]; });
+
   const now = new Date();
   const hhmm = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-  document.getElementById('sync-msg').textContent = `Pushed live at ${hhmm} — accepted changes are now visible to all users.`;
+  document.getElementById('sync-msg').textContent = `Pushed live at ${hhmm} — accepted changes visible to all users.`;
   btn.textContent = 'Push to Live →';
   setTimeout(showEditorView, 1600);
 }
