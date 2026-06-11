@@ -911,11 +911,21 @@ function toggleFieldAccept(fieldId, accept) {
   const rejectBtn = document.getElementById('reject-' + fieldId);
   if (!row) return;
 
+  if (newState === false) {
+    // Rejected — remove from draft immediately and hide the row
+    const cleanup = {};
+    cleanup[fieldId] = firebase.firestore.FieldValue.delete();
+    delete draftData[fieldId];
+    db.collection('content-drafts').doc(currentChapterId).set(cleanup, { merge: true });
+    row.style.display = 'none';
+    updatePushButton();
+    return;
+  }
+
   acceptBtn.classList.toggle('active', newState === true);
   rejectBtn.classList.toggle('active', newState === false);
   row.classList.remove('state-accepted', 'state-rejected');
-  if (newState === true)  row.classList.add('state-accepted');
-  if (newState === false) row.classList.add('state-rejected');
+  if (newState === true) row.classList.add('state-accepted');
 
   updatePushButton();
 }
@@ -934,8 +944,15 @@ function acceptAllFields() {
 
 function rejectAllFields() {
   changedFields.forEach(id => {
-    if (fieldAccepted[id] !== false) toggleFieldAccept(id, false);
+    fieldAccepted[id] = false;
   });
+  // Clear draft fields from Firestore and go back immediately
+  const cleanup = {};
+  changedFields.forEach(id => { cleanup[id] = firebase.firestore.FieldValue.delete(); delete draftData[id]; });
+  if (Object.keys(cleanup).length) {
+    db.collection('content-drafts').doc(currentChapterId).set(cleanup, { merge: true });
+  }
+  showEditorView();
 }
 
 async function pushLive() {
