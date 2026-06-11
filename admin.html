@@ -251,7 +251,10 @@ body { font-family: var(--sans); background: var(--blue-wash); color: var(--blue
           <div class="user-email" id="result-email"></div>
           <div class="user-lastlogin" id="result-lastlogin"></div>
         </div>
-        <div class="user-admin-area" id="result-admin-area"></div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
+          <div class="user-admin-area" id="result-admin-area"></div>
+          <button onclick="clearSearch()" style="background:none;border:none;font-family:var(--mono);font-size:9px;font-weight:600;color:var(--blue-soft);cursor:pointer;letter-spacing:0.08em;text-transform:uppercase;padding:0;text-decoration:underline;">✕ Clear</button>
+        </div>
       </div>
     </div>
 
@@ -353,6 +356,14 @@ function switchTab(tab) {
 }
 
 /* ── Search user ── */
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('user-result').classList.remove('visible');
+  document.getElementById('unlock-card').style.display = 'none';
+  currentUser = null;
+  currentUserDoc = null;
+}
+
 async function searchUser() {
   const query = document.getElementById('search-input').value.trim().toLowerCase();
   if (!query) return;
