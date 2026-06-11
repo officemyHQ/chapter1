@@ -459,7 +459,7 @@ const CHAPTER_DEFS = {
       { id: 'slide-1-headline',   label: 'Chapter Title (Topbar)', type: 'input',    group: 'Cover', default: 'Who We Are' },
       { id: 'slide-1-sub',        label: 'Intro Tagline',          type: 'input',    group: 'Cover', default: "Before you start, let's know the story and journey of myHQ." },
       { id: 'ch2-sl1-eyebrow',    label: 'Phase Label',            type: 'input',    group: 'Slide 1 — Phase 1 Timeline', default: 'Phase 1 · 2015 – 2017' },
-      { id: 'ch2-sl1-headline',   label: 'Headline',               type: 'input',    group: 'Slide 1 — Phase 1 Timeline', default: 'From underutilised real estate to productive workspaces.' },
+      { id: 'ch2-sl1-headline',   label: 'Headline',               type: 'input',    group: 'Slide 1 — Phase 1 Timeline', html: true, default: 'From <span style="color:var(--blue)">underutilised real estate</span><br>to productive workspaces.' },
       { id: 'ch2-sl1-t1-year',    label: 'Node 1 Year',            type: 'input',    group: 'Slide 1 — Phase 1 Timeline', default: '2015' },
       { id: 'ch2-sl1-t1-title',   label: 'Node 1 Title',           type: 'input',    group: 'Slide 1 — Phase 1 Timeline', default: 'The Spark' },
       { id: 'ch2-sl1-t1-sub',     label: 'Node 1 Description',     type: 'textarea', group: 'Slide 1 — Phase 1 Timeline', default: "Two IIT Delhi Alumni. One question. Why can't people work from wherever they want?" },
@@ -476,7 +476,7 @@ const CHAPTER_DEFS = {
       { id: 'ch2-sl1-t5-title',   label: 'Node 5 Title',           type: 'input',    group: 'Slide 1 — Phase 1 Timeline', default: 'Angel Round' },
       { id: 'ch2-sl1-t5-sub',     label: 'Node 5 Description',     type: 'textarea', group: 'Slide 1 — Phase 1 Timeline', default: 'Founder-to-founder belief. First outside capital raised.' },
       { id: 'ch2-sl2-eyebrow',    label: 'Phase Label',            type: 'input',    group: 'Slide 2 — Phase 2 Timeline', default: 'Phase 2 · 2018 – 2021' },
-      { id: 'ch2-sl2-headline',   label: 'Headline',               type: 'input',    group: 'Slide 2 — Phase 2 Timeline', default: 'As clients grew, the supply partners scaled and evolved with them.' },
+      { id: 'ch2-sl2-headline',   label: 'Headline',               type: 'input',    group: 'Slide 2 — Phase 2 Timeline', html: true, default: 'As clients grew, the supply partners <span style="color:var(--blue)">scaled and evolved</span><br>with them.' },
       { id: 'ch2-sl2-t1-year',    label: 'Node 1 Year',            type: 'input',    group: 'Slide 2 — Phase 2 Timeline', default: '2018' },
       { id: 'ch2-sl2-t1-title',   label: 'Node 1 Title',           type: 'input',    group: 'Slide 2 — Phase 2 Timeline', default: 'Assisted Marketplace Launched' },
       { id: 'ch2-sl2-t1-sub',     label: 'Node 1 Description',     type: 'textarea', group: 'Slide 2 — Phase 2 Timeline', default: 'Existing clients start asking for dedicated workspace — new product, new supply. 100+ coworkings onboarded.' },
@@ -493,8 +493,8 @@ const CHAPTER_DEFS = {
       { id: 'ch2-sl2-t5-title',   label: 'Node 5 Title',           type: 'input',    group: 'Slide 2 — Phase 2 Timeline', default: 'COVID Hit' },
       { id: 'ch2-sl2-t5-sub',     label: 'Node 5 Description',     type: 'textarea', group: 'Slide 2 — Phase 2 Timeline', default: 'Offices shut overnight. Business goes down — future seems dark.' },
       { id: 'ch2-sl3-eyebrow',    label: 'Phase Label',            type: 'input',    group: 'Slide 3 — Phase 3 Timeline', default: 'Phase 3 · 2021 – Present' },
-      { id: 'ch2-sl3-headline',   label: 'Headline',               type: 'input',    group: 'Slide 3 — Phase 3 Timeline', default: 'Not just rebuilt, reimagined from the ground up. Fuelled by 250+ people who believed in one mission.' },
-      { id: 'ch2-sl3-vision',     label: 'Vision Statement',       type: 'input',    group: 'Slide 3 — Phase 3 Timeline', default: '"Enabling individuals & corporates to work from any-where & in any-way"' },
+      { id: 'ch2-sl3-headline',   label: 'Headline',               type: 'input',    group: 'Slide 3 — Phase 3 Timeline', html: true, default: 'Not just rebuilt, <span style="color:var(--blue)">reimagined</span> from the ground up.<br>Fuelled by 250+ people who believed in one mission.' },
+      { id: 'ch2-sl3-vision',     label: 'Vision Statement',       type: 'input',    group: 'Slide 3 — Phase 3 Timeline', html: true, default: '"Enabling individuals &amp; corporates to work from <strong>any-where</strong> &amp; in <strong>any-way</strong>"' },
       { id: 'ch2-sl3-t1-year',    label: 'Node 1 Year',            type: 'input',    group: 'Slide 3 — Phase 3 Timeline', default: '2021–22' },
       { id: 'ch2-sl3-t1-title',   label: 'Node 1 Title',           type: 'input',    group: 'Slide 3 — Phase 3 Timeline', default: 'Products Take Shape' },
       { id: 'ch2-sl3-t1-sub',     label: 'Node 1 Description',     type: 'textarea', group: 'Slide 3 — Phase 3 Timeline', default: 'The rebuilding phase starts with a stronger product offering across three key verticals — AM, Virtual Office, and On-Demand Workspaces.' },
@@ -511,7 +511,7 @@ const CHAPTER_DEFS = {
       { id: 'ch2-sl3-t5-title',   label: 'Node 5 Title',           type: 'input',    group: 'Slide 3 — Phase 3 Timeline', default: 'International Expansion' },
       { id: 'ch2-sl3-t5-sub',     label: 'Node 5 Description',     type: 'textarea', group: 'Slide 3 — Phase 3 Timeline', default: 'myHQ moves beyond India — Virtual Office launches in Dubai, Assisted Marketplace expands to London.' },
       { id: 'ch2-sl4-title',      label: 'Slide Title',            type: 'input',    group: 'Slide 4 — Business Verticals', default: 'Redefining workspace solutions for All.' },
-      { id: 'ch2-sl4-sub',        label: 'Sub-heading',            type: 'textarea', group: 'Slide 4 — Business Verticals', default: 'To empower the new age workforce with freedom and flexibility to work in any way that they want and from anywhere by providing technology driven innovative workspace solutions.' },
+      { id: 'ch2-sl4-sub',        label: 'Sub-heading',            type: 'textarea', group: 'Slide 4 — Business Verticals', html: true, default: 'To empower the new age workforce with freedom and flexibility to work in any way that they want and from anywhere<br>by providing technology driven innovative workspace solutions.' },
       { id: 'ch2-sl4-v1-title',   label: 'Vertical 1 Title',       type: 'input',    group: 'Slide 4 — Business Verticals', default: 'Assisted Marketplace' },
       { id: 'ch2-sl4-v1-desc',    label: 'Vertical 1 Description', type: 'textarea', group: 'Slide 4 — Business Verticals', default: 'Platform led advisory & transaction for businesses finding long term office spaces.' },
       { id: 'ch2-sl4-v1-pill',    label: 'Vertical 1 Products',    type: 'input',    group: 'Slide 4 — Business Verticals', default: 'Coworking space, Managed office, Conventional Leasing' },
@@ -542,7 +542,7 @@ const CHAPTER_DEFS = {
       { id: 'ch2-sl7-s9-lbl',     label: 'Stat 9 Label',           type: 'input',    group: 'Slide 7 — Scale & Reach Stats', default: 'For hybrid companies & end users' },
       { id: 'ch2-sl7-s10-num',    label: 'Stat 10 Number',         type: 'input',    group: 'Slide 7 — Scale & Reach Stats', default: '2.5M+ Traffic' },
       { id: 'ch2-sl7-s10-lbl',    label: 'Stat 10 Label',          type: 'input',    group: 'Slide 7 — Scale & Reach Stats', default: 'On Website (Annually)' },
-      { id: 'ch2-sl8-headline',   label: 'Ambition Headline',      type: 'input',    group: 'Slide 8 — Ambition 2030', default: 'Ambition 2030: ₹5,000 Cr worth of Transactions, ₹500 Cr of Revenue & a global powerhouse' },
+      { id: 'ch2-sl8-headline',   label: 'Ambition Headline',      type: 'input',    group: 'Slide 8 — Ambition 2030', html: true, default: 'Ambition 2030: <span style="color:var(--blue)">₹5,000 Cr</span> worth of Transactions,<br><span style="color:var(--blue)">₹500 Cr</span> of Revenue &amp; a global powerhouse' },
       { id: 'ch2-sl8-sub',        label: 'Sub-heading',            type: 'input',    group: 'Slide 8 — Ambition 2030', default: 'We have grown 35X in the last 3 years and plan to grow 10X more in the next 5' },
     ],
     contentFields: [
@@ -550,19 +550,58 @@ const CHAPTER_DEFS = {
       { id: 'ch2-s01-title',    label: 'Title',           type: 'input',    group: 'S01 — The Story', default: 'The Story' },
       { id: 'ch2-s01-outcome',  label: 'Learning Outcome',type: 'textarea', group: 'S01 — The Story', default: "Understand every phase of myHQ's journey — the bets, the turning points, and what shaped the company it is today." },
       { id: 'ch2-s01-body',     label: 'Body',            type: 'textarea', group: 'S01 — The Story', default: "myHQ didn't start with a funding announcement or a grand plan. It started with a question asked in a Delhi NCR café in 2015 — and a friend's empty chairs that no one was using. What followed was ten years of building, breaking, rebuilding, and refusing to quit. This is that story." },
+      { id: 'ch2-tl1-year',  label: 'Entry 1 Year',  type: 'input',    group: 'S01 — Timeline Entries', default: '2015 · Phase 1 begins' },
+      { id: 'ch2-tl1-title', label: 'Entry 1 Title', type: 'input',    group: 'S01 — Timeline Entries', default: "One question. Why can't people work from wherever they want?" },
+      { id: 'ch2-tl1-body',  label: 'Entry 1 Body',  type: 'textarea', group: 'S01 — Timeline Entries', default: "Utkarsh Kawatra and Vinayak Aggarwal were IIT Delhi Alumni who'd gone their separate ways — Utkarsh to Helion Ventures, Vinayak to Goldman Sachs. They ended up back in NCR at the same time, frustrated by the same thing: good professionals wasting hours commuting to offices they didn't need to be in. The question wasn't complicated. The answer would take a decade to build." },
+      { id: 'ch2-tl2-year',  label: 'Entry 2 Year',  type: 'input',    group: 'S01 — Timeline Entries', default: 'Apr 2016 · Founded' },
+      { id: 'ch2-tl2-title', label: 'Entry 2 Title', type: 'input',    group: 'S01 — Timeline Entries', default: "A friend's café. Empty chairs every morning. That became the first supply on the platform." },
+      { id: 'ch2-tl2-body',  label: 'Entry 2 Body',  type: 'textarea', group: 'S01 — Timeline Entries', default: "A friend ran a café that stayed empty before noon — chairs up, tables empty, burning rent before the evening rush. Utkarsh and Vinayak saw something no one else was seeing: <strong>idle real estate is wasted potential.</strong> They started converting cafés and lounges into long-hour working spaces — WiFi, free coffee, discounted menus. Show up, work, leave. No deposit, no commitment. myHQ was born." },
+      { id: 'ch2-tl3-year',  label: 'Entry 3 Year',  type: 'input',    group: 'S01 — Timeline Entries', default: '2016–17 · Proof of Concept' },
+      { id: 'ch2-tl3-title', label: 'Entry 3 Title', type: 'input',    group: 'S01 — Timeline Entries', default: '100+ bookings a day. 20+ cafés. Startups were hooked.' },
+      { id: 'ch2-tl3-body',  label: 'Entry 3 Body',  type: 'textarea', group: 'S01 — Timeline Entries', default: 'Startups and freelancers loved the model — no lock-in, no security deposit, just show up and get to work. Word spread fast. Within months, myHQ was clocking 100+ daily bookings across 20+ cafés in NCR. The idea worked. Now it needed capital to grow.' },
+      { id: 'ch2-tl4-year',  label: 'Entry 4 Year',  type: 'input',    group: 'S01 — Timeline Entries', default: '2017 · Angel Round' },
+      { id: 'ch2-tl4-title', label: 'Entry 4 Title', type: 'input',    group: 'S01 — Timeline Entries', default: 'Founder-to-founder belief. First outside capital raised.' },
+      { id: 'ch2-tl4-body',  label: 'Entry 4 Body',  type: 'textarea', group: 'S01 — Timeline Entries', default: 'Neeraj Singh was building Spinny. Ashneer Grover was about to start BharatPe. They backed myHQ because they recognised the zero-to-one pattern. VCs were still debating whether coworking was a real category. Operators already knew.' },
+      { id: 'ch2-tl5-year',  label: 'Entry 5 Year',  type: 'input',    group: 'S01 — Timeline Entries', default: '2018 · Phase 2 begins' },
+      { id: 'ch2-tl5-title', label: 'Entry 5 Title', type: 'input',    group: 'S01 — Timeline Entries', default: 'Businesses started asking for dedicated space. Assisted Marketplace was born.' },
+      { id: 'ch2-tl5-body',  label: 'Entry 5 Body',  type: 'textarea', group: 'S01 — Timeline Entries', default: 'The On Demand product was growing — but businesses using the platform were asking for something more. They needed dedicated, long-term workspace. myHQ built it: <strong>Assisted Marketplace</strong>, a platform-led advisory for businesses finding office space. Over 100 coworking spaces were onboarded. A new product category was live.' },
+      { id: 'ch2-tl6-year',  label: 'Entry 6 Year',  type: 'input',    group: 'S01 — Timeline Entries', default: '2019 · Three products taking shape' },
+      { id: 'ch2-tl6-title', label: 'Entry 6 Title', type: 'input',    group: 'S01 — Timeline Entries', default: 'Virtual Office launched from a Shopify store. Series A followed.' },
+      { id: 'ch2-tl6-body',  label: 'Entry 6 Body',  type: 'textarea', group: 'S01 — Timeline Entries', default: 'Businesses needed more than a desk — they needed an address for office &amp; GST registration. myHQ launched <strong>Virtual Office</strong>, initially from a Shopify website. It was scrappy, but it worked. Three products were now live — On Demand, Assisted Marketplace, Virtual Office — and India Quotient backed the platform with a Series A.' },
+      { id: 'ch2-tl7-year',  label: 'Entry 7 Year',  type: 'input',    group: 'S01 — Timeline Entries', default: '2020 · COVID' },
+      { id: 'ch2-tl7-title', label: 'Entry 7 Title', type: 'input',    group: 'S01 — Timeline Entries', default: 'Offices shut overnight. The business went dark. Buyout offers came in. They said no to every one.' },
+      { id: 'ch2-tl7-body',  label: 'Entry 7 Body',  type: 'textarea', group: 'S01 — Timeline Entries', default: "COVID didn't ease myHQ into a downturn — it turned the lights off. Overnight. Revenue dropped. The future looked bleak. Multiple acquirers came with buyout offers. <strong>The founders turned every single one down.</strong> They believed in what they were building. They were waiting for the right partner — not a distressed exit." },
+      { id: 'ch2-tl8-year',  label: 'Entry 8 Year',  type: 'input',    group: 'S01 — Timeline Entries', default: '2022 · Phase 3 begins' },
+      { id: 'ch2-tl8-title', label: 'Entry 8 Title', type: 'input',    group: 'S01 — Timeline Entries', default: 'Powered by ANAROCK. Brand stays. Founders stay. Mission stays.' },
+      { id: 'ch2-tl8-body',  label: 'Entry 8 Body',  type: 'textarea', group: 'S01 — Timeline Entries', default: "Recognizing myHQ's strong technology foundation and scalable business model, ANAROCK became a strategic investor. This wasn't a rescue. It was the right fit. ANAROCK understood commercial real estate at the deepest level, and they wanted myHQ to keep operating as myHQ. The brand was retained. The founders stayed on board. The business verticals were now fully live across metro cities, backed by institutional credibility that opened enterprise doors that hadn't been reachable before." },
+      { id: 'ch2-tl9-year',  label: 'Entry 9 Year',  type: 'input',    group: 'S01 — Timeline Entries', default: '2024 · WeWork Partnership &amp; Investment' },
+      { id: 'ch2-tl9-title', label: 'Entry 9 Title', type: 'input',    group: 'S01 — Timeline Entries', default: "myHQ becomes WeWork India's exclusive tech, marketing &amp; distribution partner." },
+      { id: 'ch2-tl9-body',  label: 'Entry 9 Body',  type: 'textarea', group: 'S01 — Timeline Entries', default: 'WeWork invested in myHQ, making it WeWork India\'s exclusive partner for On Demand and Virtual Office products. The power of India\'s largest flex operator combined with myHQ\'s platform. A partnership that added significant inventory and institutional scale overnight.' },
+      { id: 'ch2-tl10-year',  label: 'Entry 10 Year',  type: 'input',    group: 'S01 — Timeline Entries', default: '2025–26 · Going global' },
+      { id: 'ch2-tl10-title', label: 'Entry 10 Title', type: 'input',    group: 'S01 — Timeline Entries', default: 'Virtual Office in Dubai. Assisted Marketplace in London. Same model. New geographies.' },
+      { id: 'ch2-tl10-body',  label: 'Entry 10 Body',  type: 'textarea', group: 'S01 — Timeline Entries', default: 'myHQ is now beyond India. Virtual Office launched in Dubai. Assisted Marketplace is expanding into London. The same operator-agnostic, platform-led model that worked in Delhi NCR is now being applied internationally through <a href="https://www.myhqspaces.com" target="_blank" style="color:inherit;text-decoration:underline;"><strong>myhqspaces.com</strong></a>. The ambition is no longer domestic — it\'s global.' },
+      { id: 'ch2-tl11-year',  label: 'Entry 11 Year',  type: 'input',    group: 'S01 — Timeline Entries', default: '2030 · The target' },
+      { id: 'ch2-tl11-title', label: 'Entry 11 Title', type: 'input',    group: 'S01 — Timeline Entries', default: '35X in 3 years. 10X more by 2030. ₹5,000 Cr in transactions.' },
+      { id: 'ch2-tl11-body',  label: 'Entry 11 Body',  type: 'textarea', group: 'S01 — Timeline Entries', default: 'From ₹20 Cr in FY22 to ₹1,200 Cr in FY26 — that\'s 35X in three years. The next chapter ends at <strong>₹5,000 Cr in transactions and ₹500 Cr in revenue by FY30.</strong> Same platform. Same mission. The market for flexible commercial real estate in India alone is massive — and myHQ has barely scratched the surface of it.' },
       { id: 'ch2-s02-title',    label: 'Title',           type: 'input',    group: 'S02 — Business Verticals', default: 'Business Verticals' },
       { id: 'ch2-s02-outcome',  label: 'Learning Outcome',type: 'textarea', group: 'S02 — Business Verticals', default: "What myHQ's business verticals do, who they serve, and how they work together." },
+      { id: 'ch2-s02-body',     label: 'Body (Intro)',    type: 'textarea', group: 'S02 — Business Verticals', default: 'myHQ operates three distinct business lines under one platform. Each vertical serves a different customer need, runs its own PnL, and has its own leadership. They share infrastructure, brand, and operator relationships — but each is a standalone product with its own market.' },
+      { id: 'ch2-s02-body2',    label: 'Body (Closing)',  type: 'textarea', group: 'S02 — Business Verticals', default: 'myHQ offices are present across Bengaluru, Gurugram, New Delhi, Noida, Hyderabad, Chennai, Pune and Ahmedabad. All business verticals share the same platform, operator network, and brand — which means every transaction in one vertical strengthens the others.' },
       { id: 'ch2-s03-title',    label: 'Title',           type: 'input',    group: 'S03 — Leadership Team', default: 'An entrepreneurial team using tech to disrupt commercial real estate.' },
       { id: 'ch2-s03-outcome',  label: 'Learning Outcome',type: 'textarea', group: 'S03 — Leadership Team', default: 'Who leads myHQ, what they did before, and why the team composition matters.' },
       { id: 'ch2-s03-body',     label: 'Body',            type: 'textarea', group: 'S03 — Leadership Team', default: "myHQ is led by two IIT Delhi founders backed by a team of operators who've built and scaled businesses before. Every business head has domain depth." },
       { id: 'ch2-s04-title',    label: 'Title',           type: 'input',    group: 'S04 — Org Structure', default: 'Org Structure' },
       { id: 'ch2-s04-outcome',  label: 'Learning Outcome',type: 'textarea', group: 'S04 — Org Structure', default: "How myHQ's departments, sub-teams, and functions connect to each other." },
+      { id: 'ch2-s04-body',     label: 'Body',            type: 'textarea', group: 'S04 — Org Structure', default: 'myHQ operates through a flat, function-led structure. Each business vertical has its own P&L, but all teams share tech, operations, and brand infrastructure centrally.' },
       { id: 'ch2-s05-title',    label: 'Title',           type: 'input',    group: 'S05 — Scale & Reach', default: 'Scale & Reach' },
       { id: 'ch2-s05-outcome',  label: 'Learning Outcome',type: 'textarea', group: 'S05 — Scale & Reach', default: "myHQ's scale, partner network, and reach — the numbers that reflect platform depth and market trust." },
+      { id: 'ch2-s05-body',     label: 'Body',            type: 'textarea', group: 'S05 — Scale & Reach', default: "myHQ has built India's most comprehensive flexible workspace platform. The numbers reflect a business that has scaled across clients, cities, products, and operators — all through a single technology platform." },
       { id: 'ch2-s06-title',    label: 'Title',           type: 'input',    group: 'S06 — The Ambition 2030', default: 'The Ambition — 2030' },
       { id: 'ch2-s06-outcome',  label: 'Learning Outcome',type: 'textarea', group: 'S06 — The Ambition 2030', default: "myHQ's 2030 growth plan — the numbers, the drivers, and the opportunity ahead." },
+      { id: 'ch2-s06-body',     label: 'Body',            type: 'textarea', group: 'S06 — The Ambition 2030', default: "From ₹20 Cr in FY22 to ₹1,200 Cr in FY26 — myHQ has grown 35X in three years. The next milestone is ₹5,000 Cr in transactions and ₹500 Cr in revenue by FY30. The market for flexible commercial real estate in India is massive — myHQ has barely scratched the surface." },
       { id: 'ch2-s07-title',    label: 'Title',           type: 'input',    group: 'S07 — Success Stories', default: 'Success Stories' },
       { id: 'ch2-s07-outcome',  label: 'Learning Outcome',type: 'textarea', group: 'S07 — Success Stories', default: 'Our leaders grew from within — understand the growth paths that are possible at myHQ.' },
+      { id: 'ch2-s07-body',     label: 'Body',            type: 'textarea', group: 'S07 — Success Stories', default: "myHQ's best leaders started as individual contributors. Here are people who've grown from junior roles to leading teams and verticals — proof that the path to leadership is open for those who deliver." },
     ],
     assessFields: [
       { id: 'ch2-assess-q1', label: 'Question 1', type: 'textarea', default: 'The term "Assisted Marketplace" is a deliberate choice. What does it reveal about myHQ\'s approach to the brokerage business, and why does the company prefer this model over a traditional brokerage approach?' },
@@ -979,20 +1018,32 @@ async function loadChapter(chId, btn) {
   ]);
   liveData  = liveSnap.exists  ? liveSnap.data()  : {};
 
-  // Strip stale HTML tags from non-body/outcome fields (cleanup from old data)
+  // Build set of fields that intentionally store HTML (html:true in CHAPTER_DEFS)
+  const allFieldDefs = [...def.slideFields, ...def.contentFields, ...def.assessFields];
+  const htmlFieldIds = new Set(allFieldDefs.filter(f => f.html).map(f => f.id));
+
+  // Strip stale HTML tags from non-body/outcome/html fields (cleanup from old data)
   Object.keys(liveData).forEach(k => {
-    if (k.indexOf('-body') === -1 && k.indexOf('-outcome') === -1 && typeof liveData[k] === 'string') {
+    if (k.indexOf('-body') === -1 && k.indexOf('-outcome') === -1 && !htmlFieldIds.has(k) && typeof liveData[k] === 'string') {
       liveData[k] = stripHtml(liveData[k]);
     }
   });
 
   const rawDraft = draftSnap.exists ? draftSnap.data() : {};
 
-  // Seed Firestore with defaults for any field not yet written
+  // Seed Firestore with defaults for any field not yet written,
+  // and re-seed html:true fields whose stored value was stripped of HTML tags
   const allFields = [...def.slideFields, ...def.contentFields, ...def.assessFields];
   const missing = {};
   allFields.forEach(f => {
-    if (liveData[f.id] === undefined && f.default !== '') missing[f.id] = f.default;
+    if (f.default === '') return;
+    const stored = liveData[f.id];
+    if (stored === undefined) {
+      missing[f.id] = f.default;
+    } else if (f.html && typeof stored === 'string' && /<[^>]+>/.test(f.default) && !/<[^>]+>/.test(stored)) {
+      // Stored value has no HTML but the default does — plain-text was saved previously; restore
+      missing[f.id] = f.default;
+    }
   });
   if (Object.keys(missing).length) {
     await db.collection('content').doc(chId).set(missing, { merge: true });
@@ -1004,7 +1055,7 @@ async function loadChapter(chId, btn) {
   Object.keys(rawDraft).forEach(k => {
     if (k === '_draftStatus') return;
     let val = rawDraft[k];
-    if (k.indexOf('-body') === -1 && k.indexOf('-outcome') === -1 && typeof val === 'string') {
+    if (k.indexOf('-body') === -1 && k.indexOf('-outcome') === -1 && !htmlFieldIds.has(k) && typeof val === 'string') {
       val = stripHtml(val);
     }
     if (val !== liveData[k]) draftData[k] = val;
@@ -1075,12 +1126,14 @@ function renderEditFields() {
       </div>`;
       lastGroup = group;
     }
-    if (f.type === 'textarea') {
+    if (f.type === 'textarea' || f.html) {
+      const dispVal = f.html ? val : escHtml(val);
+      const hint = f.html ? ' <span style="font-family:var(--mono);font-size:8px;color:var(--blue-soft);font-weight:600;letter-spacing:0.08em;">HTML</span>' : '';
       html += `<div class="edit-field">
-        <label class="edit-label" for="field-${f.id}">${f.label}</label>
-        <textarea class="edit-input" id="field-${f.id}" rows="4"
+        <label class="edit-label" for="field-${f.id}">${f.label}${hint}</label>
+        <textarea class="edit-input" id="field-${f.id}" rows="${f.html ? 3 : 4}"
           placeholder="${escHtml(f.placeholder || '')}"
-          oninput="scheduleDraftSave()" style="resize:vertical;min-height:80px;">${escHtml(val)}</textarea>
+          oninput="scheduleDraftSave()" style="resize:vertical;min-height:${f.html ? '54px' : '80px'};font-family:var(--mono);font-size:${f.html ? '11px' : 'inherit'};">${dispVal}</textarea>
       </div>`;
     } else {
       html += `<div class="edit-field">
@@ -1142,17 +1195,19 @@ function showDiff() {
     fieldAccepted[f.id] = null; // pending — not yet decided
     changedFields.add(f.id);
 
+    const liveDisplay  = f.html ? live  : escHtml(live);
+    const draftDisplay = f.html ? draft : escHtml(draft);
     return `<div class="diff-row" id="diff-row-${f.id}">
       <div class="diff-field-label">${escHtml(f.label)}</div>
       <div class="diff-old">
         <span style="font-family:var(--mono);font-size:8px;color:#c62828;letter-spacing:0.06em;display:block;margin-bottom:4px;">LIVE</span>
-        ${escHtml(live)}
+        ${liveDisplay}
       </div>
       <div class="diff-new">
         <span style="font-family:var(--mono);font-size:8px;color:#2e7d32;letter-spacing:0.06em;display:block;margin-bottom:4px;padding:8px 10px 0;">DRAFT
           <button class="diff-new-edit-btn" id="edit-btn-${f.id}" onclick="toggleDraftEdit('${f.id}')">Edit</button>
         </span>
-        <span class="diff-new-text" id="draft-text-${f.id}">${escHtml(draft)}</span>
+        <span class="diff-new-text" id="draft-text-${f.id}">${draftDisplay}</span>
         <textarea class="diff-new-input" id="draft-input-${f.id}" oninput="onDraftInputChange('${f.id}')">${escHtml(draft)}</textarea>
       </div>
       <div class="diff-actions">
