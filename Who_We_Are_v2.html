@@ -456,13 +456,19 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 
   .s4-cards { grid-template-columns: repeat(2, 1fr); }
 
-  /* Slide 5 team — panels stack vertically */
-  .screen-team { overflow-y: auto; height: auto; justify-content: flex-start; }
-  .s5t-two-panel { flex-direction: column; height: auto !important; }
-  .s5t-panel--left  { flex: none !important; width: 100%; }
-  .s5t-panel--right { flex: none !important; width: 100%; }
-  .s5t-people-grid  { grid-template-columns: repeat(2, 1fr); }
-  .s5t-bg-grid      { grid-template-columns: repeat(3, 1fr); grid-template-rows: unset; min-height: 200px; }
+  /* Slide 5 team — scale down to fit viewport */
+  .screen-team { overflow-y: auto; padding: clamp(8px,1.2vw,16px) clamp(16px,3vw,40px) 56px; gap: 8px; }
+  .s5t-title { font-size: clamp(1.1rem,2.2vw,1.8rem); }
+  .s5t-two-panel { height: clamp(240px,55vh,400px); gap: 8px; }
+  .s5t-panel--left { padding: 14px 16px; }
+  .s5t-panel--right { padding: 14px 16px; }
+  .s5t-people-grid { gap: 10px !important; }
+  .s5t-person { gap: 8px !important; }
+  .s5t-photo { width: 36px !important; height: 36px !important; }
+  .s5t-person-name { font-size: 12px !important; }
+  .s5t-person-role { font-size: 9px !important; }
+  .s5t-person-prev { font-size: 10px !important; }
+  .s5t-bg-grid { gap: 8px; }
 
   .s7-stats { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
   .s7-sub-panels--clientele { grid-template-columns: 1fr; }
@@ -480,11 +486,13 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
   .s3-milestones { grid-template-columns: 1fr; }
   .s4-cards      { grid-template-columns: 1fr; }
 
-  .s5t-grid       { grid-template-columns: 1fr; }
-  .s5t-founders   { grid-template-columns: 1fr; }
-  .s5t-pnl        { grid-template-columns: 1fr; }
-  .s5t-people-grid { grid-template-columns: 1fr; }
-  .s5t-bg-grid    { grid-template-columns: repeat(2, 1fr); }
+  .s5t-grid     { grid-template-columns: 1fr; }
+  .s5t-founders { grid-template-columns: 1fr; }
+  .s5t-pnl      { grid-template-columns: 1fr; }
+  .s5t-two-panel { height: clamp(200px,60vh,380px); }
+  .s5t-photo { width: 30px !important; height: 30px !important; }
+  .s5t-person-name { font-size: 11px !important; }
+  .s5t-person-prev { display: none; }
 
   .s7-stats               { grid-template-columns: repeat(2, 1fr); }
   .s7-logo-panels         { grid-template-columns: 1fr; }
