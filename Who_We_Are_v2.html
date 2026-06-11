@@ -2208,7 +2208,8 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
           var val = cData[key];
           if (val === undefined) return;
           if (key.indexOf('-body') !== -1 || key.indexOf('-outcome') !== -1 || el.getAttribute('data-editable-html') === 'true') {
-            el.innerHTML = val;
+            var isBody = key.indexOf('-body') !== -1 || key.indexOf('-outcome') !== -1;
+            el.innerHTML = isBody ? val : val.replace(/<br\s*\/?>/gi, ' ');
           } else {
             el.textContent = String(val).replace(/<[^>]*>/g, '');
           }
