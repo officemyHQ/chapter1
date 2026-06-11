@@ -978,6 +978,14 @@ async function loadChapter(chId, btn) {
     db.collection('content-drafts').doc(chId).get()
   ]);
   liveData  = liveSnap.exists  ? liveSnap.data()  : {};
+
+  // Strip stale HTML tags from non-body/outcome fields (cleanup from old data)
+  Object.keys(liveData).forEach(k => {
+    if (k.indexOf('-body') === -1 && k.indexOf('-outcome') === -1 && typeof liveData[k] === 'string') {
+      liveData[k] = stripHtml(liveData[k]);
+    }
+  });
+
   const rawDraft = draftSnap.exists ? draftSnap.data() : {};
 
   // Seed Firestore with defaults for any field not yet written
@@ -995,7 +1003,11 @@ async function loadChapter(chId, btn) {
   draftData = {};
   Object.keys(rawDraft).forEach(k => {
     if (k === '_draftStatus') return;
-    if (rawDraft[k] !== liveData[k]) draftData[k] = rawDraft[k];
+    let val = rawDraft[k];
+    if (k.indexOf('-body') === -1 && k.indexOf('-outcome') === -1 && typeof val === 'string') {
+      val = stripHtml(val);
+    }
+    if (val !== liveData[k]) draftData[k] = val;
   });
 
   // If no real content differences remain, delete the draft doc entirely
@@ -1029,6 +1041,9 @@ function updateSyncArea() {
 
 function escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function stripHtml(str) {
+  return String(str).replace(/<[^>]*>/g, '');
 }
 
 function switchEditTab(tab) {

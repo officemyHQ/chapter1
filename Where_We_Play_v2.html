@@ -2199,7 +2199,8 @@ h2.section-title { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.03em;
           if (key.indexOf('-body') !== -1 || key.indexOf('-outcome') !== -1) {
             el.innerHTML = val;
           } else {
-            el.textContent = val;
+            // Strip any HTML tags that may have been stored in old data
+            el.textContent = String(val).replace(/<[^>]*>/g, '');
           }
         });
       });

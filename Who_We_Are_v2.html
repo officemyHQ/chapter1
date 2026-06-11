@@ -2210,7 +2210,8 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
           if (key.indexOf('-body') !== -1 || key.indexOf('-outcome') !== -1) {
             el.innerHTML = val;
           } else {
-            el.textContent = val;
+            // Strip any HTML tags that may have been stored in old data
+            el.textContent = String(val).replace(/<[^>]*>/g, '');
           }
         });
       });
