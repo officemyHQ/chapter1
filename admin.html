@@ -823,14 +823,22 @@ function renderChapterPills() {
 async function refreshPillStatuses() {
   const allChapters = Object.values(COURSES).flat().flatMap(g => g.chapters).filter(c => c.available);
   await Promise.all(allChapters.map(async ch => {
-    const draftSnap = await db.collection('content-drafts').doc(ch.id).get();
+    const [draftSnap, liveSnap] = await Promise.all([
+      db.collection('content-drafts').doc(ch.id).get(),
+      db.collection('content').doc(ch.id).get()
+    ]);
     if (draftSnap.exists) {
       const d = draftSnap.data();
-      const contentKeys = Object.keys(d).filter(k => k !== '_draftStatus');
-      pillStatuses[ch.id] = {
-        hasDraft: contentKeys.length > 0,
-        draftStatus: contentKeys.length > 0 ? (d._draftStatus || 'pending') : null
-      };
+      const live = liveSnap.exists ? liveSnap.data() : {};
+      // Only count keys that actually differ from live (ignore _draftStatus)
+      const realChanges = Object.keys(d).filter(k => k !== '_draftStatus' && d[k] !== live[k]);
+      if (realChanges.length > 0) {
+        pillStatuses[ch.id] = { hasDraft: true, draftStatus: d._draftStatus || 'pending' };
+      } else {
+        // Stale doc — clean it up
+        db.collection('content-drafts').doc(ch.id).delete();
+        pillStatuses[ch.id] = { hasDraft: false, draftStatus: null };
+      }
     } else {
       pillStatuses[ch.id] = { hasDraft: false, draftStatus: null };
     }
