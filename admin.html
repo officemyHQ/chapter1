@@ -904,10 +904,14 @@ async function loadChapter(chId, btn) {
 function updateSyncArea() {
   const syncArea = document.getElementById('sync-area');
   if (!syncArea) return;
-  const hasPendingDraft = isMasterAdmin && Object.keys(draftData).filter(k => k !== '_draftStatus').length > 0;
-  syncArea.innerHTML = hasPendingDraft
-    ? '<button class="sync-btn" onclick="showDiff()">Review &amp; Push Live →</button>'
-    : '';
+  const hasDraft = Object.keys(draftData).filter(k => k !== '_draftStatus').length > 0;
+  if (!hasDraft) { syncArea.innerHTML = ''; return; }
+  const badge = `<span style="font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:6px 12px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;">Submitted for Review</span>`;
+  if (isMasterAdmin) {
+    syncArea.innerHTML = `<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">${badge}<button class="sync-btn" onclick="showDiff()">Review Changes →</button></div>`;
+  } else {
+    syncArea.innerHTML = badge;
+  }
 }
 
 function escHtml(str) {
