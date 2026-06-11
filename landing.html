@@ -7,6 +7,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Firebase v9 compat -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 <style>
 :root {
   --blue:       #1A1E9E;
@@ -214,86 +220,6 @@ body {
   margin-bottom: 18px;
 }
 
-/* Fields */
-.field { margin-bottom: 13px; }
-.field-label {
-  display: block;
-  font-family: var(--mono);
-  font-size: 8.5px; font-weight: 600;
-  letter-spacing: 0.13em; text-transform: uppercase;
-  color: var(--blue-soft);
-  margin-bottom: 6px;
-}
-.field-input {
-  width: 100%;
-  font-family: var(--sans);
-  font-size: 13px; font-weight: 600;
-  color: var(--blue);
-  padding: 11px 13px;
-  background: var(--white);
-  border: 1px solid var(--border-mid);
-  outline: none;
-  border-radius: 0;
-  appearance: none;
-  transition: border-color 0.18s, box-shadow 0.18s;
-  letter-spacing: -0.01em;
-}
-.field-input::placeholder { color: var(--blue-pale); font-weight: 500; }
-.field-input:focus {
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(26,30,158,0.07);
-}
-.field-input.error { border-color: var(--blue-mid); }
-
-.field-error {
-  font-family: var(--mono);
-  font-size: 8.5px; font-weight: 600;
-  color: var(--blue-mid);
-  margin-top: 4px;
-  display: none; align-items: center; gap: 5px;
-  letter-spacing: 0.06em; text-transform: uppercase;
-}
-.field-error.visible { display: flex; }
-.field-hint {
-  font-family: var(--mono);
-  font-size: 8.5px; font-weight: 500;
-  color: var(--blue-pale);
-  margin-top: 4px;
-  letter-spacing: 0.06em; text-transform: uppercase;
-}
-
-/* Course radio */
-.radio-group { display: flex; flex-direction: column; gap: 6px; }
-.radio-option { cursor: pointer; }
-.radio-option input { display: none; }
-.radio-label {
-  display: flex; align-items: center; gap: 12px;
-  padding: 11px 14px;
-  background: var(--white);
-  border: 1px solid var(--border-mid);
-  transition: border-color 0.18s, background 0.18s;
-  cursor: pointer;
-}
-.radio-option input:checked + .radio-label {
-  border-color: var(--blue);
-  background: var(--white);
-  box-shadow: inset 3px 0 0 var(--blue);
-}
-.radio-option:hover .radio-label { border-color: var(--blue-mid); }
-.radio-num {
-  font-family: var(--mono);
-  font-size: 9px; font-weight: 600;
-  color: var(--blue-pale);
-  letter-spacing: 0.08em;
-  min-width: 18px;
-}
-.radio-option input:checked + .radio-label .radio-num { color: var(--blue); }
-.radio-text {
-  font-size: 13px; font-weight: 700;
-  color: var(--blue);
-  letter-spacing: -0.01em;
-}
-
 /* Submit */
 .btn-submit {
   width: 100%; margin-top: 10px;
@@ -334,7 +260,6 @@ body {
   background: var(--white);
 }
 .api-error.visible { display: block; }
-.api-error .link { color: var(--blue); cursor: pointer; text-decoration: underline; }
 
 /* Success */
 .success-panel { display: none; flex-direction: column; gap: 20px; }
@@ -344,12 +269,6 @@ body {
   color: var(--blue); letter-spacing: -0.03em; line-height: 1.1;
 }
 .success-name { color: var(--blue-mid); }
-.success-body {
-  font-size: 12px; font-weight: 500;
-  color: var(--blue-soft); line-height: 1.65;
-  padding-left: 14px;
-  border-left: 2px solid var(--blue-pale);
-}
 .course-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
 .course-list-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--blue-soft); margin-bottom: 4px; }
 .course-list-item {
@@ -388,42 +307,29 @@ a.course-list-item:hover { background: #e4e7ff; }
   <!-- LEFT -->
   <div class="left">
     <div class="left-content">
-
       <div class="headline-block">
         <div class="headline">Learn today<span class="dot-sep">.</span><br>Lead tomorrow<span class="dot-sep">.</span><br>Last forever<span class="dot-sep">.</span></div>
       </div>
-
-
     </div>
   </div>
 
   <!-- RIGHT -->
   <div class="right">
 
-    <div id="form-panel">
+    <!-- LOGGED OUT: Google sign-in -->
+    <div id="signin-panel">
       <div class="form-header">
+        <div class="form-label-top">Sign in</div>
         <div class="form-title">Learn · Grow · Succeed</div>
+        <div class="form-desc">Use your myHQ Google account to continue.</div>
       </div>
-
-      <div class="field">
-        <label class="field-label" for="input-username">Username</label>
-        <input class="field-input" id="input-username" type="text" placeholder="Enter your username" autocomplete="username">
-        <div class="field-error" id="err-username">Enter your username</div>
-      </div>
-
-      <div class="field">
-        <label class="field-label" for="input-password">Password</label>
-        <input class="field-input" id="input-password" type="password" placeholder="Enter your password" autocomplete="current-password">
-        <div class="field-error" id="err-password">Enter your password</div>
-      </div>
-
-      <button class="btn-submit" id="submit-btn" onclick="handleSubmit()">
-        <span class="btn-text">Log In &nbsp;→</span>
+      <button class="btn-submit" id="google-btn" onclick="signInWithGoogle()">
+        <span class="btn-text">Sign in with Google &nbsp;→</span>
       </button>
-
-      <div class="api-error" id="api-error"></div>
+      <div class="api-error" id="auth-error"></div>
     </div>
 
+    <!-- LOGGED IN: welcome + courses -->
     <div class="success-panel" id="success-panel">
       <div class="success-title">Welcome,<br><span class="success-name" id="success-name">—</span>.</div>
       <div class="course-list">
@@ -433,147 +339,76 @@ a.course-list-item:hover { background: #e4e7ff; }
           <span class="course-list-name">Beginner</span>
           <span class="course-list-arrow">→</span>
         </a>
-        <div class="course-list-item locked" id="course-intermediate">
+        <div class="course-list-item locked">
           <span class="course-list-num">02</span>
           <span class="course-list-name">Intermediate</span>
-          <span class="course-list-lock" id="course-intermediate-icon">🔒</span>
+          <span class="course-list-lock">🔒</span>
         </div>
-        <div class="course-list-item locked" id="course-advanced">
+        <div class="course-list-item locked">
           <span class="course-list-num">03</span>
           <span class="course-list-name">Advanced</span>
-          <span class="course-list-lock" id="course-advanced-icon">🔒</span>
+          <span class="course-list-lock">🔒</span>
         </div>
       </div>
-      <button class="signout-btn" onclick="signOut()">Sign out</button>
+      <button class="signout-btn" onclick="doSignOut()">Sign out</button>
     </div>
 
   </div>
 </div>
 
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwX0Z5vx6DSwdwZwK26pKZL3V3U9XwEyWgPa9Ek_cFEH1_tpULnWNcn7RlgE-wT8M9M/exec';
+var auth = window.firebaseAuth;
 
-document.getElementById('input-username').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('input-password').focus(); });
-document.getElementById('input-password').addEventListener('keydown', e => { if (e.key === 'Enter') handleSubmit(); });
-
-function setFieldError(inputId, errId, show, msg) {
-  const input = document.getElementById(inputId);
-  const err = document.getElementById(errId);
-  if (show) {
-    input.classList.add('error');
-    if (msg) err.textContent = msg;
-    err.style.display = 'flex'; err.classList.add('visible');
-  } else {
-    input.classList.remove('error');
-    err.style.display = 'none'; err.classList.remove('visible');
-  }
-}
-
-async function handleSubmit() {
-  const username = document.getElementById('input-username').value.trim();
-  const password = document.getElementById('input-password').value.trim();
-  const apiError = document.getElementById('api-error');
-  apiError.classList.remove('visible');
-
-  let valid = true;
-  if (!username) { setFieldError('input-username', 'err-username', true, 'Enter your username'); valid = false; }
-  else setFieldError('input-username', 'err-username', false);
-  if (!password) { setFieldError('input-password', 'err-password', true, 'Enter your password'); valid = false; }
-  else setFieldError('input-password', 'err-password', false);
-  if (!valid) return;
-
-  const btn = document.getElementById('submit-btn');
-  btn.classList.add('loading'); btn.disabled = true;
-  btn.querySelector('.btn-text').textContent = 'Checking…';
-
-  try {
-    const res = await fetch(APPS_SCRIPT_URL + '?action=loginWithProgress&username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
-    const data = await res.json();
-    if (data.success) {
-      ['myhq_ch1_answers','myhq_ch1_submitted','myhq_ch1_complete',
-       'myhq_ch2_answers','myhq_ch2_submitted','myhq_ch2_complete','myhq_ch2_unlocked'].forEach(k => localStorage.removeItem(k));
-
-      localStorage.setItem('myhq_name', data.name);
-      localStorage.setItem('myhq_email', data.email);
-      localStorage.setItem('myhq_course', data.course || 'Beginner Course');
-      localStorage.setItem('myhq_registered_at', new Date().toISOString());
-
-      const prog = data.progress;
-      if (prog && prog.found) {
-        if (prog.ch1) {
-          localStorage.setItem('myhq_ch1_answers', JSON.stringify(prog.ch1));
-          localStorage.setItem('myhq_ch1_submitted', 'true');
-          localStorage.setItem('myhq_ch1_complete', 'true');
-          localStorage.setItem('myhq_ch2_unlocked', 'true');
-        }
-        if (prog.ch2) {
-          localStorage.setItem('myhq_ch2_answers', JSON.stringify(prog.ch2));
-          localStorage.setItem('myhq_ch2_submitted', 'true');
-          localStorage.setItem('myhq_ch2_complete', 'true');
-        }
-      }
-
-      document.getElementById('success-name').textContent = data.name.split(' ')[0];
-      unlockCourseCards(data.course || 'Beginner');
-      document.getElementById('form-panel').style.display = 'none';
-      document.getElementById('success-panel').classList.add('visible');
-    } else {
-      apiError.textContent = 'Wrong username or password. Please try again.';
-      apiError.classList.add('visible');
-      btn.classList.remove('loading'); btn.disabled = false;
-      btn.querySelector('.btn-text').textContent = 'Log In  →';
+function signInWithGoogle() {
+  var btn = document.getElementById('google-btn');
+  btn.disabled = true;
+  btn.querySelector('.btn-text').textContent = 'Signing in…';
+  var provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({ hd: 'myhq.in' });
+  auth.signInWithPopup(provider).catch(function(err) {
+    btn.disabled = false;
+    btn.querySelector('.btn-text').textContent = 'Sign in with Google  →';
+    if (err.code !== 'auth/popup-closed-by-user') {
+      showAuthError('Sign-in failed. Please try again.');
     }
-  } catch {
-    apiError.textContent = 'Could not connect. Please try again.';
-    apiError.classList.add('visible');
-    btn.classList.remove('loading'); btn.disabled = false;
-    btn.querySelector('.btn-text').textContent = 'Log In  →';
-  }
+  });
 }
 
-function goToHub() { window.location.href = 'hub.html'; }
-
-function signOut() {
-  localStorage.removeItem('myhq_name');
-  localStorage.removeItem('myhq_email');
-  localStorage.removeItem('myhq_registered_at');
-  localStorage.removeItem('myhq_course');
-  document.getElementById('success-panel').classList.remove('visible');
-  document.getElementById('form-panel').style.display = '';
-  document.getElementById('input-username').value = '';
-  document.getElementById('input-password').value = '';
-  const btn = document.getElementById('submit-btn');
-  btn.classList.remove('loading'); btn.disabled = false;
-  btn.querySelector('.btn-text').textContent = 'Log In  →';
+function showAuthError(msg) {
+  var el = document.getElementById('auth-error');
+  el.textContent = msg;
+  el.classList.add('visible');
 }
 
-function unlockCourseCards(course) {
-  const level = (course || '').toLowerCase().trim().split(' ')[0];
-  const intermediate = document.getElementById('course-intermediate');
-  const advanced = document.getElementById('course-advanced');
-  if (level === 'intermediate' || level === 'advanced') {
-    intermediate.classList.remove('locked');
-    intermediate.innerHTML = '<span class="course-list-num">02</span><span class="course-list-name">Intermediate</span><span class="course-list-arrow">→</span>';
-    intermediate.style.cursor = 'pointer';
-    intermediate.onclick = () => { window.location.href = 'hub.html'; };
-  }
-  if (level === 'advanced') {
-    advanced.classList.remove('locked');
-    advanced.innerHTML = '<span class="course-list-num">03</span><span class="course-list-name">Advanced</span><span class="course-list-arrow">→</span>';
-    advanced.style.cursor = 'pointer';
-    advanced.onclick = () => { window.location.href = 'hub.html'; };
-  }
+function doSignOut() {
+  auth.signOut();
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  const n = localStorage.getItem('myhq_name');
-  const e = localStorage.getItem('myhq_email');
-  if (n && e) {
-    document.getElementById('success-name').textContent = n.split(' ')[0];
-    unlockCourseCards(localStorage.getItem('myhq_course') || 'Beginner');
-    document.getElementById('form-panel').style.display = 'none';
-    document.getElementById('success-panel').classList.add('visible');
-    return;
+auth.onAuthStateChanged(function(user) {
+  var signinPanel  = document.getElementById('signin-panel');
+  var successPanel = document.getElementById('success-panel');
+  var authError    = document.getElementById('auth-error');
+  var btn          = document.getElementById('google-btn');
+
+  if (user) {
+    if (!user.email.endsWith('@myhq.in')) {
+      auth.signOut();
+      showAuthError('Only myHQ team members can access this.');
+      signinPanel.style.display  = '';
+      successPanel.classList.remove('visible');
+      btn.disabled = false;
+      btn.querySelector('.btn-text').textContent = 'Sign in with Google  →';
+      return;
+    }
+    authError.classList.remove('visible');
+    document.getElementById('success-name').textContent = (user.displayName || user.email).split(' ')[0];
+    signinPanel.style.display = 'none';
+    successPanel.classList.add('visible');
+  } else {
+    signinPanel.style.display = '';
+    successPanel.classList.remove('visible');
+    btn.disabled = false;
+    btn.querySelector('.btn-text').textContent = 'Sign in with Google  →';
   }
 });
 </script>

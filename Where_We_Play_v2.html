@@ -9,6 +9,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- Firebase v9 compat -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 <style>
 /* ── SLIDE STYLES ── */
 
@@ -784,7 +789,7 @@ h2.section-title { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.03em;
     <span class="topbar-logo">myHQ</span>
     <span class="topbar-chapter">Chapter 1</span>
   </div>
-  <div class="topbar-center">Where We Play</div>
+  <div class="topbar-center" data-editable="slide-1-headline">Where We Play</div>
   <div class="topbar-right">
     <a class="hub-btn" href="hub.html"><i class="fa-solid fa-house"></i></a>
     <span class="screen-counter" id="screenCounter">1 / 6</span>
@@ -822,7 +827,7 @@ h2.section-title { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.03em;
     <div class="s1-stat-headline">
       <span class="s1-dollar">$1</span><span class="s1-trillion">T</span>
     </div>
-    <p class="s1-tagline">Where We Play: India's $1 trillion real estate market.</p>
+    <p class="s1-tagline" data-editable="slide-1-sub">Where We Play: India's $1 trillion real estate market.</p>
     <p class="s1-sub">Understanding the arena before learning how to win in it.</p>
     <div class="s1-facts">
       <div class="s1-fact">World's 3rd largest real estate market by value</div>
@@ -2165,6 +2170,37 @@ h2.section-title { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.03em;
 
 <!-- ═══ SCRIPTS ═══ -->
 <script>
+/* ── FIREBASE AUTH GATE ── */
+(function() {
+  var CHAPTER_ID = 'ch1';
+  window.firebaseAuth.onAuthStateChanged(function(user) {
+    if (!user) { window.location.href = 'landing.html'; return; }
+    var db = window.firebaseDB;
+    db.collection('users').doc(user.uid).get().then(function(snap) {
+      var data = snap.exists ? snap.data() : {};
+      var unlocked = (data.unlockedChapters && data.unlockedChapters.beginner) || [];
+      if (unlocked.indexOf(CHAPTER_ID) === -1) {
+        document.getElementById('slide-mode').style.display = 'none';
+        var rm = document.getElementById('read-mode');
+        if (rm) rm.style.display = 'none';
+        var lock = document.createElement('div');
+        lock.style.cssText = 'position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;font-family:Manrope,sans-serif;z-index:9999;';
+        lock.innerHTML = '<div style="font-size:2.5rem;">🔒</div><div style="font-size:1.2rem;font-weight:800;color:#1E22AA;">This chapter is locked.</div><div style="font-size:14px;color:#7B7FE8;max-width:340px;text-align:center;">Ask your admin to unlock it.</div><a href="hub.html" style="margin-top:8px;font-size:13px;font-weight:700;color:#1E22AA;text-decoration:underline;">← Back to Hub</a>';
+        document.body.appendChild(lock);
+        return;
+      }
+      db.collection('content').doc(CHAPTER_ID).get().then(function(cSnap) {
+        if (!cSnap.exists) return;
+        var cData = cSnap.data();
+        document.querySelectorAll('[data-editable]').forEach(function(el) {
+          var val = cData[el.getAttribute('data-editable')];
+          if (val !== undefined) el.textContent = val;
+        });
+      });
+    });
+  });
+})();
+
 /* ── MODE TOGGLE ── */
 let currentMode = 'slide';
 let chartsReady = false;

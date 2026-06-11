@@ -1,534 +1,547 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>myHQ Admin — Training Tracker</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Portal — myHQ T&D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: #F4F5F7;
-      color: #1A1D2E;
-      min-height: 100vh;
-    }
+<!-- Firebase v9 compat -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 
-    /* Login screen */
-    #login-screen {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 24px;
-    }
+<style>
+:root {
+  --blue:      #1E22AA;
+  --blue-mid:  #4A4FD4;
+  --blue-soft: #7B7FE8;
+  --blue-pale: #C7C9F5;
+  --blue-wash: #f4f5fb;
+  --white:     #FFFFFF;
+  --border:    rgba(30,34,170,0.1);
+  --sans:      'Manrope', system-ui, sans-serif;
+  --mono:      'JetBrains Mono', ui-monospace, monospace;
+  --ease:      cubic-bezier(0.22,1,0.36,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; }
+body { font-family: var(--sans); background: var(--blue-wash); color: var(--blue); min-height: 100vh; }
 
-    .login-card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 48px 40px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-    }
+/* ── Topbar ── */
+.topbar {
+  height: 56px; padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--white); border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 50;
+}
+.topbar-rule { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--blue); }
+.brand-mark { height: 34px; }
+.topbar-title { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; color: var(--blue); }
+.back-btn {
+  font-size: 12px; font-weight: 600; color: var(--blue-soft); text-decoration: none;
+  display: flex; align-items: center; gap: 6px;
+  transition: color 0.15s;
+}
+.back-btn:hover { color: var(--blue); }
 
-    .login-logo {
-      font-size: 22px;
-      font-weight: 800;
-      color: #1A1D2E;
-      margin-bottom: 8px;
-      letter-spacing: -0.03em;
-    }
+/* ── Content ── */
+.content { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
 
-    .login-sub {
-      font-size: 13px;
-      color: #6B7280;
-      margin-bottom: 36px;
-    }
+/* ── Tabs ── */
+.tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 32px; }
+.tab-btn {
+  padding: 10px 22px; font-family: var(--sans); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.04em; border: none; background: none; cursor: pointer;
+  color: var(--blue-soft); border-bottom: 2px solid transparent; margin-bottom: -2px;
+  transition: color 0.15s;
+}
+.tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
 
-    .login-card label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: #374151;
-      margin-bottom: 6px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
 
-    .login-card input {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid #E5E7EB;
-      border-radius: 8px;
-      font-size: 14px;
-      outline: none;
-      transition: border-color 0.15s;
-      margin-bottom: 20px;
-    }
+/* ── Cards ── */
+.card { background: var(--white); border: 1px solid var(--border); padding: 24px; margin-bottom: 20px; }
+.card-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--blue-soft); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.card-title::before { content: ''; width: 14px; height: 1px; background: var(--blue-soft); }
 
-    .login-card input:focus { border-color: #2563EB; }
+/* ── Search ── */
+.search-row { display: flex; gap: 10px; }
+.search-input {
+  flex: 1; font-family: var(--sans); font-size: 13px; font-weight: 600;
+  color: var(--blue); padding: 11px 14px;
+  background: var(--blue-wash); border: 1px solid var(--border);
+  outline: none; transition: border-color 0.18s;
+}
+.search-input:focus { border-color: var(--blue); background: var(--white); }
+.search-input::placeholder { color: var(--blue-pale); font-weight: 500; }
+.search-btn {
+  padding: 11px 20px; font-family: var(--sans); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  background: var(--blue); color: var(--white); border: none; cursor: pointer;
+  transition: background 0.15s;
+}
+.search-btn:hover { background: var(--blue-mid); }
 
-    .login-btn {
-      width: 100%;
-      padding: 13px;
-      background: #2563EB;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
+/* ── User result card ── */
+.user-result { display: none; margin-top: 16px; }
+.user-result.visible { display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--blue-wash); border: 1px solid var(--border); }
+.user-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--blue); color: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 800; flex-shrink: 0;
+}
+.user-info { flex: 1; }
+.user-name { font-size: 14px; font-weight: 700; color: var(--blue); }
+.user-email { font-size: 11px; color: var(--blue-soft); margin-top: 2px; font-family: var(--mono); }
+.user-lastlogin { font-size: 10px; color: var(--blue-pale); margin-top: 3px; font-family: var(--mono); }
+.user-admin-area { display: flex; align-items: center; gap: 10px; }
+.admin-label { font-size: 11px; font-weight: 600; color: var(--blue-soft); }
+.master-badge {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 4px 10px; background: #e6f9e9; color: #2e7d32; border: 1px solid #BEE5C2;
+}
 
-    .login-btn:hover { background: #1D4ED8; }
-    .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+/* Toggle switch */
+.toggle-wrap { display: flex; align-items: center; gap: 8px; }
+.toggle { position: relative; width: 40px; height: 22px; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; inset: 0; cursor: pointer;
+  background: #e0e0e0; border-radius: 22px; transition: 0.3s;
+}
+.toggle-slider::before {
+  content: ''; position: absolute; width: 16px; height: 16px; border-radius: 50%;
+  left: 3px; bottom: 3px; background: white; transition: 0.3s;
+}
+.toggle input:checked + .toggle-slider { background: var(--blue); }
+.toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
 
-    .login-error {
-      margin-top: 14px;
-      font-size: 13px;
-      color: #DC2626;
-      display: none;
-    }
+/* ── Course pills ── */
+.course-pills { display: flex; gap: 8px; margin-bottom: 20px; }
+.course-pill {
+  padding: 8px 18px; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  cursor: pointer; border: 1.5px solid var(--border); background: var(--white);
+  color: var(--blue-soft); transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.course-pill.active { background: var(--blue); color: var(--white); border-color: var(--blue); }
 
-    /* Dashboard */
-    #dashboard { display: none; }
+/* ── Chapter rows ── */
+.chapter-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0; border-bottom: 1px solid var(--border);
+}
+.chapter-row:last-child { border-bottom: none; }
+.chapter-row.dimmed { opacity: 0.45; }
+.chapter-name { font-size: 13px; font-weight: 700; color: var(--blue); }
+.chapter-desc { font-size: 11px; color: var(--blue-soft); margin-top: 3px; font-family: var(--mono); }
+.unlock-pill {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 5px 14px; cursor: pointer; border: none; transition: opacity 0.3s, background 0.15s;
+}
+.unlock-pill.unlocked { background: #BEE5C2; color: #2e7d32; }
+.unlock-pill.locked   { background: #f0f0f0; color: #8B8FA8; }
+.unlock-pill.na       { background: #f0f0f0; color: #8B8FA8; cursor: default; }
+.unlock-pill.fade     { opacity: 0.4; }
 
-    .topbar {
-      background: #fff;
-      border-bottom: 1px solid #E5E7EB;
-      padding: 0 32px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+.chapters-note {
+  font-size: 10px; color: var(--blue-soft); margin-top: 14px;
+  font-family: var(--mono); letter-spacing: 0.04em;
+}
 
-    .topbar-brand {
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      color: #1A1D2E;
-    }
+/* ── All users table ── */
+.users-table { width: 100%; border-collapse: collapse; }
+.users-table th {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--blue-soft); padding: 10px 12px; text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+.users-table td {
+  padding: 12px 12px; font-size: 12px; font-weight: 600; color: var(--blue);
+  border-bottom: 1px solid var(--border); cursor: pointer;
+}
+.users-table tr:hover td { background: var(--blue-wash); }
+.badge-admin {
+  display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 3px 8px; background: var(--blue-wash); color: var(--blue-mid);
+  border: 1px solid var(--blue-pale);
+}
+.badge-master {
+  display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 3px 8px; background: #e6f9e9; color: #2e7d32;
+  border: 1px solid #BEE5C2;
+}
 
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .refresh-btn {
-      padding: 7px 16px;
-      background: #F3F4F6;
-      border: 1px solid #E5E7EB;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      color: #374151;
-      transition: background 0.15s;
-    }
-
-    .refresh-btn:hover { background: #E5E7EB; }
-
-    .logout-btn {
-      padding: 7px 16px;
-      background: none;
-      border: 1px solid #E5E7EB;
-      border-radius: 6px;
-      font-size: 13px;
-      color: #6B7280;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .logout-btn:hover { border-color: #DC2626; color: #DC2626; }
-
-    .main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 36px 24px;
-    }
-
-    /* Stats row */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-
-    .stat-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px 24px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-
-    .stat-label {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #6B7280;
-      margin-bottom: 8px;
-    }
-
-    .stat-value {
-      font-size: 32px;
-      font-weight: 800;
-      color: #1A1D2E;
-      letter-spacing: -0.03em;
-    }
-
-    .stat-value.blue { color: #2563EB; }
-    .stat-value.green { color: #059669; }
-
-    /* Filters */
-    .filters {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .filter-input {
-      padding: 9px 14px;
-      border: 1.5px solid #E5E7EB;
-      border-radius: 8px;
-      font-size: 13px;
-      outline: none;
-      min-width: 220px;
-      transition: border-color 0.15s;
-    }
-
-    .filter-input:focus { border-color: #2563EB; }
-
-    .filter-select {
-      padding: 9px 14px;
-      border: 1.5px solid #E5E7EB;
-      border-radius: 8px;
-      font-size: 13px;
-      outline: none;
-      background: #fff;
-      cursor: pointer;
-      transition: border-color 0.15s;
-    }
-
-    .filter-select:focus { border-color: #2563EB; }
-
-    /* Table */
-    .table-wrap {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-      overflow: hidden;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    thead {
-      background: #F9FAFB;
-      border-bottom: 1px solid #E5E7EB;
-    }
-
-    th {
-      padding: 12px 20px;
-      text-align: left;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: #6B7280;
-    }
-
-    td {
-      padding: 14px 20px;
-      font-size: 14px;
-      border-bottom: 1px solid #F3F4F6;
-      color: #374151;
-    }
-
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #FAFAFA; }
-
-    .name-cell {
-      font-weight: 600;
-      color: #1A1D2E;
-    }
-
-    .email-cell {
-      color: #6B7280;
-      font-size: 13px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .badge-done {
-      background: #D1FAE5;
-      color: #065F46;
-    }
-
-    .badge-pending {
-      background: #F3F4F6;
-      color: #9CA3AF;
-    }
-
-    .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: currentColor;
-    }
-
-    .timestamp {
-      font-size: 12px;
-      color: #9CA3AF;
-    }
-
-    .empty-row td {
-      text-align: center;
-      padding: 48px;
-      color: #9CA3AF;
-      font-size: 14px;
-    }
-
-    .last-updated {
-      font-size: 12px;
-      color: #9CA3AF;
-      margin-top: 16px;
-      text-align: right;
-    }
-  </style>
+/* ── Edit chapter tab ── */
+.chapter-select {
+  font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--blue);
+  padding: 10px 14px; background: var(--white); border: 1px solid var(--border);
+  outline: none; cursor: pointer; width: 100%; max-width: 320px; margin-bottom: 24px;
+  appearance: none; -webkit-appearance: none;
+}
+.edit-field { margin-bottom: 18px; }
+.edit-label {
+  font-family: var(--mono); font-size: 9px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--blue-soft); margin-bottom: 6px; display: block;
+}
+.edit-input {
+  width: 100%; font-family: var(--sans); font-size: 13px; font-weight: 600;
+  color: var(--blue); padding: 11px 14px; background: var(--blue-wash);
+  border: 1px solid var(--border); outline: none; transition: border-color 0.18s;
+}
+.edit-input:focus { border-color: var(--blue); background: var(--white); }
+.draft-indicator {
+  font-size: 10px; color: #2e7d32; font-family: var(--mono); letter-spacing: 0.06em;
+  margin-bottom: 16px; min-height: 16px; transition: opacity 0.3s;
+}
+.sync-btn {
+  padding: 12px 24px; font-family: var(--sans); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  background: var(--blue); color: var(--white); border: none; cursor: pointer;
+  transition: background 0.15s; margin-top: 8px;
+}
+.sync-btn:hover { background: var(--blue-mid); }
+.sync-msg {
+  font-size: 11px; color: var(--blue-mid); font-family: var(--mono);
+  margin-top: 10px; min-height: 18px; letter-spacing: 0.04em;
+}
+</style>
 </head>
 <body>
 
-<!-- Login Screen -->
-<div id="login-screen">
-  <div class="login-card">
-    <div class="login-logo">myHQ Admin</div>
-    <div class="login-sub">Training Completion Tracker — Internal Use Only</div>
-    <label for="admin-key">Admin Passphrase</label>
-    <input type="password" id="admin-key" placeholder="Enter passphrase" />
-    <button class="login-btn" id="login-btn" onclick="loadDashboard()">Access Dashboard</button>
-    <div class="login-error" id="login-error">Incorrect passphrase. Please try again.</div>
-  </div>
+<div class="topbar">
+  <div class="topbar-rule"></div>
+  <img src="logo_landing_hub/myHQ_logo_landing.png" alt="myHQ" class="brand-mark">
+  <span class="topbar-title">Admin Portal</span>
+  <a href="hub.html" class="back-btn">← Back to Hub</a>
 </div>
 
-<!-- Dashboard -->
-<div id="dashboard">
-  <div class="topbar">
-    <div class="topbar-brand">myHQ · Training Tracker</div>
-    <div class="topbar-right">
-      <button class="refresh-btn" onclick="refreshData()">↻ Refresh</button>
-      <button class="logout-btn" onclick="logout()">Log out</button>
-    </div>
+<div class="content">
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('access')">Logins &amp; Access</button>
+    <button class="tab-btn" onclick="switchTab('edit')">Edit Chapter</button>
   </div>
 
-  <div class="main">
-    <div class="stats">
-      <div class="stat-card">
-        <div class="stat-label">Total Users</div>
-        <div class="stat-value" id="stat-total">—</div>
+  <!-- TAB 1: LOGINS & ACCESS -->
+  <div class="tab-panel active" id="tab-access">
+
+    <!-- User search -->
+    <div class="card">
+      <div class="card-title">Find User</div>
+      <div class="search-row">
+        <input class="search-input" id="search-input" type="email" placeholder="user@myhq.in" />
+        <button class="search-btn" onclick="searchUser()">Search</button>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Ch1 Submitted</div>
-        <div class="stat-value green" id="stat-ch1">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Ch2 Submitted</div>
-        <div class="stat-value blue" id="stat-ch2">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Not Started</div>
-        <div class="stat-value" id="stat-none">—</div>
+      <div class="user-result" id="user-result">
+        <div class="user-avatar" id="result-avatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="result-name"></div>
+          <div class="user-email" id="result-email"></div>
+          <div class="user-lastlogin" id="result-lastlogin"></div>
+        </div>
+        <div class="user-admin-area" id="result-admin-area"></div>
       </div>
     </div>
 
-    <div class="filters">
-      <input class="filter-input" type="text" id="search" placeholder="Search by name or email…" oninput="renderTable()" />
-      <select class="filter-select" id="filter-course" onchange="renderTable()">
-        <option value="">Course — All</option>
-      </select>
-      <select class="filter-select" id="filter-ch1" onchange="renderTable()">
-        <option value="">Chapter 1 — All</option>
-        <option value="done">Submitted</option>
-        <option value="pending">Not submitted</option>
-      </select>
-      <select class="filter-select" id="filter-ch2" onchange="renderTable()">
-        <option value="">Chapter 2 — All</option>
-        <option value="done">Submitted</option>
-        <option value="pending">Not submitted</option>
-      </select>
+    <!-- Course pill selector -->
+    <div class="card" id="unlock-card" style="display:none;">
+      <div class="card-title">Select Course</div>
+      <div class="course-pills">
+        <button class="course-pill active" onclick="selectCourse('beginner',this)">01 Beginner</button>
+        <button class="course-pill" onclick="selectCourse('intermediate',this)">02 Intermediate</button>
+        <button class="course-pill" onclick="selectCourse('advanced',this)">03 Advanced</button>
+      </div>
+      <div id="chapter-list"></div>
+      <div class="chapters-note">⚡ Click Unlocked / Locked to toggle. Updates in real-time — no Save button.</div>
     </div>
 
-    <div class="table-wrap">
-      <table>
+    <!-- All users list -->
+    <div class="card">
+      <div class="card-title">All Users</div>
+      <table class="users-table">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Course</th>
-            <th>Ch1 — Where We Play</th>
-            <th>Ch2 — Who We Are</th>
+            <th>Name</th><th>Email</th><th>Last Login</th><th>Role</th>
           </tr>
         </thead>
-        <tbody id="table-body">
-          <tr class="empty-row"><td colspan="5">Loading…</td></tr>
-        </tbody>
+        <tbody id="users-tbody"></tbody>
       </table>
     </div>
 
-    <div class="last-updated" id="last-updated"></div>
   </div>
+
+  <!-- TAB 2: EDIT CHAPTER -->
+  <div class="tab-panel" id="tab-edit">
+    <div class="card">
+      <div class="card-title">Edit Chapter Content</div>
+      <select class="chapter-select" id="chapter-select" onchange="loadChapter(this.value)">
+        <option value="ch1">Ch 1 — Where We Play</option>
+        <option value="ch2">Ch 2 — Who We Are</option>
+      </select>
+      <div class="draft-indicator" id="draft-indicator"></div>
+      <div id="edit-fields"></div>
+      <div id="sync-area"></div>
+      <div class="sync-msg" id="sync-msg"></div>
+    </div>
+  </div>
+
 </div>
 
 <script>
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwX0Z5vx6DSwdwZwK26pKZL3V3U9XwEyWgPa9Ek_cFEH1_tpULnWNcn7RlgE-wT8M9M/exec';
-  let allUsers = [];
-  let adminKey = '';
+const db   = window.firebaseDB;
+const auth = window.firebaseAuth;
 
-  document.getElementById('admin-key').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') loadDashboard();
+let currentUser    = null;
+let currentUserDoc = null;
+let selectedCourse = 'beginner';
+let isMasterAdmin  = false;
+
+const CHAPTER_DEFS = {
+  ch1: {
+    label: 'Ch 1 — Where We Play',
+    fields: [
+      { id: 'slide-1-headline', label: 'Slide 1 Headline', default: 'Where We Play' },
+      { id: 'slide-1-sub',      label: 'Slide 1 Subtitle', default: "India's $1 trillion commercial real estate market" }
+    ]
+  },
+  ch2: {
+    label: 'Ch 2 — Who We Are',
+    fields: [
+      { id: 'slide-1-headline', label: 'Slide 1 Headline', default: 'Who We Are' },
+      { id: 'slide-1-sub',      label: 'Slide 1 Subtitle', default: 'Before you start, let\'s know the story and journey of myHQ.' }
+    ]
+  }
+};
+
+const COURSES = {
+  beginner: [
+    { id: 'ch1', name: 'Where We Play', desc: "India's commercial real estate market", available: true },
+    { id: 'ch2', name: 'Who We Are',    desc: "myHQ's story, team & ambition",         available: true }
+  ],
+  intermediate: [],
+  advanced: []
+};
+
+auth.onAuthStateChanged(async function(user) {
+  if (!user) { window.location.href = 'landing.html'; return; }
+  const snap = await db.collection('users').doc(user.uid).get();
+  if (!snap.exists) { window.location.href = 'hub.html'; return; }
+  const data = snap.data();
+  if (!data.isAdmin && !data.masterAdmin) { window.location.href = 'hub.html'; return; }
+  isMasterAdmin = !!data.masterAdmin;
+  loadAllUsers();
+  loadChapter('ch1');
+});
+
+/* ── Tabs ── */
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', ['access','edit'][i] === tab));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+/* ── Search user ── */
+async function searchUser() {
+  const email = document.getElementById('search-input').value.trim().toLowerCase();
+  if (!email) return;
+  const snap = await db.collection('users').where('email', '==', email).limit(1).get();
+  if (snap.empty) { alert('No user found with that email.'); return; }
+  loadUserResult(snap.docs[0]);
+}
+
+function loadUserResult(doc) {
+  currentUser    = doc.id;
+  currentUserDoc = doc.data();
+  const d = currentUserDoc;
+  const resultEl = document.getElementById('user-result');
+  document.getElementById('result-avatar').textContent = (d.name || d.email || '?')[0].toUpperCase();
+  document.getElementById('result-name').textContent   = d.name || '—';
+  document.getElementById('result-email').textContent  = d.email || '—';
+  const ll = d.lastLogin ? new Date(d.lastLogin.seconds * 1000).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) : '—';
+  document.getElementById('result-lastlogin').textContent = 'Last login: ' + ll;
+
+  const adminArea = document.getElementById('result-admin-area');
+  if (d.masterAdmin) {
+    adminArea.innerHTML = '<span class="master-badge">Master Admin</span>';
+  } else {
+    adminArea.innerHTML = `
+      <span class="admin-label">Admin access</span>
+      <label class="toggle">
+        <input type="checkbox" id="admin-toggle" ${d.isAdmin ? 'checked' : ''} onchange="toggleAdmin(this.checked)">
+        <span class="toggle-slider"></span>
+      </label>`;
+  }
+
+  resultEl.classList.add('visible');
+  document.getElementById('unlock-card').style.display = '';
+  selectCourse('beginner', document.querySelector('.course-pill'));
+}
+
+async function toggleAdmin(checked) {
+  if (!currentUser) return;
+  await db.collection('users').doc(currentUser).update({ isAdmin: checked });
+  currentUserDoc.isAdmin = checked;
+  loadAllUsers();
+}
+
+/* ── Course selection ── */
+function selectCourse(course, btn) {
+  selectedCourse = course;
+  document.querySelectorAll('.course-pill').forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderChapterList();
+}
+
+function renderChapterList() {
+  const list = document.getElementById('chapter-list');
+  const chapters = COURSES[selectedCourse];
+  if (!chapters || chapters.length === 0) {
+    list.innerHTML = '<p style="font-size:12px;color:var(--blue-soft);padding:12px 0;">Coming soon — no chapters available yet.</p>';
+    return;
+  }
+  const unlocked = (currentUserDoc?.unlockedChapters?.[selectedCourse] || []);
+  list.innerHTML = chapters.map(ch => {
+    if (!ch.available) {
+      return `<div class="chapter-row dimmed">
+        <div><div class="chapter-name">${ch.name}</div><div class="chapter-desc">${ch.desc}</div></div>
+        <button class="unlock-pill na">Not available yet</button>
+      </div>`;
+    }
+    const isUnlocked = unlocked.includes(ch.id);
+    return `<div class="chapter-row" id="row-${ch.id}">
+      <div><div class="chapter-name">${ch.name}</div><div class="chapter-desc">${ch.desc}</div></div>
+      <button class="unlock-pill ${isUnlocked ? 'unlocked' : 'locked'}" id="pill-${ch.id}" onclick="toggleChapter('${ch.id}', this)">
+        ${isUnlocked ? 'Unlocked' : 'Locked'}
+      </button>
+    </div>`;
+  }).join('');
+}
+
+async function toggleChapter(chId, pill) {
+  if (!currentUser) return;
+  pill.classList.add('fade');
+  setTimeout(() => pill.classList.remove('fade'), 300);
+
+  const ref  = db.collection('users').doc(currentUser);
+  const snap = await ref.get();
+  const existing = snap.data()?.unlockedChapters?.[selectedCourse] || [];
+  let updated;
+  if (existing.includes(chId)) {
+    updated = existing.filter(id => id !== chId);
+  } else {
+    updated = [...existing, chId];
+  }
+  await ref.update({ [`unlockedChapters.${selectedCourse}`]: updated });
+  if (!currentUserDoc.unlockedChapters) currentUserDoc.unlockedChapters = {};
+  currentUserDoc.unlockedChapters[selectedCourse] = updated;
+  renderChapterList();
+}
+
+/* ── All users table ── */
+async function loadAllUsers() {
+  const snap = await db.collection('users').orderBy('lastLogin', 'desc').get();
+  const tbody = document.getElementById('users-tbody');
+  tbody.innerHTML = snap.docs.map(doc => {
+    const d = doc.data();
+    const ll = d.lastLogin ? new Date(d.lastLogin.seconds * 1000).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) : '—';
+    const badge = d.masterAdmin
+      ? '<span class="badge-master">Master Admin</span>'
+      : d.isAdmin ? '<span class="badge-admin">Admin</span>' : '';
+    return `<tr onclick="loadUserResultById('${doc.id}')">
+      <td>${d.name || '—'}</td>
+      <td style="font-family:var(--mono);font-size:11px;">${d.email || '—'}</td>
+      <td style="font-family:var(--mono);font-size:11px;">${ll}</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join('');
+}
+
+async function loadUserResultById(uid) {
+  const snap = await db.collection('users').doc(uid).get();
+  if (snap.exists) {
+    document.getElementById('search-input').value = snap.data().email || '';
+    loadUserResult(snap);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+/* ── Edit chapter ── */
+let debounceTimer = null;
+let currentChapterId = 'ch1';
+
+async function loadChapter(chId) {
+  currentChapterId = chId;
+  const def = CHAPTER_DEFS[chId];
+  const fields = document.getElementById('edit-fields');
+  document.getElementById('draft-indicator').textContent = '';
+  document.getElementById('sync-msg').textContent = '';
+
+  let values = {};
+  const draftSnap = await db.collection('content-drafts').doc(chId).get();
+  if (draftSnap.exists) {
+    values = draftSnap.data();
+  } else {
+    const liveSnap = await db.collection('content').doc(chId).get();
+    if (liveSnap.exists) values = liveSnap.data();
+  }
+
+  fields.innerHTML = def.fields.map(f => `
+    <div class="edit-field">
+      <label class="edit-label" for="field-${f.id}">${f.label}</label>
+      <input class="edit-input" id="field-${f.id}" type="text"
+        value="${escHtml(values[f.id] !== undefined ? values[f.id] : f.default)}"
+        oninput="scheduleDraftSave()" />
+    </div>`).join('');
+
+  const syncArea = document.getElementById('sync-area');
+  if (isMasterAdmin) {
+    syncArea.innerHTML = '<button class="sync-btn" onclick="syncToLive()">Sync to Live →</button>';
+  } else {
+    syncArea.innerHTML = '';
+  }
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function scheduleDraftSave() {
+  clearTimeout(debounceTimer);
+  document.getElementById('draft-indicator').textContent = 'Saving draft…';
+  debounceTimer = setTimeout(saveDraft, 500);
+}
+
+async function saveDraft() {
+  const def = CHAPTER_DEFS[currentChapterId];
+  const data = {};
+  def.fields.forEach(f => {
+    const el = document.getElementById('field-' + f.id);
+    if (el) data[f.id] = el.value;
   });
+  await db.collection('content-drafts').doc(currentChapterId).set(data, { merge: true });
+  document.getElementById('draft-indicator').textContent = 'Draft saved ✓';
+}
 
-  async function loadDashboard() {
-    const key = document.getElementById('admin-key').value.trim();
-    if (!key) return;
-    const btn = document.getElementById('login-btn');
-    const err = document.getElementById('login-error');
-    btn.disabled = true;
-    btn.textContent = 'Loading…';
-    err.style.display = 'none';
-
-    try {
-      const res = await fetch(APPS_SCRIPT_URL + '?action=admin&key=' + encodeURIComponent(key));
-      const data = await res.json();
-      if (!data.success) {
-        err.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Access Dashboard';
-        return;
-      }
-      adminKey = key;
-      allUsers = Object.values(data.users);
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-      updateStats();
-      renderTable();
-      document.getElementById('last-updated').textContent = 'Last updated: ' + new Date().toLocaleString();
-    } catch (e) {
-      err.textContent = 'Could not connect. Check your internet connection.';
-      err.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Access Dashboard';
-    }
-  }
-
-  async function refreshData() {
-    const tbody = document.getElementById('table-body');
-    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">Refreshing…</td></tr>';
-    try {
-      const res = await fetch(APPS_SCRIPT_URL + '?action=admin&key=' + encodeURIComponent(adminKey));
-      const data = await res.json();
-      if (data.success) {
-        allUsers = Object.values(data.users);
-        updateStats();
-        renderTable();
-        document.getElementById('last-updated').textContent = 'Last updated: ' + new Date().toLocaleString();
-      }
-    } catch (e) {}
-  }
-
-  function updateStats() {
-    const total = allUsers.length;
-    const ch1 = allUsers.filter(u => u.ch1).length;
-    const ch2 = allUsers.filter(u => u.ch2).length;
-    const none = allUsers.filter(u => !u.ch1 && !u.ch2).length;
-    document.getElementById('stat-total').textContent = total;
-    document.getElementById('stat-ch1').textContent = ch1;
-    document.getElementById('stat-ch2').textContent = ch2;
-    document.getElementById('stat-none').textContent = none;
-
-    // Populate course filter dynamically from actual data
-    const courses = [...new Set(allUsers.map(u => u.course).filter(Boolean))].sort();
-    const courseSelect = document.getElementById('filter-course');
-    const current = courseSelect.value;
-    courseSelect.innerHTML = '<option value="">Course — All</option>' +
-      courses.map(c => `<option value="${esc(c)}"${c === current ? ' selected' : ''}>${esc(c)}</option>`).join('');
-  }
-
-  function renderTable() {
-    const search = document.getElementById('search').value.toLowerCase();
-    const filterCourse = document.getElementById('filter-course').value;
-    const filterCh1 = document.getElementById('filter-ch1').value;
-    const filterCh2 = document.getElementById('filter-ch2').value;
-
-    let filtered = allUsers.filter(u => {
-      const matchSearch = !search || u.name.toLowerCase().includes(search) || (u.email || '').toLowerCase().includes(search);
-      const matchCourse = !filterCourse || u.course === filterCourse;
-      const matchCh1 = !filterCh1 || (filterCh1 === 'done' ? u.ch1 : !u.ch1);
-      const matchCh2 = !filterCh2 || (filterCh2 === 'done' ? u.ch2 : !u.ch2);
-      return matchSearch && matchCourse && matchCh1 && matchCh2;
-    });
-
-    const tbody = document.getElementById('table-body');
-    if (!filtered.length) {
-      tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No users match your filters.</td></tr>';
-      return;
-    }
-
-    tbody.innerHTML = filtered.map(u => `
-      <tr>
-        <td class="name-cell">${esc(u.name)}</td>
-        <td class="email-cell">${esc(u.email || '—')}</td>
-        <td>${esc(u.course || 'Beginner Course')}</td>
-        <td>
-          ${u.ch1
-            ? `<span class="badge badge-done"><span class="dot"></span>Submitted</span>
-               ${u.ch1_submitted_at ? '<div class="timestamp">' + formatDate(u.ch1_submitted_at) + '</div>' : ''}`
-            : `<span class="badge badge-pending"><span class="dot"></span>Not submitted</span>`}
-        </td>
-        <td>
-          ${u.ch2
-            ? `<span class="badge badge-done"><span class="dot"></span>Submitted</span>
-               ${u.ch2_submitted_at ? '<div class="timestamp">' + formatDate(u.ch2_submitted_at) + '</div>' : ''}`
-            : `<span class="badge badge-pending"><span class="dot"></span>Not submitted</span>`}
-        </td>
-      </tr>
-    `).join('');
-  }
-
-  function formatDate(ts) {
-    if (!ts) return '';
-    const d = new Date(ts);
-    return isNaN(d) ? ts : d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-  }
-
-  function esc(str) {
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  function logout() {
-    adminKey = '';
-    allUsers = [];
-    document.getElementById('admin-key').value = '';
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('login-screen').style.display = 'flex';
-  }
+async function syncToLive() {
+  const snap = await db.collection('content-drafts').doc(currentChapterId).get();
+  if (!snap.exists) { alert('No draft to sync.'); return; }
+  await db.collection('content').doc(currentChapterId).set(snap.data());
+  const now = new Date();
+  const hhmm = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  document.getElementById('sync-msg').textContent = `Synced at ${hhmm} — live for all users.`;
+}
 </script>
 </body>
 </html>

@@ -8,6 +8,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<!-- Firebase v9 compat -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 <style>
 :root {
   --blue:      #1A1E9E;
@@ -354,6 +360,17 @@ body {
   <div class="page-subtitle">Here are the listed chapters for <span id="subtitle-course"></span></div>
 </div>
 
+<!-- ADMIN PORTAL ROW (shown only if isAdmin or masterAdmin) -->
+<div class="courses-wrap" id="admin-portal-wrap" style="display:none;padding-bottom:0;">
+  <div style="border:1px solid rgba(30,34,170,0.15);border-left:4px solid #1A1E9E;background:#f0f2ff;display:flex;align-items:center;justify-content:space-between;padding:18px 24px;cursor:pointer;" onclick="window.location.href='admin.html'">
+    <div>
+      <div style="font-size:13px;font-weight:800;color:#1A1E9E;letter-spacing:-0.01em;">⚙️ Admin Portal</div>
+      <div style="font-size:10px;font-weight:600;color:#7B7FE8;letter-spacing:0.08em;text-transform:uppercase;margin-top:3px;font-family:'JetBrains Mono',monospace;">Manage users &amp; content</div>
+    </div>
+    <span style="font-size:18px;color:#1A1E9E;">→</span>
+  </div>
+</div>
+
 <!-- COURSES -->
 <div class="courses-wrap">
   <div class="courses-heading">Org Chapters</div>
@@ -596,94 +613,56 @@ body {
 </div>
 
 <script>
-window.addEventListener('DOMContentLoaded', function() {
-  const name = localStorage.getItem('myhq_name');
-  const email = localStorage.getItem('myhq_email');
-  if (!name || !email) {
-    window.location.href = 'landing.html'; return;
-  }
-  const firstName = name.split(' ')[0];
+var auth = window.firebaseAuth;
+var db   = window.firebaseDB;
+
+auth.onAuthStateChanged(function(user) {
+  if (!user) { window.location.href = 'landing.html'; return; }
+
+  var firstName = (user.displayName || user.email).split(' ')[0];
   document.getElementById('header-username').textContent = firstName;
-  const course = localStorage.getItem('myhq_course') || 'Beginner Course';
-  const courseShort = course.split(' ')[0];
-  document.getElementById('nav-course').textContent = courseShort;
-  document.getElementById('subtitle-course').textContent = course;
-  updateHub();
-});
+  document.getElementById('nav-course').textContent = 'Beginner';
+  document.getElementById('subtitle-course').textContent = 'Beginner Course';
 
-function updateHub() {
-  const course = (localStorage.getItem('myhq_course') || 'Beginner').toLowerCase().trim().split(' ')[0];
-  const isIntermediate = course === 'intermediate' || course === 'advanced';
-  const isAdvanced = course === 'advanced';
+  db.collection('users').doc(user.uid).get().then(function(snap) {
+    var data = snap.exists ? snap.data() : {};
+    var unlocked = (data.unlockedChapters && data.unlockedChapters.beginner) || [];
 
-  const ch1Progress = parseInt(localStorage.getItem('myhq_ch1_progress') || '0');
-  const ch1Complete = localStorage.getItem('myhq_ch1_complete') === 'true';
-  const ch2Unlocked = localStorage.getItem('myhq_ch2_unlocked') === 'true' || isIntermediate;
-  const ch2Progress = parseInt(localStorage.getItem('myhq_ch2_progress') || '0');
-  const ch2Complete = localStorage.getItem('myhq_ch2_complete') === 'true';
-
-  // Chapter 1
-  const card1 = document.getElementById('card-ch1');
-  const status1 = document.getElementById('status-ch1');
-  const cta1text = document.getElementById('cta-ch1-text');
-  if (ch1Complete) {
-    card1.classList.add('completed');
-    status1.textContent = 'Completed'; status1.className = 'badge badge-mint';
-    cta1text.textContent = 'Review';
-    document.getElementById('cta-ch1').className = 'card-cta cta-done';
-  } else if (ch1Progress > 0) {
-    status1.textContent = 'In progress'; status1.className = 'badge badge-blue';
-    cta1text.textContent = 'Continue';
-  } else {
-    status1.textContent = 'Not started'; status1.className = 'badge badge-blue';
-    cta1text.textContent = 'Start';
-  }
-
-  // Chapter 2
-  const card2 = document.getElementById('card-ch2');
-  const footer2 = document.getElementById('footer-ch2');
-  const unlockSec = document.getElementById('unlock-section-ch2');
-  const status2 = document.getElementById('status-ch2');
-
-  if (ch2Unlocked) {
-    card2.classList.remove('locked'); card2.classList.add('unlocked');
-    if (ch2Complete) {
-      card2.classList.add('completed');
-      status2.textContent = 'Completed'; status2.className = 'badge badge-mint';
-      footer2.innerHTML = '<a class="card-cta cta-done" href="Who_We_Are_v2.html"><span>Review</span><span class="arrow">→</span></a>';
-    } else {
-      const label = ch2Progress > 0 ? 'In progress' : 'Unlocked';
-      status2.textContent = label; status2.className = 'badge badge-blue';
-      const ctaLabel = ch2Progress > 0 ? 'Continue' : 'Start';
-      footer2.innerHTML = `<a class="card-cta cta-primary" href="Who_We_Are_v2.html"><span>${ctaLabel}</span><span class="arrow">→</span></a>`;
+    // Show admin portal row if admin or masterAdmin
+    if (data.isAdmin || data.masterAdmin) {
+      document.getElementById('admin-portal-wrap').style.display = '';
     }
-    unlockSec.style.display = 'none';
-  } else {
-    document.getElementById('hint-ch2').textContent = 'Complete Chapter 1 and submit your answers to unlock Chapter 2.';
-  }
 
-  // AM chapters — unlock for Intermediate and Advanced
-  if (isIntermediate) {
-    document.querySelectorAll('.courses-wrap').forEach(wrap => {
-      if (wrap.querySelector('.card-num') && wrap.querySelector('.card-num').textContent.includes('AM')) return;
-    });
-    document.querySelectorAll('[id^="card-am"], .course-card.locked').forEach(card => {
-      const numEl = card.querySelector('.card-num');
-      if (numEl && numEl.textContent.includes('AM')) {
-        card.classList.remove('locked'); card.classList.add('unlocked');
-        const badge = card.querySelector('.badge-locked');
-        if (badge) { badge.textContent = 'Coming Soon'; badge.className = 'badge badge-blue'; }
-      }
-    });
-  }
-}
+    // Chapter 1 — always show, locked state based on Firestore
+    var ch1Unlocked = unlocked.indexOf('ch1') !== -1;
+    var card1    = document.getElementById('card-ch1');
+    var status1  = document.getElementById('status-ch1');
+    var cta1wrap = document.getElementById('cta-ch1');
+    var cta1text = document.getElementById('cta-ch1-text');
+    if (!ch1Unlocked) {
+      card1.classList.remove('unlocked'); card1.classList.add('locked');
+      status1.textContent = 'Locked'; status1.className = 'badge badge-locked';
+      cta1wrap.outerHTML = '<button class="card-cta cta-locked" disabled>Locked</button>';
+    }
+
+    // Chapter 2
+    var ch2Unlocked = unlocked.indexOf('ch2') !== -1;
+    var card2    = document.getElementById('card-ch2');
+    var footer2  = document.getElementById('footer-ch2');
+    var unlockSec = document.getElementById('unlock-section-ch2');
+    var status2  = document.getElementById('status-ch2');
+    if (ch2Unlocked) {
+      card2.classList.remove('locked'); card2.classList.add('unlocked');
+      status2.textContent = 'Unlocked'; status2.className = 'badge badge-blue';
+      footer2.innerHTML = '<a class="card-cta cta-primary" href="Who_We_Are_v2.html"><span>Start</span><span class="arrow">→</span></a>';
+      if (unlockSec) unlockSec.style.display = 'none';
+    }
+  });
+});
 
 function signOut() {
   if (confirm('Sign out?')) {
-    localStorage.removeItem('myhq_name');
-    localStorage.removeItem('myhq_email');
-    localStorage.removeItem('myhq_registered_at');
-    window.location.href = 'landing.html';
+    auth.signOut().then(function() { window.location.href = 'landing.html'; });
   }
 }
 </script>

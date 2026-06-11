@@ -1,0 +1,2583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 2: Who We Are | myHQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" as="style">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" as="style">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+/* ── TOKENS (identical to Where We Play) ── */
+:root {
+  --blue:       #1E22AA;
+  --blue-dark:  #161a8b;
+  --green:      #BEE5C2;
+  --coral:      #FF7351;
+  --amber:      #FFB848;
+  --ink:        #0B0F2C;
+  --body:       #4A4D63;
+  --muted:      #94909C;
+  --white:      #FFFFFF;
+  --hairline:   rgba(11,15,44,0.10);
+  --sans:       'Manrope', system-ui, sans-serif;
+  --radius:     8px;
+  --ease:       cubic-bezier(0.22,1,0.36,1);
+  --transition: 0.25s var(--ease);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--sans); background: var(--white); color: var(--ink); overflow: hidden; font-size: 16px; line-height: 1.6; }
+
+/* ── TOP BAR ── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: clamp(44px,3.6vw,52px); z-index: 100;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--hairline);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(16px,4vw,48px);
+}
+.topbar-left { display: flex; align-items: center; gap: clamp(6px,0.7vw,10px); }
+.topbar-logo { font-size: clamp(11px,1.05vw,15px); font-weight: 800; color: var(--blue); letter-spacing: -0.02em; }
+.topbar-chapter { font-size: clamp(8px,0.76vw,11px); font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.topbar-center { font-size: clamp(13px,1.25vw,18px); font-weight: 800; color: var(--blue); letter-spacing: -0.03em; position: absolute; left: 50%; transform: translateX(-50%); }
+.topbar-right { display: flex; align-items: center; gap: clamp(10px,1.1vw,16px); }
+.screen-counter { font-size: clamp(8px,0.76vw,11px); font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+.read-btn {
+  font-size: clamp(8px,0.76vw,11px); font-weight: 700; color: var(--white); background: var(--blue);
+  padding: clamp(4px,0.42vw,6px) clamp(8px,0.97vw,14px); border-radius: var(--radius); text-decoration: none;
+  display: inline-flex; align-items: center; gap: clamp(4px,0.42vw,6px);
+  transition: var(--transition); cursor: pointer; border: none; font-family: var(--sans);
+}
+.read-btn:hover { background: var(--blue-dark); }
+.hub-btn {
+  font-size: clamp(10px,0.97vw,14px); color: var(--blue); background: transparent;
+  width: clamp(24px,2.22vw,32px); height: clamp(24px,2.22vw,32px); border-radius: var(--radius);
+  border: 1px solid rgba(30,34,170,0.3);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: var(--transition); text-decoration: none;
+}
+.hub-btn:hover { background: rgba(30,34,170,0.06); border-color: var(--blue); }
+
+/* ── SLIDES ── */
+.dot-nav { position: fixed; bottom: clamp(10px,1.94vw,28px); left: 50%; transform: translateX(-50%); display: flex; gap: clamp(4px,0.56vw,8px); z-index: 100; }
+.dot { width: clamp(6px,0.49vw,9px); height: clamp(6px,0.49vw,9px); border-radius: 50%; background: var(--hairline); border: 1.5px solid rgba(11,15,44,0.2); cursor: pointer; transition: var(--transition); }
+.dot.active { background: var(--blue); border-color: var(--blue); transform: scale(1.3); }
+.key-hint { position: fixed; bottom: clamp(10px,1.8vw,26px); right: clamp(16px,4vw,58px); font-size: clamp(9px,0.76vw,11px); font-weight: 500; color: var(--muted); display: flex; align-items: center; gap: clamp(4px,0.42vw,6px); transition: opacity 0.5s; z-index: 100; }
+.key-hint.hidden { opacity: 0; pointer-events: none; }
+
+.slides { position: fixed; top: clamp(44px,3.6vw,52px); left: 0; right: 0; bottom: 0; }
+.screen { position: absolute; inset: 0; opacity: 0; pointer-events: none; transition: opacity 0.5s var(--ease), transform 0.5s var(--ease); transform: translateY(20px); overflow: hidden; }
+.screen.active { opacity: 1; pointer-events: all; transform: translateY(0); }
+.screen.exit-up { opacity: 0; transform: translateY(-20px); }
+
+.screen-next-btn {
+  position: absolute; bottom: clamp(12px,3.9vw,56px); right: clamp(16px,5vw,72px);
+  background: transparent; color: var(--muted); border: 1px solid var(--hairline);
+  font-size: clamp(9px,0.76vw,11px); font-weight: 700; font-family: var(--sans);
+  padding: clamp(5px,0.56vw,8px) clamp(8px,1.1vw,16px); border-radius: var(--radius); cursor: pointer;
+  display: flex; align-items: center; gap: clamp(4px,0.42vw,6px); transition: var(--transition);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.screen-next-btn:hover { color: var(--blue); border-color: rgba(30,34,170,0.3); }
+.screen-next-btn--light { color: rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.15); }
+.screen-next-btn--light:hover { color: var(--green); border-color: rgba(190,229,194,0.4); }
+
+/* ── SCREEN 0: INTRO VIDEO ── */
+.screen-video { background: var(--white); }
+.screen-video-inner { display: grid; grid-template-columns: 1fr 1fr; height: 100%; align-items: center; padding: 0 clamp(32px,6vw,80px); gap: clamp(32px,4vw,80px); }
+.s0-eyebrow { font-size: clamp(10px,1.1vw,13px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--blue); margin-bottom: clamp(12px,2vw,24px); display: flex; align-items: center; gap: 10px; }
+.s0-eyebrow::before { content: ''; width: 9px; height: 9px; background: var(--blue); border-radius: 50%; display: block; }
+.s0-headline { font-size: clamp(2.4rem,5.5vw,4.6rem); font-weight: 800; line-height: 1.08; letter-spacing: -0.04em; color: var(--ink); margin-bottom: clamp(16px,2.5vw,28px); }
+.s0-headline em { font-style: normal; color: var(--blue); }
+.s0-sub { font-size: clamp(1rem,1.6vw,1.2rem); color: var(--body); line-height: 1.7; margin-bottom: clamp(20px,3vw,36px); white-space: nowrap; }
+.s0-vision { display: flex; flex-direction: column; gap: 8px; max-width: 100%; margin-top: 4px; width: 100%; }
+.s0-vision-label { font-size: clamp(10px,1.1vw,13px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--blue); display: flex; align-items: center; gap: 10px; }
+.s0-vision-label::before { display: none; }
+.s0-vision-text { font-size: clamp(1rem,2.2vw,1.6rem); font-weight: 500; color: var(--ink); line-height: 1.4; letter-spacing: -0.02em; display: inline-block; background: rgba(30,34,170,0.07); border: 1px solid rgba(30,34,170,0.15); border-radius: var(--radius); padding: clamp(12px,1.5vw,20px) clamp(16px,2vw,28px); width: 100%; }
+.s0-vision-text strong { font-weight: 800; color: var(--blue); }
+.s0-thumb { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: var(--radius); overflow: hidden; cursor: pointer; box-shadow: 0 16px 48px rgba(11,15,44,0.18); }
+.s0-thumb-bg { position: absolute; inset: 0; background: var(--ink); display: flex; align-items: center; justify-content: center; }
+.s0-play-circle { width: clamp(56px,7vw,88px); height: clamp(56px,7vw,88px); background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(11,15,44,0.25); transition: var(--transition); }
+.s0-thumb:hover .s0-play-circle { transform: scale(1.1); background: var(--green); }
+.s0-play-circle i { font-size: clamp(18px,2.5vw,30px); color: var(--blue); margin-left: 5px; }
+.s0-play-label { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: clamp(10px,1.1vw,13px); font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap; }
+
+/* ── SCREEN 1: FOUNDATION ── */
+.screen-foundation { background: var(--white); }
+.screen-center-wrap { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: clamp(32px,6vw,80px); }
+.s1-eyebrow { font-size: clamp(11px,1.2vw,14px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--blue); margin-bottom: clamp(16px,2.5vw,28px); }
+.s1-stat-headline { line-height: 1; margin-bottom: 20px; }
+.s1-year { font-size: clamp(7rem,16vw,13rem); font-weight: 800; color: var(--ink); letter-spacing: -0.04em; }
+.s1-year-sub { font-size: clamp(1.5rem,3vw,2.6rem); font-weight: 800; color: var(--blue); letter-spacing: -0.03em; }
+.s1-vision { font-size: clamp(1.2rem,2.2vw,1.7rem); font-weight: 700; color: var(--body); margin-bottom: clamp(24px,4vw,48px); max-width: 56ch; font-style: italic; }
+.s1-facts { display: grid; grid-template-columns: repeat(4, auto); gap: 0; border: 1px solid var(--hairline); border-radius: var(--radius); overflow: hidden; max-width: 900px; }
+.s1-fact { padding: clamp(14px,2vw,24px) clamp(16px,2.5vw,30px); border-right: 1px solid var(--hairline); text-align: left; }
+.s1-fact:last-child { border-right: none; }
+.s1-fact-num { font-size: clamp(1.2rem,2vw,1.7rem); font-weight: 800; color: var(--blue); letter-spacing: -0.03em; margin-bottom: 4px; }
+.s1-fact-lbl { font-size: clamp(10px,1.1vw,13px); color: var(--muted); line-height: 1.4; }
+
+/* ── SCREEN 1/2: THE ORIGIN ── */
+.screen-origin { background: var(--white); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: clamp(16px,2vw,32px) clamp(32px,6vw,80px) 90px; gap: 20px; }
+.s2-eyebrow-dark { font-size: clamp(11px,1.2vw,14px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); text-align: center; }
+.s2-headline { font-size: clamp(1.8rem,3.5vw,3rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); text-align: center; line-height: 1.12; max-width: 760px; }
+.s2-headline span { color: var(--blue); }
+.s2-timeline { display: flex; align-items: stretch; gap: 0; width: 100%; max-width: 1100px; }
+.s2-tl-node { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; padding-top: 0; }
+.s2-tl-sub { flex: 1; }
+.s2-tl-node:not(:last-child)::after { content: ''; position: absolute; top: 22px; left: calc(50% + 26px); right: calc(-50% + 26px); height: 1px; background: var(--hairline); }
+.s2-tl-dot { width: clamp(32px,3.5vw,44px); height: clamp(32px,3.5vw,44px); border-radius: 50%; border: 2px solid var(--blue); background: rgba(30,34,170,0.06); display: flex; align-items: center; justify-content: center; margin-bottom: clamp(8px,1.2vw,14px); font-size: clamp(10px,1.1vw,13px); font-weight: 800; color: var(--blue); }
+.s2-tl-node--highlight .s2-tl-dot { background: var(--blue); color: var(--white); border-color: var(--blue); }
+.s2-tl-year { font-size: clamp(10px,1.1vw,13px); font-weight: 800; color: var(--blue); margin-bottom: 6px; letter-spacing: 0.04em; }
+.s2-tl-title { font-size: clamp(12px,1.4vw,16px); font-weight: 700; color: var(--ink); margin-bottom: 7px; }
+.s2-tl-sub { font-size: clamp(10px,1.1vw,13px); color: var(--muted); line-height: 1.55; max-width: 160px; }
+.s2-tl-node--highlight .s2-tl-title { color: var(--blue); }
+.s2-investors { display: flex; align-items: center; gap: 10px; justify-content: center; padding: clamp(4px,0.5vw,6px) clamp(12px,1.8vw,20px); border: 1px solid var(--hairline); border-radius: var(--radius); background: rgba(30,34,170,0.03); }
+.s2-investors-label { font-size: clamp(10px,1.1vw,13px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-right: 6px; }
+.s2-investor-tag { font-size: clamp(10px,1vw,12px); font-weight: 700; color: var(--blue); padding: 3px 10px; border-radius: 4px; background: rgba(30,34,170,0.06); white-space: nowrap; }
+.s2-investor-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--hairline); }
+
+/* ── SCREEN 3: BUILDING SCALE ── */
+.screen-build { background: var(--white); display: flex; flex-direction: column; justify-content: center; padding: clamp(32px,5vw,72px) clamp(32px,6vw,80px); gap: 40px; }
+.s3-header { text-align: center; }
+.s3-eyebrow { font-size: clamp(11px,1.2vw,14px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--blue); margin-bottom: 12px; }
+.s3-title { font-size: clamp(2.2rem,4.5vw,3.8rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
+.s3-sub { font-size: clamp(0.95rem,1.5vw,1.1rem); color: var(--body); margin-top: 10px; }
+.s3-milestones { display: grid; grid-template-columns: repeat(4,1fr); gap: clamp(8px,1.2vw,16px); align-items: start; }
+.s3-card { border: 1px solid var(--hairline); border-radius: var(--radius); padding: clamp(16px,2vw,28px) clamp(14px,1.8vw,22px); background: #f7f8ff; display: flex; flex-direction: column; gap: 12px; position: relative; }
+.s3-card--highlight { background: var(--blue); border-color: var(--blue); }
+.s3-card-year { font-size: clamp(1.8rem,3vw,2.6rem); font-weight: 800; letter-spacing: -0.04em; color: var(--blue); line-height: 1; }
+.s3-card--highlight .s3-card-year { color: var(--green); }
+.s3-card-title { font-size: clamp(11px,1.2vw,14px); font-weight: 800; color: var(--ink); text-transform: uppercase; letter-spacing: 0.06em; }
+.s3-card--highlight .s3-card-title { color: var(--white); }
+.s3-card-event { font-size: clamp(12px,1.3vw,15px); color: var(--body); line-height: 1.55; }
+.s3-card--highlight .s3-card-event { color: rgba(255,255,255,0.75); }
+.s3-card-investor { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; padding: clamp(4px,0.5vw,7px) clamp(8px,1.2vw,14px); border-radius: 4px; background: rgba(30,34,170,0.08); font-size: clamp(10px,1.1vw,13px); font-weight: 600; color: var(--blue); }
+.s3-card--highlight .s3-card-investor { background: rgba(255,255,255,0.15); color: var(--white); }
+.s3-card-investor i { font-size: 11px; }
+.s3-card--covid { background: #fff8f0; border-color: #ffd4b8; border-top: 3px solid var(--coral); }
+.s3-card--covid .s3-card-year { color: var(--coral); }
+.s3-card--covid .s3-card-title { color: var(--coral); }
+.s3-card--covid .s3-card-investor { background: rgba(255,115,81,0.08); color: var(--coral); }
+
+/* ── SCREEN 4: THREE VERTICALS ── */
+.screen-verticals { display: flex; flex-direction: column; justify-content: center; padding: clamp(32px,5vw,72px) clamp(32px,6vw,80px); gap: 36px; background: var(--white); }
+.s4-header { text-align: center; }
+.s4-eyebrow { font-size: clamp(11px,1.2vw,14px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--blue); margin-bottom: 12px; }
+.s4-title { font-size: clamp(1.8rem,3.5vw,3rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
+.s4-sub { font-size: clamp(0.95rem,1.5vw,1.1rem); color: var(--body); margin-top: 10px; }
+.s4-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(10px,1.5vw,18px); }
+.s4-card { border: 1px solid var(--hairline); border-radius: var(--radius); padding: clamp(20px,2.5vw,32px) clamp(16px,2vw,28px); display: flex; flex-direction: column; gap: 16px; }
+.s4-card--am { border-top: 4px solid var(--blue); }
+.s4-card--vo { border-top: 4px solid var(--blue); }
+.s4-card--od { border-top: 4px solid var(--blue); }
+.s4-card--blue { border-top: 4px solid var(--blue); }
+.s4-card-icon { width: clamp(40px,4.5vw,56px); height: clamp(40px,4.5vw,56px); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: clamp(18px,2.2vw,26px); }
+.s4-icon--coral { background: rgba(255,115,81,0.1); color: var(--coral); }
+.s4-icon--blue { background: rgba(30,34,170,0.1); color: var(--blue); }
+.s4-icon--amber { background: rgba(255,184,72,0.15); color: #c97d00; }
+.s4-card-tag { font-size: clamp(10px,1vw,12px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.s4-card-title { font-size: clamp(1.1rem,1.8vw,1.4rem); font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
+.s4-card-desc { font-size: clamp(12px,1.3vw,15px); color: var(--body); line-height: 1.6; flex: 1; }
+.s4-card-pill { display: inline-flex; align-items: center; gap: 5px; font-size: clamp(10px,1.1vw,13px); font-weight: 600; padding: clamp(4px,0.5vw,6px) clamp(8px,1.2vw,14px); border-radius: 4px; background: rgba(0,0,0,0.04); color: var(--muted); }
+.s4-offices { font-size: clamp(10px,1vw,12px); font-weight: 400; color: var(--muted); text-align: center; letter-spacing: 0.01em; }
+.s4-offices strong { color: var(--muted); font-weight: 400; }
+
+/* ── SCREEN 5: TEAM ── */
+.screen-team { background: var(--white); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: clamp(16px,2vw,28px) clamp(32px,6vw,80px) 72px; gap: 16px; overflow: hidden; height: 100%; box-sizing: border-box; }
+.s5t-header { text-align: center; }
+.s5t-eyebrow { font-size: clamp(11px,1.2vw,14px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--blue); margin-bottom: 6px; }
+.s5t-title { font-size: clamp(1.8rem,3.5vw,3rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
+.s5t-sub { font-size: clamp(0.9rem,1.4vw,1rem); color: var(--body); margin-top: 8px; }
+.s5t-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(10px,1.3vw,16px); }
+.s5t-founders { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(10px,1.3vw,16px); }
+.s5t-pnl { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(10px,1.3vw,16px); }
+.s5t-card { border: 1px solid var(--hairline); border-radius: var(--radius); padding: clamp(14px,1.8vw,24px) clamp(12px,1.6vw,20px); display: flex; align-items: flex-start; gap: clamp(10px,1.5vw,18px); background: #f7f8ff; }
+.s5t-card--founder { background: var(--blue); border-color: var(--blue); }
+.s5t-avatar { width: clamp(40px,4.5vw,56px); height: clamp(40px,4.5vw,56px); border-radius: 50%; background: rgba(30,34,170,0.12); display: flex; align-items: center; justify-content: center; font-size: clamp(14px,1.7vw,20px); font-weight: 800; color: var(--blue); flex-shrink: 0; }
+.s5t-card--founder .s5t-avatar { background: rgba(255,255,255,0.15); color: var(--white); }
+.s5t-info { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.s5t-name { font-size: clamp(14px,1.6vw,18px); font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
+.s5t-card--founder .s5t-name { color: var(--white); }
+.s5t-role { font-size: clamp(10px,1vw,12px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue); }
+.s5t-card--founder .s5t-role { color: var(--green); }
+.s5t-vertical-tag { font-size: clamp(9px,0.9vw,11px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 9px; border-radius: 3px; display: inline-block; width: fit-content; }
+.s5t-tag--am { background: rgba(255,115,81,0.1); color: var(--coral); }
+.s5t-tag--vo { background: rgba(30,34,170,0.08); color: var(--blue); }
+.s5t-tag--od { background: rgba(255,184,72,0.15); color: #c97d00; }
+.s5t-tag--mkt { background: rgba(190,229,194,0.3); color: #2a7a30; }
+.s5t-tag--green { background: rgba(190,229,194,0.2); color: var(--green); }
+.s5t-prev { font-size: clamp(10px,1.1vw,13px); color: var(--muted); line-height: 1.5; }
+.s5t-card--founder .s5t-prev { color: rgba(255,255,255,0.6); }
+.s5t-re { font-size: clamp(10px,1.1vw,13px); font-weight: 700; color: var(--body); }
+.s5t-card--founder .s5t-re { color: rgba(255,255,255,0.8); }
+
+/* ── NEW TEAM LAYOUT (matching image) ── */
+.s5t-two-panel { display: flex; align-items: flex-start; gap: clamp(8px,1.2vw,16px); width: 100%; }
+.s5t-panel { border: 1.5px solid var(--blue); border-radius: 12px; padding: 0; background: var(--white); overflow: hidden; display: inline-flex; }
+.s5t-panel img { display: block; width: 100%; height: auto; max-height: 75vh; object-fit: contain; }
+.s5t-panel-label { font-size: clamp(10px,1vw,12px); font-weight: 700; font-style: italic; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); margin-bottom: clamp(10px,1.4vw,16px); }
+.s5t-people-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(10px,1.5vw,14px); }
+.s5t-person { display: flex; align-items: flex-start; gap: clamp(8px,1vw,12px); }
+.s5t-photo { width: clamp(40px,4.5vw,52px); height: clamp(40px,4.5vw,52px); border-radius: 50%; border: 2px solid var(--hairline); background: rgba(30,34,170,0.08); display: flex; align-items: center; justify-content: center; font-size: clamp(12px,1.4vw,16px); font-weight: 800; color: var(--blue); flex-shrink: 0; overflow: hidden; }
+.s5t-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.s5t-person-name { font-size: clamp(12px,1.3vw,15px); font-weight: 800; color: var(--ink); letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 2px; }
+.s5t-person-role { font-size: clamp(9px,0.95vw,11px); font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+.s5t-person-prev { font-size: clamp(10px,1.05vw,12px); color: var(--muted); line-height: 1.45; }
+/* Background logos */
+.s5t-logo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.s5t-logo-item { display: flex; align-items: center; justify-content: center; padding: 10px 8px; border: 1px solid var(--hairline); border-radius: 6px; min-height: 48px; }
+.s5t-logo-text { font-size: 14px; font-weight: 800; color: var(--ink); text-align: center; letter-spacing: -0.02em; line-height: 1.2; }
+.s5t-logo-text.goldman { font-size: 13px; }
+.s5t-logo-text.adobe { color: #FF0000; }
+.s5t-logo-text.sp { color: #C41230; font-size: 13px; }
+.s5t-logo-text.helion { color: #e6a817; }
+.s5t-logo-text.msft { font-size: 12px; }
+.s5t-logo-item.inst { border-color: rgba(30,34,170,0.15); background: rgba(30,34,170,0.03); }
+.s5t-logo-text.inst { font-size: 11px; font-weight: 700; color: var(--blue); text-align: center; }
+
+/* ── SCREEN 6: ORG PYRAMID ── */
+.screen-org { background: var(--white); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: clamp(8px,1.5vw,24px) clamp(24px,3vw,48px) 60px; gap: 8px; overflow: hidden; }
+.s6-title { font-size: clamp(1.8rem,3.5vw,3rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); text-align: center; }
+.s6-pyramid { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; max-width: 1000px; }
+.s6-tier { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; border-radius: 8px; padding: clamp(14px,2vw,24px) clamp(16px,2.5vw,32px); text-align: center; }
+.s6-tier--1 { width: 35%; background: #1E22AA; }
+.s6-tier--2 { width: 57%; background: #3B40C4; }
+.s6-tier--3 { width: 78%; background: #7178D8; }
+.s6-tier--4 { width: 100%; background: #AEB2E8; }
+.s6-tier-title { font-size: clamp(1rem,2vw,1.4rem); font-weight: 800; color: var(--white); letter-spacing: -0.01em; }
+.s6-tier-desig { font-size: clamp(0.8rem,1.3vw,0.95rem); font-weight: 500; color: rgba(255,255,255,0.82); }
+.s6-tier-meta  { font-size: clamp(0.8rem,1.3vw,0.95rem); font-weight: 700; color: var(--green); }
+
+/* ── SCREEN 7: SCALE & CLIENTS ── */
+.screen-scale { background: var(--white); overflow: hidden; display: flex; flex-direction: column; padding: clamp(16px,2vw,28px) clamp(24px,3.5vw,48px) clamp(40px,5vw,64px); gap: clamp(24px,3.6vw,48px); }
+.s7-title { font-size: clamp(14px,1.6vw,24px); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); flex-shrink: 0; margin-bottom: clamp(8px,1.2vw,16px); }
+.s7-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(8px,1vw,14px); width: 100%; flex-shrink: 0; }
+.s7-stat { border: 1px solid var(--hairline); border-radius: var(--radius); background: #f7f8ff; display: flex; align-items: flex-start; gap: 8px; padding: clamp(8px,1vw,14px) clamp(8px,0.9vw,12px); }
+.s7-stat-icon { font-size: clamp(11px,1vw,16px); flex-shrink: 0; margin-top: 2px; width: 26px; text-align: center; }
+.s7-stat-num { font-size: clamp(11px,1.05vw,16px); font-weight: 800; color: var(--blue); letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 1px; }
+.s7-stat-lbl { font-size: clamp(9px,0.9vw,12px); color: var(--body); line-height: 1.3; font-weight: 500; }
+
+/* ── SCREEN 7: LOGO GRID ── */
+.s7-logo-panels { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(8px,1vw,12px); width: 100%; flex: 1; min-height: 0; align-items: stretch; margin-top: clamp(12px,2vw,28px); }
+#read-mode .s7-logo-panels { grid-template-columns: 1fr; }
+.s7-logo-panel { border: 1px solid var(--hairline); border-radius: var(--radius); padding: clamp(8px,0.8vw,10px) clamp(10px,1.2vw,16px) clamp(10px,1.2vw,16px); background: #fff; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.s7-lp-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; flex-shrink: 0; }
+.s7-lp-title { font-size: clamp(12px,1.15vw,18px); font-weight: 800; color: var(--blue); letter-spacing: -0.02em; }
+.s7-lp-sub { font-size: clamp(10px,1.02vw,12px); color: var(--body); margin-bottom: 8px; font-weight: 500; flex-shrink: 0; }
+.s7-lp-divider { width: 100%; height: 1.5px; background: repeating-linear-gradient(90deg, var(--blue) 0, var(--blue) 6px, transparent 6px, transparent 12px); margin-bottom: 10px; opacity: 0.35; flex-shrink: 0; }
+.s7-lp-myHQ-icon { width: 30px; height: 30px; object-fit: contain; }
+.s7-sub-panels { display: grid; gap: 8px; flex: 1; min-height: 0; align-items: stretch; }
+.s7-sub-panels--clientele { grid-template-columns: 7fr 5fr; }
+.s7-sub-panels--partners { grid-template-columns: 1fr 1fr; }
+.s7-sub-panel { border: 1px solid rgba(30,34,170,0.18); border-radius: 8px; padding: 2px 12px 10px; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.s7-sp-label { font-size: clamp(9px,1vw,13px); font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; flex-shrink: 0; }
+.s7-logo-grid { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; flex: 1; align-content: space-around; }
+.s7-logo-img { height: clamp(24px,3.5vw,42px); width: auto; max-width: 120px; object-fit: contain; }
+.s7-logo-img--lg { height: clamp(28px,3.8vw,46px); max-width: 140px; }
+.s7-logo-img--xl { height: clamp(32px,4.2vw,52px); max-width: 170px; }
+.s7-sub-panels--partners-right { grid-template-rows: 1fr 1fr; }
+.s7-partner-grid { display: grid; gap: 8px; }
+.s7-partner-grid--cw { grid-template-columns: 1fr 1fr; }
+.s7-partner-grid--right { grid-template-rows: 1fr 1fr; }
+.s7-enterprises-grid { display: grid; grid-template-columns: repeat(3,1fr); row-gap: 1px; align-items: center; justify-items: center; flex: 1; align-content: flex-start; }
+.s7-enterprises-grid .s7-logo-img { height: clamp(26px,3.5vw,42px); max-width: 120px; }
+.s7-gccs-row { display: flex; align-items: center; flex-wrap: wrap; flex: 1; align-content: center; justify-content: space-around; width: 100%; }
+.s7-gccs-row .s7-logo-img { height: clamp(30px,4vw,48px); max-width: 160px; }
+/* Full chapter (read-mode) logo sizes */
+#read-mode .s7-logo-img { height: clamp(36px,5vw,56px); max-width: 160px; }
+#read-mode .s7-logo-img--lg { height: clamp(42px,5.5vw,64px); max-width: 190px; }
+#read-mode .s7-logo-img--xl { height: clamp(48px,6vw,72px); max-width: 220px; }
+#read-mode .s7-enterprises-grid .s7-logo-img { height: clamp(36px,5vw,56px); max-width: 160px; }
+#read-mode .s7-gccs-row .s7-logo-img { height: clamp(42px,5.5vw,64px); max-width: 200px; }
+.s7-logo-badge { font-size: clamp(9px,0.95vw,11px); font-weight: 700; color: var(--ink); letter-spacing: -0.01em; border: 1px solid var(--hairline); border-radius: 4px; padding: 3px 8px; white-space: nowrap; }
+
+/* ── SCREEN 8: AMBITION ── */
+.screen-ambition { background: var(--white); display: flex; flex-direction: column; padding: clamp(16px,2.2vw,36px) clamp(28px,5vw,64px) clamp(16px,2vw,28px); gap: clamp(6px,0.8vw,12px); overflow: hidden; }
+.s5-headline { font-size: clamp(16px,1.9vw,28px); font-weight: 800; letter-spacing: -0.02em; color: var(--ink); line-height: 1.25; flex-shrink: 0; }
+.s5-headline span { color: var(--blue); }
+.s5-subtext { font-size: clamp(12px,1.2vw,18px); color: var(--body); line-height: 1.55; flex-shrink: 0; }
+.s5-subtext strong { color: var(--ink); font-weight: 800; }
+.s5-subtext em { font-style: italic; color: var(--blue); font-weight: 600; }
+.s5-body { display: grid; grid-template-columns: 1fr clamp(140px,16vw,220px); gap: clamp(12px,2vw,24px); align-items: center; flex: 1; min-height: 0; overflow: visible; }
+.s5-growth { overflow: visible; }
+.ambition-chart { width: 100%; position: relative; font-family: Manrope,system-ui,sans-serif; overflow: visible; }
+.ambition-bar-row { display: flex; align-items: flex-end; width: 100%; gap: 0.8%; overflow: visible; }
+.ambition-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; }
+.ambition-val { width: 100%; text-align: center; font-size: clamp(7px,0.85vw,12px); line-height: 1.2; margin-bottom: 0.2vw; white-space: nowrap; }
+.ambition-bar { width: 100%; border-radius: 3px 3px 0 0; box-sizing: border-box; }
+.ambition-label-row { display: flex; width: 100%; gap: 0.8%; margin-top: 0.3vw; }
+.ambition-label { flex: 1; text-align: center; font-size: clamp(7px,0.85vw,12px); }
+.ambition-canvas { position: absolute; top: 0; left: 0; width: 100%; pointer-events: none; }
+.s5-driven { border: 1.5px solid var(--hairline); border-radius: var(--radius); padding: clamp(10px,1.4vw,18px) clamp(10px,1.2vw,16px); display: flex; flex-direction: column; gap: clamp(8px,1.1vw,14px); }
+.s5-driven-title { font-size: clamp(11px,1.1vw,14px); font-weight: 800; color: var(--ink); }
+.s5-driven-item { display: flex; align-items: center; gap: 12px; }
+.s5-driven-chevron { width: 0; height: 0; border-top: 7px solid transparent; border-bottom: 7px solid transparent; border-left: 12px solid var(--blue); flex-shrink: 0; }
+.s5-driven-text { font-size: clamp(10px,1.1vw,13px); font-weight: 600; color: var(--body); line-height: 1.4; }
+
+/* ── READ MODE ── */
+#read-mode { margin-top: 52px; }
+#read-mode .topbar-logo { font-size: 15px; }
+.r-layout { display: flex; width: 100%; max-width: 100%; margin: 0; padding: 0 40px 80px; align-items: flex-start; box-sizing: border-box; }
+.r-sidebar { width: 220px; flex-shrink: 0; position: sticky; top: 72px; padding: 32px 20px 0 0; max-height: calc(100vh - 72px); overflow-y: auto; }
+.r-toc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 10px; }
+.toc-link { display: block; font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; padding: 7px 10px; border-radius: 6px; margin-bottom: 2px; transition: all 0.15s; border-left: 2px solid transparent; }
+.toc-link:hover { color: var(--ink); background: rgba(0,0,0,0.04); }
+.toc-link.active { color: var(--blue); font-weight: 700; border-left-color: var(--blue); background: rgba(30,34,170,0.05); }
+.r-content { flex: 1; min-width: 0; padding: 40px 0 0 40px; }
+
+.r-section { margin-bottom: 72px; }
+.r-section-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--blue); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.r-section-eyebrow::before { content: ''; width: 8px; height: 8px; background: var(--blue); border-radius: 50%; }
+.r-section-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 6px; }
+.r-section-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+.r-body { font-size: 15px; color: var(--body); line-height: 1.75; margin-bottom: 14px; }
+
+/* Timeline */
+.tl-wrap { position: relative; }
+.tl-item { border-top: 1px solid var(--hairline); }
+.tl-item:last-child { border-bottom: 1px solid var(--hairline); }
+.tl-head { display: grid; grid-template-columns: 120px 1fr auto; gap: 20px; align-items: baseline; padding: 20px 0; cursor: pointer; transition: background 0.15s; }
+.tl-head:hover .tl-event { color: var(--blue); }
+.tl-year-col { display: flex; flex-direction: column; gap: 2px; }
+.tl-year { font-size: 1.1rem; font-weight: 800; color: var(--ink); letter-spacing: -0.03em; }
+.tl-phase { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.tl-event { font-size: 1rem; font-weight: 600; color: var(--ink); line-height: 1.35; transition: color 0.15s; }
+.tl-toggle { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--hairline); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.25s var(--ease); flex-shrink: 0; }
+.tl-toggle svg { width: 12px; height: 12px; stroke: var(--muted); fill: none; stroke-width: 2.5; transition: transform 0.4s var(--ease); }
+.tl-item.open .tl-toggle { background: var(--blue); border-color: var(--blue); }
+.tl-item.open .tl-toggle svg { stroke: var(--white); transform: rotate(45deg); }
+.tl-body { max-height: 0; overflow: hidden; transition: max-height 0.55s var(--ease); }
+.tl-item.open .tl-body { max-height: 1000px; }
+.tl-body-inner { padding: 0 0 28px 140px; max-width: 680px; }
+.tl-detail p { font-size: 14px; color: var(--body); line-height: 1.7; margin-bottom: 12px; }
+.tl-detail p strong { color: var(--ink); font-weight: 600; }
+.tl-detail p em { color: var(--muted); }
+
+/* Timeline sub-components */
+.tl-funding { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: rgba(30,34,170,0.04); border-left: 3px solid var(--blue); border-radius: 0 var(--radius) var(--radius) 0; margin: 14px 0; }
+.tl-funding-year { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--blue); display: block; margin-bottom: 2px; }
+.tl-funding-names { font-size: 13px; color: var(--ink); font-weight: 500; }
+.tl-funding-icon { width: 32px; height: 32px; border-radius: 50%; background: rgba(30,34,170,0.08); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.tl-funding-icon svg { width: 14px; height: 14px; stroke: var(--blue); fill: none; }
+
+.tl-dyk { margin: 14px 0; border: 1px solid var(--hairline); border-radius: var(--radius); background: rgba(255,184,72,0.04); overflow: hidden; }
+.tl-dyk-trigger { width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: transparent; border: none; cursor: pointer; text-align: left; font-family: var(--sans); }
+.tl-dyk-icon { width: 24px; height: 24px; border-radius: 50%; background: var(--amber); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--ink); flex-shrink: 0; }
+.tl-dyk-teaser { font-size: 13px; font-weight: 600; color: var(--ink); }
+.tl-dyk-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #a06800; display: block; margin-bottom: 1px; }
+.tl-dyk-chevron { margin-left: auto; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: transform 0.3s var(--ease); }
+.tl-dyk-chevron svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+.tl-dyk.open .tl-dyk-chevron { transform: rotate(180deg); }
+.tl-dyk-body { max-height: 0; overflow: hidden; transition: max-height 0.4s var(--ease); padding: 0 16px; }
+.tl-dyk.open .tl-dyk-body { max-height: 300px; padding: 0 16px 14px; }
+.tl-dyk-body p { font-size: 13px; color: var(--body); line-height: 1.7; }
+.tl-dyk-body p strong { color: var(--ink); font-weight: 600; }
+
+.tl-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.tl-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; border: 1px solid; }
+.badge-teal { background: rgba(150,230,220,0.15); color: #0d5d52; border-color: rgba(150,230,220,0.5); }
+.badge-mint { background: rgba(190,229,194,0.2); color: #2e7d36; border-color: rgba(190,229,194,0.5); }
+.badge-blue { background: rgba(30,34,170,0.06); color: var(--blue); border-color: rgba(30,34,170,0.2); }
+.badge-amber { background: rgba(255,184,72,0.1); color: #a06800; border-color: rgba(255,184,72,0.3); }
+.badge-white { background: var(--white); color: var(--ink); border-color: var(--hairline); }
+
+/* Verticals grid (inside timeline) */
+.r-verticals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 16px 0; }
+.r-vertical-card { padding: 16px 18px; background: var(--white); border: 1px solid var(--hairline); border-radius: var(--radius); cursor: pointer; transition: all 0.2s var(--ease); }
+.r-vertical-card:hover { border-color: var(--ink); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(11,15,44,0.06); }
+.r-vertical-name { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.r-vertical-desc { font-size: 12px; color: var(--body); line-height: 1.5; }
+
+/* Team section */
+.r-team-note { padding: 20px; border: 1px dashed var(--hairline); border-radius: var(--radius); background: rgba(30,34,170,0.02); display: flex; align-items: flex-start; gap: 14px; }
+.r-team-note i { color: var(--blue); margin-top: 2px; }
+.r-team-note-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* Org pyramid */
+.r-org-pyramid { display: flex; flex-direction: column; gap: 8px; margin: 20px 0; }
+.r-org-tier { border: 1px solid var(--hairline); border-radius: var(--radius); padding: 16px 20px; transition: all 0.2s var(--ease); cursor: pointer; }
+.r-org-tier:hover { border-color: var(--ink); background: rgba(11,15,44,0.01); }
+.r-org-tier-1 { width: 100%; border-left: 3px solid var(--amber); }
+.r-org-tier-2 { width: 92%; align-self: center; border-left: 3px solid var(--coral); }
+.r-org-tier-3 { width: 84%; align-self: center; border-left: 3px solid var(--blue); }
+.r-org-tier-4 { width: 76%; align-self: center; border-left: 3px solid var(--green); }
+.r-org-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 4px; }
+.r-org-name { font-size: 17px; font-weight: 800; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 4px; }
+.r-org-desc { font-size: 13px; color: var(--body); }
+
+/* Stats row */
+.r-stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; border: 1px solid var(--hairline); border-radius: var(--radius); overflow: hidden; margin: 24px 0; }
+.r-stat { padding: 20px; border-right: 1px solid var(--hairline); }
+.r-stat:last-child { border-right: none; }
+.r-stat-num { font-size: 1.6rem; font-weight: 800; color: var(--blue); letter-spacing: -0.03em; margin-bottom: 2px; }
+.r-stat-lbl { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <span class="topbar-logo">myHQ</span>
+    <span class="topbar-chapter" id="chapterLabel">Chapter 2</span>
+  </div>
+  <div class="topbar-center">Who We Are</div>
+  <div class="topbar-right">
+    <span class="screen-counter" id="screenCounter">1 / 9</span>
+    <button class="read-btn" id="btnRead" onclick="setMode('read')">
+      <i class="fa-solid fa-book-open"></i>&nbsp;Read Full Chapter
+    </button>
+  </div>
+</header>
+
+<!-- ═══ SLIDE MODE ═══ -->
+<div id="slide-mode">
+  <div class="slides" id="slides">
+
+  <!-- SCREEN 0: INTRO VIDEO -->
+  <div class="screen screen-video">
+    <div class="screen-video-inner">
+      <div>
+
+        <h1 class="s0-headline">From a friend's café<br>to <em>India's fastest growing</em><br>CRE platform.</h1>
+        <p class="s0-sub">Before you start, let's know the story and journey of myHQ.</p>
+        <div class="s0-vision">
+          <span class="s0-vision-label">Our Vision</span>
+          <span class="s0-vision-text" style="white-space:nowrap;">"A world where <strong>everyone</strong> has the opportunity<br>to make magic, <strong>everywhere</strong>."</span>
+        </div>
+      </div>
+      <div>
+        <div class="s0-thumb" onclick="openVideo()">
+          <div class="s0-thumb-bg">
+            <div class="s0-play-circle"><i class="fa-solid fa-play"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="screen-next-btn" onclick="next()"><i class="fa-solid fa-arrow-right"></i></button>
+  </div>
+
+  <!-- SCREEN 1: THE ORIGIN (Phase 1) -->
+  <div class="screen screen-origin">
+    <div class="s2-eyebrow-dark">Phase 1 · 2015 – 2017</div>
+    <h2 class="s2-headline">From <span>underutilised real estate</span><br>to productive workspaces.</h2>
+    <div class="s2-timeline">
+      <div class="s2-tl-node">
+        <div class="s2-tl-dot">01</div>
+        <div class="s2-tl-year">2015</div>
+        <div class="s2-tl-title">The Spark</div>
+        <div class="s2-tl-sub">Two IIT Delhi Alumni. One question. Why can't people work from wherever they want?</div>
+      </div>
+      <div class="s2-tl-node">
+        <div class="s2-tl-dot">02</div>
+        <div class="s2-tl-year">2016</div>
+        <div class="s2-tl-title">The Move</div>
+        <div class="s2-tl-sub">Found a friend's café with empty chairs — that became the first supply on the platform.</div>
+      </div>
+      <div class="s2-tl-node">
+        <div class="s2-tl-dot">03</div>
+        <div class="s2-tl-year">Apr '16</div>
+        <div class="s2-tl-title">Founded</div>
+        <div class="s2-tl-sub">Start converting cafés &amp; lounges to long-hour working mode — with WiFi, free coffee, and discounted menus.</div>
+      </div>
+      <div class="s2-tl-node">
+        <div class="s2-tl-dot">04</div>
+        <div class="s2-tl-year">2016–17</div>
+        <div class="s2-tl-title">Proof of Concept</div>
+        <div class="s2-tl-sub">Startups loved it — no commitment, no security deposit. Started getting 100+ bookings every day across 20+ cafés in NCR.</div>
+      </div>
+      <div class="s2-tl-node s2-tl-node--highlight">
+        <div class="s2-tl-dot">05</div>
+        <div class="s2-tl-year">2017</div>
+        <div class="s2-tl-title">Angel Round</div>
+        <div class="s2-tl-sub">Founder-to-founder belief. First outside capital raised.</div>
+      </div>
+    </div>
+    <div class="s2-investors">
+      <span class="s2-investors-label">Backed by</span>
+      <span class="s2-investor-tag">Neeraj Singh · Spinny</span>
+      <span class="s2-investor-dot"></span>
+      <span class="s2-investor-tag">Ashneer Grover · BharatPe</span>
+    </div>
+    <button class="screen-next-btn" onclick="next()"><i class="fa-solid fa-arrow-right"></i></button>
+  </div>
+
+  <!-- SCREEN 2: BUILDING SCALE -->
+  <div class="screen screen-origin">
+    <div class="s2-eyebrow-dark">Phase 2 · 2018 – 2021</div>
+    <h2 class="s2-headline" style="white-space: nowrap;">As clients grew, the <span>supply partners</span><br>scaled and evolved with them.</h2>
+    <div class="s2-timeline">
+      <div class="s2-tl-node">
+        <div class="s2-tl-dot">01</div>
+        <div class="s2-tl-year">2018</div>
+        <div class="s2-tl-title">Assisted Marketplace Launched</div>
+        <div class="s2-tl-sub">Existing clients start asking for dedicated workspace — new product, new supply. 100+ coworkings onboarded.</div>
+      </div>
+      <div class="s2-tl-node">
+        <div class="s2-tl-dot">02</div>
+        <div class="s2-tl-year">2018</div>
+        <div class="s2-tl-title">Pre-Series A</div>
+        <div class="s2-tl-sub">On Demand growing fast. First institutional vote of confidence — Pre-Series A led by Anupam Mittal.</div>
+      </div>
+      <div class="s2-tl-node">
+        <div class="s2-tl-dot">03</div>
+        <div class="s2-tl-year">2019</div>
+        <div class="s2-tl-title">Virtual Office<br>Launched</div>
+        <div class="s2-tl-sub">Started with a Shopify website to help clients with address for office &amp; GST registration.</div>
+      </div>
+      <div class="s2-tl-node">
+        <div class="s2-tl-dot">04</div>
+        <div class="s2-tl-year">2019</div>
+        <div class="s2-tl-title">Series A</div>
+        <div class="s2-tl-sub">Three products taking shape. Real traction. First institutional capital arrives — India Quotient leads.</div>
+      </div>
+      <div class="s2-tl-node">
+        <div class="s2-tl-dot">05</div>
+        <div class="s2-tl-year">2020</div>
+        <div class="s2-tl-title">COVID Hit</div>
+        <div class="s2-tl-sub">Offices shut overnight. Business goes down — future seems dark.</div>
+      </div>
+    </div>
+    <div class="s2-investors">
+      <span class="s2-investors-label">Backed by</span>
+      <span class="s2-investor-tag">Anupam Mittal</span>
+      <span class="s2-investor-dot"></span>
+      <span class="s2-investor-tag">India Quotient</span>
+    </div>
+    <button class="screen-next-btn" onclick="next()"><i class="fa-solid fa-arrow-right"></i></button>
+  </div>
+
+  <!-- SCREEN 3: PHASE 3 TIMELINE -->
+  <div class="screen screen-origin">
+    <div class="s2-eyebrow-dark">Phase 3 · 2021 – Present</div>
+    <h2 class="s2-headline" style="font-size:clamp(1.4rem,2.8vw,2.2rem);white-space:nowrap;">Not just rebuilt, <span>reimagined</span> from the ground up.<br>Fuelled by 250+ people who believed in one mission.</h2>
+    <div style="margin: 0 auto 8px;">
+      <span class="s0-vision-text" style="font-size:20px;white-space:nowrap;">"Enabling individuals &amp; corporates to work from <strong>any-where</strong> &amp; in <strong>any-way</strong>"</span>
+    </div>
+    <div class="s2-timeline">
+      <div class="s2-tl-node">
+        <div class="s2-tl-dot">01</div>
+        <div class="s2-tl-year">2021–22</div>
+        <div class="s2-tl-title">Products Take Shape</div>
+        <div class="s2-tl-sub">The rebuilding phase starts with a stronger product offering across three key verticals — AM, Virtual Office, and On-Demand Workspaces.</div>
+      </div>
+      <div class="s2-tl-node">
+        <div class="s2-tl-dot">02</div>
+        <div class="s2-tl-year">2022</div>
+        <div class="s2-tl-title">Powered by ANAROCK</div>
+        <div class="s2-tl-sub">Recognizing myHQ's strong technology foundation and scalable business model, ANAROCK became a strategic investor.</div>
+      </div>
+      <div class="s2-tl-node">
+        <div class="s2-tl-dot">03</div>
+        <div class="s2-tl-year">2023</div>
+        <div class="s2-tl-title">Geographical Expansion</div>
+        <div class="s2-tl-sub">Builds a pan-India presence across metro cities through new offices and expanded operations.</div>
+      </div>
+      <div class="s2-tl-node">
+        <div class="s2-tl-dot">04</div>
+        <div class="s2-tl-year">2024</div>
+        <div class="s2-tl-title">WeWork Partnership &amp; Investment</div>
+        <div class="s2-tl-sub">WeWork invested in myHQ, making it WeWork India's exclusive partner for On Demand and Virtual Office products.</div>
+      </div>
+      <div class="s2-tl-node s2-tl-node--highlight">
+        <div class="s2-tl-dot">05</div>
+        <div class="s2-tl-year">2025–26</div>
+        <div class="s2-tl-title">International Expansion</div>
+        <div class="s2-tl-sub">myHQ moves beyond India — Virtual Office launches in Dubai, Assisted Marketplace expands to London.</div>
+      </div>
+    </div>
+    <div class="s2-investors">
+      <span class="s2-investors-label">Backed by</span>
+      <span class="s2-investor-tag">Anarock</span>
+      <span class="s2-investor-dot"></span>
+      <span class="s2-investor-tag">WeWork</span>
+    </div>
+    <button class="screen-next-btn" onclick="next()"><i class="fa-solid fa-arrow-right"></i></button>
+  </div>
+
+  <!-- SCREEN 5: THREE VERTICALS (deep dive) -->
+  <div class="screen screen-verticals">
+    <div class="s4-header">
+      <h2 class="s4-title">Redefining workspace solutions for All.</h2>
+      <p class="s4-sub">To empower the new age workforce with freedom and flexibility to work in any way that they want and from anywhere<br>by providing technology driven innovative workspace solutions.</p>
+    </div>
+    <div class="s4-cards">
+      <div class="s4-card s4-card--blue">
+        <div class="s4-card-icon s4-icon--blue"><i class="fa-solid fa-handshake"></i></div>
+        <div class="s4-card-title">Assisted Marketplace</div>
+        <div class="s4-card-desc">Platform led advisory &amp; transaction for businesses finding long term office spaces.</div>
+        <span class="s4-card-pill">Coworking space, Managed office, Conventional Leasing</span>
+      </div>
+      <div class="s4-card s4-card--blue">
+        <div class="s4-card-icon s4-icon--blue"><i class="fa-solid fa-file-lines"></i></div>
+        <div class="s4-card-title">Virtual Office</div>
+        <div class="s4-card-desc">Spaces for business address, GST registration, compliance for individuals and startups.</div>
+        <span class="s4-card-pill">GST Registration, Business Address, Company Registration</span>
+      </div>
+      <div class="s4-card s4-card--blue">
+        <div class="s4-card-icon s4-icon--blue"><i class="fa-solid fa-calendar-day"></i></div>
+        <div class="s4-card-title">On Demand</div>
+        <div class="s4-card-desc">Book a desk or meeting room on the go. Work from 2000+ locations across India using a single membership plan.</div>
+        <span class="s4-card-pill">Day passes, Meeting room, Training rooms, Executive day passes</span>
+      </div>
+    </div>
+    <p class="s4-offices"><strong>Bengaluru</strong> &nbsp;·&nbsp; <strong>Gurugram</strong> &nbsp;·&nbsp; <strong>New Delhi</strong> &nbsp;·&nbsp; <strong>Noida</strong> &nbsp;·&nbsp; <strong>Hyderabad</strong> &nbsp;·&nbsp; <strong>Chennai</strong> &nbsp;·&nbsp; <strong>Pune</strong> &nbsp;·&nbsp; <strong>Ahmedabad</strong></p>
+    <button class="screen-next-btn" onclick="next()"><i class="fa-solid fa-arrow-right"></i></button>
+  </div>
+
+  <!-- SCREEN 5: TEAM -->
+  <div class="screen screen-team">
+    <div class="s5t-header">
+      <h2 class="s5t-title">An entrepreneurial team using tech to disrupt commercial real estate.</h2>
+    </div>
+
+    <div class="s5t-two-panel" style="height:clamp(320px,45vh,450px);align-items:stretch;">
+
+      <!-- LEFT: LEADERSHIP TEAM -->
+      <div class="s5t-panel" style="flex:1.15;flex-direction:column;padding:24px 28px;display:flex;">
+        <div style="font-size:clamp(12px,1.4vw,16px);font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--blue);margin-bottom:clamp(10px,1.5vw,18px);">Leadership Team</div>
+        <div class="s5t-people-grid" style="flex:1;gap:22px;align-content:start;">
+
+          <!-- Utkarsh -->
+          <div class="s5t-person" style="gap:14px;align-items:center;">
+            <div class="s5t-photo" style="width:clamp(56px,6.5vw,82px);height:clamp(56px,6.5vw,82px);flex-shrink:0;"><img loading="lazy" src="ch2_book_images/utkarsh.png" alt="Utkarsh" onerror="this.style.display='none';this.parentElement.innerHTML='UK';"></div>
+            <div>
+              <div class="s5t-person-name" style="font-size:clamp(14px,1.7vw,20px);">Utkarsh Kawatra</div>
+              <div class="s5t-person-role" style="font-size:clamp(10px,1.1vw,13px);">CEO</div>
+              <div class="s5t-person-prev" style="font-size:clamp(10px,1.2vw,14px);">Ex: Helion VC, Opera Solutions<br>IIT Delhi · Cofounder, BloodConnect</div>
+            </div>
+          </div>
+
+          <!-- Vinayak -->
+          <div class="s5t-person" style="gap:14px;align-items:center;">
+            <div class="s5t-photo" style="width:clamp(56px,6.5vw,82px);height:clamp(56px,6.5vw,82px);flex-shrink:0;"><img loading="lazy" src="ch2_book_images/vinayak.jpeg" alt="Vinayak" onerror="this.style.display='none';this.parentElement.innerHTML='VA';"></div>
+            <div>
+              <div class="s5t-person-name" style="font-size:clamp(14px,1.7vw,20px);">Vinayak Agrawal</div>
+              <div class="s5t-person-role" style="font-size:clamp(10px,1.1vw,13px);">CTO</div>
+              <div class="s5t-person-prev" style="font-size:clamp(10px,1.2vw,14px);">Ex: Goldman Sachs<br>IIT Delhi · 2X Patent Holder</div>
+            </div>
+          </div>
+
+          <!-- Manoj -->
+          <div class="s5t-person" style="gap:14px;align-items:center;">
+            <div class="s5t-photo" style="width:clamp(56px,6.5vw,82px);height:clamp(56px,6.5vw,82px);flex-shrink:0;"><img loading="lazy" src="ch2_book_images/manoj.jpeg" alt="Manoj" onerror="this.style.display='none';this.parentElement.innerHTML='MY';"></div>
+            <div>
+              <div class="s5t-person-name" style="font-size:clamp(14px,1.7vw,20px);">Manoj Yadav</div>
+              <div class="s5t-person-role" style="font-size:clamp(10px,1.1vw,13px);">Vertical Head</div>
+              <div class="s5t-person-prev" style="font-size:clamp(10px,1.2vw,14px);">Ex: Founder – SchoolLog<br>IIT Delhi</div>
+            </div>
+          </div>
+
+          <!-- Judhajit -->
+          <div class="s5t-person" style="gap:14px;align-items:center;">
+            <div class="s5t-photo" style="width:clamp(56px,6.5vw,82px);height:clamp(56px,6.5vw,82px);flex-shrink:0;"><img loading="lazy" src="ch2_book_images/judhajit.jpeg" alt="Judhajit" onerror="this.style.display='none';this.parentElement.innerHTML='JB';"></div>
+            <div>
+              <div class="s5t-person-name" style="font-size:clamp(14px,1.7vw,20px);">Judhajit Bal</div>
+              <div class="s5t-person-role" style="font-size:clamp(10px,1.1vw,13px);">Vertical Head</div>
+              <div class="s5t-person-prev" style="font-size:clamp(10px,1.2vw,14px);">Ex: Founder – Maidaan, Coca-Cola<br>MDI Gurgaon</div>
+            </div>
+          </div>
+
+          <!-- Nitin -->
+          <div class="s5t-person" style="gap:14px;align-items:center;">
+            <div class="s5t-photo" style="width:clamp(56px,6.5vw,82px);height:clamp(56px,6.5vw,82px);flex-shrink:0;"><img loading="lazy" src="ch2_book_images/nitin.jpeg" alt="Nitin" onerror="this.style.display='none';this.parentElement.innerHTML='NA';"></div>
+            <div>
+              <div class="s5t-person-name" style="font-size:clamp(14px,1.7vw,20px);">Nitin Agrawal</div>
+              <div class="s5t-person-role" style="font-size:clamp(10px,1.1vw,13px);">Vertical Head</div>
+              <div class="s5t-person-prev" style="font-size:clamp(10px,1.2vw,14px);">Ex: Founder – Paavn, YoloBus<br>IIT Delhi</div>
+            </div>
+          </div>
+
+          <!-- Malvika -->
+          <div class="s5t-person" style="gap:14px;align-items:center;">
+            <div class="s5t-photo" style="width:clamp(56px,6.5vw,82px);height:clamp(56px,6.5vw,82px);flex-shrink:0;"><img loading="lazy" src="ch2_book_images/malvika.jpeg" alt="Malvika" onerror="this.style.display='none';this.parentElement.innerHTML='MS';"></div>
+            <div>
+              <div class="s5t-person-name" style="font-size:clamp(14px,1.7vw,20px);">Malvika Sankrityayan</div>
+              <div class="s5t-person-role" style="font-size:clamp(10px,1.1vw,13px);">Marketing Head</div>
+              <div class="s5t-person-prev" style="font-size:clamp(10px,1.2vw,14px);">Ex: Accredian, S&amp;P Global<br>NMIMS Mumbai</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: THEIR BACKGROUND -->
+      <div class="s5t-panel" style="flex:0.85;flex-direction:column;padding:24px 28px;display:flex;gap:0;justify-content:flex-start;">
+        <div style="font-size:clamp(12px,1.4vw,16px);font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--blue);margin-bottom:clamp(12px,1.6vw,20px);">Their Background</div>
+
+        <!-- All 9 logos in a unified 3x3 grid filling the box -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:repeat(3,1fr);gap:clamp(8px,1.2vw,16px);flex:1;">
+          <div style="display:flex;align-items:center;justify-content:center;"><img loading="lazy" src="ch2_book_images/Photos_Training/Picture 1.png" alt="Goldman Sachs" style="width:100%;height:auto;max-height:clamp(36px,5vw,58px);object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img loading="lazy" src="ch2_book_images/Photos_Training/Picture 2.png" alt="Helion" style="width:100%;height:auto;max-height:clamp(36px,5vw,58px);object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img loading="lazy" src="ch2_book_images/Photos_Training/Picture 3.png" alt="Coca-Cola" style="width:100%;height:auto;max-height:clamp(24px,3.5vw,38px);object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img loading="lazy" src="ch2_book_images/Photos_Training/Picture 4.jpg" alt="Microsoft Research" style="width:100%;height:auto;max-height:clamp(24px,3.5vw,38px);object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img loading="lazy" src="ch2_book_images/Photos_Training/Picture 5.png" alt="Adobe" style="width:100%;height:auto;max-height:clamp(24px,3.5vw,38px);object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img loading="lazy" src="ch2_book_images/Photos_Training/Picture 6.png" alt="S&P Global" style="width:100%;height:auto;max-height:clamp(24px,3.5vw,38px);object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img loading="lazy" src="ch2_book_images/Photos_Training/Picture 7.png" alt="IIT Delhi" style="width:100%;height:auto;max-height:clamp(30px,4.3vw,48px);object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img loading="lazy" src="ch2_book_images/Photos_Training/Picture 8.jpg" alt="MDI Gurgaon" style="width:100%;height:auto;max-height:clamp(30px,4.3vw,48px);object-fit:contain;"></div>
+          <div style="display:flex;align-items:center;justify-content:center;"><img loading="lazy" src="ch2_book_images/Photos_Training/Picture 9.png" alt="IIM Calcutta" style="width:100%;height:auto;max-height:clamp(30px,4.3vw,48px);object-fit:contain;"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <button class="screen-next-btn" onclick="next()"><i class="fa-solid fa-arrow-right"></i></button>
+  </div>
+
+  <!-- SCREEN 6: ORG MINDMAP -->
+  <div class="screen screen-org">
+    <div class="s6-title">Organizational Structure</div>
+    <div class="org-chart" id="img-org-mindmap">
+
+      <!-- ROOT -->
+      <div class="oc-root">myHQ</div>
+      <div class="oc-stem oc-stem--root"></div>
+
+      <!-- TWO COLUMNS -->
+      <div class="oc-cols">
+
+        <!-- LEFT: BUSINESS VERTICALS -->
+        <div class="oc-col" style="position:relative;">
+          <!-- horizontal connector going right to divider -->
+          <div style="position:absolute;top:0;left:50%;right:-8px;height:1.5px;background:rgba(30,34,170,0.3);z-index:0;"></div>
+          <div class="oc-stem" style="position:relative;z-index:1;"></div>
+          <div class="oc-section oc-section--biz" style="position:relative;z-index:1;">Business Verticals</div>
+          <div class="oc-stem"></div>
+
+          <!-- Three verticals in dashed container -->
+          <div class="oc-vbox">
+            <div class="oc-vnode">Assisted Marketplace</div>
+            <div class="oc-vnode">On Demand</div>
+            <div class="oc-vnode">Virtual Office</div>
+          </div>
+
+          <!-- Hierarchy -->
+          <div class="oc-hier-wrap">
+            <div class="oc-hierarchy" style="padding-top:18px;">
+              <div class="oc-h-row"><div class="oc-hnode oc-hnode--1">Individual Contributors</div></div>
+              <div class="oc-h-row"><div class="oc-hnode oc-hnode--2">Captains</div></div>
+              <div class="oc-h-row"><div class="oc-hnode oc-hnode--3">Team Leads / City Heads</div></div>
+              <div class="oc-h-row"><div class="oc-hnode oc-hnode--4">Business Leads</div></div>
+            </div>
+            <div class="oc-h-row--l">
+              <span class="oc-l-curve"></span>
+              <div class="oc-hnode oc-hnode--5">Vertical Heads</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIVIDER -->
+        <div style="width:1px;border-left:2px dashed rgba(30,34,170,0.25);margin:0 8px;align-self:stretch;"></div>
+
+        <!-- RIGHT: BUSINESS ENABLEMENT FUNCTIONS -->
+        <div class="oc-col" style="position:relative;">
+          <!-- horizontal connector going left to divider -->
+          <div style="position:absolute;top:0;right:50%;left:-8px;height:1.5px;background:rgba(30,34,170,0.3);z-index:0;"></div>
+          <div class="oc-stem" style="position:relative;z-index:1;"></div>
+          <div class="oc-section oc-section--fn" style="position:relative;z-index:1;">Business Enablement Functions</div>
+          <div style="margin-top:40px;display:grid;grid-template-columns:1fr 1fr;row-gap:45px;column-gap:45px;width:100%;max-width:520px;">
+            <!-- Technology: Blue -->
+            <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(30,34,170,0.08);border-color:#1E22AA;color:#1E22AA;">
+              <i class="fa-solid fa-microchip" style="font-size:18px;"></i>
+              <span>Technology</span>
+            </div>
+            <!-- Product & Design: Coral -->
+            <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(255,115,81,0.08);border-color:#FF7351;color:#FF7351;">
+              <i class="fa-solid fa-pen-ruler" style="font-size:18px;"></i>
+              <span>Product &amp; Design</span>
+            </div>
+            <!-- Marketing: Amber -->
+            <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(255,184,72,0.12);border-color:#FFB848;color:#a06800;">
+              <i class="fa-solid fa-bullhorn" style="font-size:18px;"></i>
+              <span>Marketing</span>
+            </div>
+            <!-- Finance & Legal: Ink -->
+            <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(11,15,44,0.06);border-color:#0B0F2C;color:#0B0F2C;">
+              <i class="fa-solid fa-scale-balanced" style="font-size:18px;"></i>
+              <span>Finance &amp; Legal</span>
+            </div>
+            <!-- HR & People: Green -->
+            <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(190,229,194,0.25);border-color:#5aaa60;color:#2a7a30;">
+              <i class="fa-solid fa-people-group" style="font-size:18px;"></i>
+              <span>HR &amp; People</span>
+            </div>
+            <!-- IT & Admin: Coral-tint -->
+            <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(30,34,170,0.04);border-color:rgba(30,34,170,0.4);color:#1E22AA;">
+              <i class="fa-solid fa-screwdriver-wrench" style="font-size:18px;"></i>
+              <span>IT &amp; Admin</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <style>
+    /* ── ORG CHART ── */
+    .org-chart { width:100%; max-width:100%; display:flex; flex-direction:column; align-items:center; font-family:var(--sans); }
+
+    /* root */
+    .oc-root { background:var(--blue); color:#fff; font-size:clamp(13px,1.6vw,18px); font-weight:800; padding:clamp(6px,0.8vw,10px) clamp(16px,2.5vw,32px); border-radius:8px; letter-spacing:-0.01em; }
+
+    /* stems */
+    .oc-stem { width:1px; background:rgba(30,34,170,0.3); height:18px; }
+    .oc-stem--root { height:18px; }
+    .oc-stem--long { height:22px; }
+
+    /* split row */
+    /* two columns */
+    .oc-cols { display:flex; width:100%; align-items:flex-start; gap:0; position:relative; }
+    .oc-cols::before { display:none; }
+    .oc-col { flex:1; display:flex; flex-direction:column; align-items:center; padding:0 12px; }
+
+    /* section headers */
+    .oc-section { font-size:clamp(11px,1.3vw,15px); font-weight:700; padding:clamp(6px,0.7vw,9px) clamp(12px,1.6vw,20px); border-radius:6px; text-align:center; letter-spacing:0.03em; }
+    .oc-section--biz { border:1.5px solid var(--blue); color:var(--blue); }
+    .oc-section--fn  { border:1.5px solid rgba(30,34,170,0.5); color:var(--blue); }
+
+    /* fan layout */
+    .oc-fan { width:100%; display:flex; flex-direction:column; align-items:center; }
+    .oc-fan-h-line { width:80%; height:1px; background:rgba(30,34,170,0.3); }
+    .oc-fan-nodes { display:flex; width:80%; justify-content:space-between; }
+    .oc-fan-item { display:flex; flex-direction:column; align-items:center; flex:1; }
+    .oc-fan-v-line { width:1px; height:14px; background:rgba(30,34,170,0.3); }
+
+    /* dashed container wrapping 3 verticals */
+    .oc-vbox { display:flex; gap:10px; align-items:stretch; border:1.5px dashed rgba(30,34,170,0.45); border-radius:10px; padding:10px 12px; width:95%; }
+    .oc-vnode { white-space:nowrap; }
+    /* vertical nodes (AM / OnDemand / VO) */
+    .oc-vnode { border:1.5px solid var(--blue); color:var(--blue); font-size:clamp(11px,1.2vw,14px); font-weight:600; padding:clamp(7px,0.8vw,10px) clamp(8px,0.9vw,12px); border-radius:8px; text-align:center; flex:1; display:flex; align-items:center; justify-content:center; min-height:52px; }
+
+    /* fn-hierarchy: mirrors oc-hierarchy */
+    .oc-fn-connected { display:flex; flex-direction:column; align-items:flex-start; }
+    .oc-fn-hierarchy { display:flex; flex-direction:column; align-items:flex-start; border-left:2px solid rgba(30,34,170,0.3); padding-top:0; padding-bottom:0; gap:0; width:fit-content; min-width:200px; }
+    .oc-fn-row { display:flex; align-items:center; padding:12px 0; position:relative; }
+    .oc-fn-row::before { content:''; display:block; width:20px; height:1.5px; background:rgba(30,34,170,0.3); flex-shrink:0; }
+    .oc-fn-row .oc-fnnode { margin-left:6px; }
+    /* function nodes — fixed width so all boxes are same size */
+    .oc-fnnode { background:rgba(30,34,170,0.12); border:1.5px solid rgba(30,34,170,0.3); color:var(--blue); font-size:14px; font-weight:700; padding:10px 0; border-radius:20px; margin-left:6px; width:190px; text-align:center; }
+
+    /* hierarchy with arrows — centered under dashed box */
+    /* hierarchy wrapper — aligns border column and L-row at same left edge */
+    .oc-hier-wrap { display:flex; flex-direction:column; align-items:flex-start; margin:0 auto; width:fit-content; }
+    .oc-hierarchy { display:flex; flex-direction:column; align-items:flex-start; border-left:2px solid rgba(30,34,170,0.3); padding-bottom:0; gap:0; width:fit-content; min-width:200px; }
+    .oc-h-row { display:flex; align-items:center; padding:8px 0; position:relative; }
+    .oc-h-row::before { content:''; display:block; width:20px; height:1.5px; background:rgba(30,34,170,0.3); flex-shrink:0; }
+    .oc-hnode { margin-left:6px; }
+    .oc-arrow { display:none; }
+    /* L-row: curved corner via span */
+    .oc-h-row--l { display:flex; align-items:center; position:relative; padding:12px 0 0 24px; }
+    .oc-h-row--l::before,.oc-h-row--l::after { display:none; }
+    .oc-h-row--l .oc-hnode { margin-left:2px; }
+    /* curved L connector */
+    .oc-l-curve { position:absolute; left:0; top:0; height:50%; width:22px; border-left:2px solid rgba(30,34,170,0.3); border-bottom:1.5px solid rgba(30,34,170,0.3); border-bottom-left-radius:7px; background:transparent; display:block; }
+    /* fn variant — positioned at vertical line center */
+    .oc-l-curve--fn { left:calc(50% - 2px); }
+    .oc-hnode { font-size:clamp(11px,1.2vw,14px); font-weight:700; padding:clamp(8px,1vw,12px) clamp(12px,1.5vw,18px); border-radius:20px; white-space:nowrap; }
+    .oc-hnode { text-align:center; }
+    .oc-hnode--1 { background:var(--blue); color:#fff; width:clamp(180px,22vw,280px); }
+    .oc-hnode--2 { background:rgba(30,34,170,0.7); color:#fff; width:clamp(154px,19vw,240px); }
+    .oc-hnode--3 { background:rgba(30,34,170,0.45); color:#fff; width:clamp(135px,16.5vw,210px); }
+    .oc-hnode--4 { background:rgba(30,34,170,0.25); color:var(--blue); width:clamp(115px,14vw,180px); }
+    .oc-hnode--5 { background:rgba(30,34,170,0.1); color:var(--blue); width:clamp(96px,12vw,150px); }
+    .oc-fn-desc { font-size:13px; color:var(--muted); line-height:1.4; max-width:220px; padding-left:12px; }
+    </style>
+    <button class="screen-next-btn" onclick="next()"><i class="fa-solid fa-arrow-right"></i></button>
+  </div>
+
+  <!-- SCREEN 7: SCALE, CLIENTELE & PARTNERS -->
+  <div class="screen screen-scale" id="screen-scale">
+    <div id="s7-canvas">
+    <div class="s7-title">India's #1 online platform — and growing 15% MoM.</div>
+
+    <div class="s7-stats">
+      <!-- ROW 1 -->
+      <div class="s7-stat">
+        <div class="s7-stat-icon"><i class="fa-solid fa-handshake" style="color:var(--blue);"></i></div>
+        <div><div class="s7-stat-num">50,000 Clients</div><div class="s7-stat-lbl">Corporates, SMEs, Startups</div></div>
+      </div>
+      <div class="s7-stat">
+        <div class="s7-stat-icon"><i class="fa-solid fa-envelope" style="color:var(--blue);"></i></div>
+        <div><div class="s7-stat-num">30K Virtual Offices</div><div class="s7-stat-lbl">Helping companies register in every state</div></div>
+      </div>
+      <div class="s7-stat">
+        <div class="s7-stat-icon"><i class="fa-solid fa-building" style="color:var(--blue);"></i></div>
+        <div><div class="s7-stat-num">2M+ sq ft</div><div class="s7-stat-lbl">Leased annually in flex</div></div>
+      </div>
+      <div class="s7-stat">
+        <div class="s7-stat-icon"><i class="fa-solid fa-chair" style="color:var(--blue);"></i></div>
+        <div><div class="s7-stat-num">5L+ On Demand</div><div class="s7-stat-lbl">For hybrid companies &amp; end users</div></div>
+      </div>
+      <div class="s7-stat">
+        <div class="s7-stat-icon"><i class="fa-solid fa-indian-rupee-sign" style="color:var(--blue);"></i></div>
+        <div><div class="s7-stat-num">500Cr+ GMV</div><div class="s7-stat-lbl">Value of transactions done annually</div></div>
+      </div>
+      <!-- ROW 2 -->
+      <div class="s7-stat">
+        <div class="s7-stat-icon"><i class="fa-solid fa-map-location-dot" style="color:var(--blue);"></i></div>
+        <div><div class="s7-stat-num">30 Cities</div><div class="s7-stat-lbl">Covered with ground presence in 10 of them</div></div>
+      </div>
+      <div class="s7-stat">
+        <div class="s7-stat-icon"><i class="fa-solid fa-user-tie" style="color:var(--blue);"></i></div>
+        <div><div class="s7-stat-num">150 RMs</div><div class="s7-stat-lbl">Working with corporates for all their needs</div></div>
+      </div>
+      <div class="s7-stat">
+        <div class="s7-stat-icon"><i class="fa-solid fa-list-check" style="color:var(--blue);"></i></div>
+        <div><div class="s7-stat-num">10,000+ Listings</div><div class="s7-stat-lbl">Verified on the platform</div></div>
+      </div>
+      <div class="s7-stat">
+        <div class="s7-stat-icon"><i class="fa-solid fa-mobile-screen" style="color:var(--blue);"></i></div>
+        <div><div class="s7-stat-num">5L+ Downloads</div><div class="s7-stat-lbl">For hybrid companies &amp; end users</div></div>
+      </div>
+      <div class="s7-stat">
+        <div class="s7-stat-icon"><i class="fa-solid fa-globe" style="color:var(--blue);"></i></div>
+        <div><div class="s7-stat-num">2.5M+ Traffic</div><div class="s7-stat-lbl">On Website (Annually)</div></div>
+      </div>
+    </div>
+
+    <!-- CODED LOGO GRID replacing static images -->
+    <div class="s7-logo-panels">
+
+      <!-- LEFT: Our Esteemed Clientele -->
+      <div class="s7-logo-panel">
+        <div class="s7-lp-header">
+          <div class="s7-lp-title">Our Esteemed Clientele</div>
+        </div>
+        <div class="s7-lp-sub">Serving modern age companies for their various business needs across different products</div>
+
+        <!-- 3 stacked rows: GCCs → Start-Ups → Enterprises -->
+        <div style="display:flex;flex-direction:column;gap:8px;flex:1;min-height:0;">
+
+          <!-- GCCs -->
+          <div class="s7-sub-panel">
+            <div class="s7-sp-label">GCCs</div>
+            <div class="s7-gccs-row">
+              <img loading="lazy" src="logos_clientele_supply/komatsu.png" alt="Komatsu" class="s7-logo-img s7-logo-img--xl" style="max-width:210px;">
+              <img loading="lazy" src="logos_clientele_supply/acsendion.png" alt="Ascendion" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+              <img loading="lazy" src="logos_clientele_supply/nachi.png" alt="NACHI" class="s7-logo-img s7-logo-img--xl">
+            </div>
+          </div>
+
+          <!-- Start-Ups + New Age Brands -->
+          <div class="s7-sub-panel" style="flex:3;">
+            <div class="s7-sp-label">Start-Ups + New Age Brands</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);row-gap:1px;align-items:center;justify-items:center;flex:1;align-content:flex-start;">
+              <img loading="lazy" src="logos_clientele_supply/zomato.png" alt="Zomato" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/flipkart.png" alt="Flipkart" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/keka.png" alt="Keka" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/credgenics.png" alt="Credgenics" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/cars24.png" alt="Cars24" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/signzy.png" alt="Signzy" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/tvf.jpg" alt="TVF" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/jiosaavn.png" alt="JioSaavn" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/rebel.png" alt="Rebel Foods" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/angleone.png" alt="AngelOne" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/yulu.jpg" alt="Yulu" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/mpl.png" alt="MPL" class="s7-logo-img s7-logo-img--lg">
+            </div>
+          </div>
+
+          <!-- Enterprises -->
+          <div class="s7-sub-panel" style="flex:3;">
+            <div class="s7-sp-label">Enterprises</div>
+            <div class="s7-enterprises-grid" style="grid-template-columns:repeat(4,1fr);">
+              <img loading="lazy" src="logos_clientele_supply/marriot.png" alt="Marriott" class="s7-logo-img">
+              <img loading="lazy" src="logos_clientele_supply/axis.png" alt="Axis Bank" class="s7-logo-img" style="max-width:160px;">
+              <img loading="lazy" src="logos_clientele_supply/tatacliq.png" alt="Tata CliQ" class="s7-logo-img">
+              <img loading="lazy" src="logos_clientele_supply/philips.png" alt="Philip Morris" class="s7-logo-img">
+              <img loading="lazy" src="logos_clientele_supply/ouylok.png" alt="Outlook" class="s7-logo-img">
+              <img loading="lazy" src="logos_clientele_supply/adity.png" alt="Aditya Birla" class="s7-logo-img">
+              <img loading="lazy" src="logos_clientele_supply/uni.png" alt="UNICEF" class="s7-logo-img">
+              <img loading="lazy" src="logos_clientele_supply/io.png" alt="IndianOil" class="s7-logo-img">
+              <img loading="lazy" src="logos_clientele_supply/emami.png" alt="Emami" class="s7-logo-img">
+              <img loading="lazy" src="logos_clientele_supply/taj.png" alt="TAJ" class="s7-logo-img" style="max-width:108px;">
+              <img loading="lazy" src="logos_clientele_supply/mahi.png" alt="Mahindra Lifespaces" class="s7-logo-img">
+              <img loading="lazy" src="logos_clientele_supply/teamlease.png" alt="TeamLease" class="s7-logo-img" style="max-width:180px;">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: Our Space Partners -->
+      <div class="s7-logo-panel">
+        <div class="s7-lp-header">
+          <div class="s7-lp-title">Our Space Partners</div>
+        </div>
+        <div class="s7-lp-sub">Largest network of flex, commercial real estate players in India; Now expanding the platform internationally</div>
+
+        <!-- 3 stacked rows: Grade A → Managed → Coworking -->
+        <div style="display:flex;flex-direction:column;gap:8px;flex:1;min-height:0;">
+
+          <!-- Grade A Developers -->
+          <div class="s7-sub-panel">
+            <div class="s7-sp-label">Grade A Developers</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;align-items:center;justify-items:center;flex:1;align-content:center;">
+              <img loading="lazy" src="logos_clientele_supply/m3m.jpg" alt="M3M" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/embassy.png" alt="Embassy" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/unitech.png" alt="Unitech" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/vamsimran.jpg" alt="Vamsimran" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+            </div>
+          </div>
+
+          <!-- Managed Office Brands -->
+          <div class="s7-sub-panel" style="flex:2.5;">
+            <div class="s7-sp-label">Managed Office Brands</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);row-gap:1px;align-items:center;justify-items:center;flex:1;align-content:flex-start;">
+              <img loading="lazy" src="logos_clientele_supply/smartworks.png" alt="Smartworks" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/indi.png" alt="IndiQube" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/tablespac.png" alt="Table Space" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/urbanvault.png" alt="Urban Vault" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+              <img loading="lazy" src="logos_clientele_supply/devx.png" alt="DevX" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/isprout.jpg" alt="iSprout" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/headquarters.png" alt="The Headquarters" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/simpli.jpg" alt="Simpliwork" class="s7-logo-img s7-logo-img--lg">
+            </div>
+          </div>
+
+          <!-- Coworking Brands -->
+          <div class="s7-sub-panel" style="flex:4;">
+            <div class="s7-sp-label">Coworking Brands</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);row-gap:1px;align-items:center;justify-items:center;flex:1;align-content:flex-start;">
+              <img loading="lazy" src="logos_clientele_supply/wework.png" alt="WeWork" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/awfis.png" alt="Awfis" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/innox8.png" alt="Innov8" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/bhive.png" alt="Bhive" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+              <img loading="lazy" src="logos_clientele_supply/efc.png" alt="EFC" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+              <img loading="lazy" src="logos_clientele_supply/springhouse.png" alt="Spring House" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/regus.png" alt="Regus" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/coworks.png" alt="Cowrks" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/91sb.png" alt="91Springboard" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+              <img loading="lazy" src="logos_clientele_supply/exec_centre.png" alt="The Executive Centre" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+              <img loading="lazy" src="logos_clientele_supply/vatika.jpg" alt="Vatika" class="s7-logo-img s7-logo-img--lg">
+              <img loading="lazy" src="logos_clientele_supply/altf.png" alt="alt.f" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /s7-logo-panels -->
+    </div><!-- /s7-canvas -->
+
+    <button class="screen-next-btn" onclick="next()"><i class="fa-solid fa-arrow-right"></i></button>
+  </div>
+
+
+  <!-- SCREEN 8: THE AMBITION -->
+  <div class="screen screen-ambition">
+    <h2 class="s5-headline"><span>Ambition 2030:</span> ₹5,000 Cr worth of Transactions, ₹500 Cr of Revenue &amp; a global powerhouse</h2>
+    <p class="s5-subtext">We have grown <strong>35X</strong> in the <em>last 3 years</em> and plan to grow <strong>10X</strong> more in the <em>next 5</em></p>
+
+    <div class="s5-body">
+      <!-- Chart -->
+      <div class="s5-growth">
+        <!--
+          9 bars: FY22–FY30. Baseline y=300. Max bar height=260 (for 5000 Cr).
+          Scale: 1 Cr = 0.052px. Bar width=52, gap=18. Total width=(52+18)*9-18=612. Canvas=660.
+          Left offset=24. Bar centres at x = 24 + 26 + i*70.
+          Values: 20,200,400,700,1200,1700,2400,3500,5000
+          Heights: 1,10.4,20.8,36.4,62.4,88.4,124.8,182,260
+          Tops (y=300-h): 299,289.6,279.2,263.6,237.6,211.6,175.2,118,40
+          Actual bars: FY22–FY26 (i=0–4). Projected dashed: FY27–FY30 (i=5–8) — but FY30 is the target.
+          Arrow path through all bar tops.
+        -->
+        <div class="ambition-chart" id="ambitionChart"></div>
+      </div>
+
+      <!-- Driven by box -->
+      <div class="s5-driven">
+        <div class="s5-driven-title">Driven by:</div>
+        <div class="s5-driven-item">
+          <div class="s5-driven-chevron"></div>
+          <div class="s5-driven-text">International Expansion</div>
+        </div>
+        <div class="s5-driven-item">
+          <div class="s5-driven-chevron"></div>
+          <div class="s5-driven-text">New Business Lines</div>
+        </div>
+        <div class="s5-driven-item">
+          <div class="s5-driven-chevron"></div>
+          <div class="s5-driven-text">Tech &amp; Product Innovation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /slides -->
+
+  <nav class="dot-nav" id="dotNav"></nav>
+</div><!-- /slide-mode -->
+
+
+<!-- ═══ READ MODE ═══ -->
+<style>
+/* ── BOOK READ MODE ADDITIONS ── */
+.section { margin-bottom: 72px; }
+.section-num { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 6px; }
+.section-title { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); line-height: 1.15; margin-bottom: 16px; }
+.section-body { font-size: 15px; color: var(--body); line-height: 1.78; margin-bottom: 14px; }
+.section-outcome { font-size: 12px; color: var(--blue); font-weight: 600; margin-bottom: 20px; padding: 10px 16px; background: rgba(30,34,170,0.05); border-left: 3px solid var(--blue); border-radius: 0 6px 6px 0; }
+.section-outcome span { opacity: 0.6; }
+.takeaway { background: rgba(190,229,194,0.22); border-left: 3px solid #4CAF74; border-radius: 0 6px 6px 0; padding: 13px 18px; font-size: 14px; font-weight: 600; color: var(--ink); margin: 22px 0 12px; }
+.takeaway::before { content: '✦  '; color: #4CAF74; }
+.next-up { font-size: 13px; color: var(--blue); font-weight: 600; display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+.bridge { display: flex; align-items: center; gap: 14px; margin: -16px 0 26px; color: var(--muted); font-size: 13px; font-weight: 500; }
+.bridge::before, .bridge::after { content: ''; flex: 1; height: 1px; background: var(--hairline); }
+.visual { margin: 24px 0; }
+
+/* Book timeline — always expanded, no toggle */
+.btl { display: flex; flex-direction: column; position: relative; padding-left: 32px; }
+.btl::before { content: ''; position: absolute; left: 4px; top: 8px; bottom: 8px; width: 1.5px; background: var(--hairline); }
+.btl-item { position: relative; padding: 0 0 36px 28px; }
+.btl-item:last-child { padding-bottom: 0; }
+.btl-dot { position: absolute; left: -5px; top: 5px; width: 11px; height: 11px; border-radius: 50%; background: var(--white); border: 2px solid var(--blue); }
+.btl-item:last-child .btl-dot { background: var(--blue); }
+.btl-year { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--blue); margin-bottom: 5px; }
+.btl-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.01em; }
+.btl-body { font-size: 14px; color: var(--body); line-height: 1.7; }
+.btl-funding { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: rgba(30,34,170,0.04); border-left: 3px solid var(--blue); border-radius: 0 var(--radius) var(--radius) 0; margin: 10px 0; }
+.btl-funding-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--blue); margin-bottom: 2px; }
+.btl-funding-name { font-size: 13px; color: var(--ink); font-weight: 500; }
+.btl-dyk { margin: 12px 0; padding: 14px 16px; background: rgba(255,184,72,0.06); border: 1px solid rgba(255,184,72,0.25); border-radius: var(--radius); }
+.btl-dyk-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #a06800; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.btl-dyk-label::before { content: '?'; width: 18px; height: 18px; background: var(--amber); border-radius: 50%; font-size: 11px; font-weight: 800; color: var(--ink); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.btl-dyk-text { font-size: 13px; color: var(--body); line-height: 1.65; }
+.btl-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+
+/* Team cards — book style, always expanded */
+.book-team-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin: 20px 0; }
+.book-team-card { border: 1px solid var(--hairline); border-radius: var(--radius); overflow: hidden; }
+.book-team-banner { height: 120px; overflow: hidden; background: rgba(30,34,170,0.06); display: flex; align-items: center; justify-content: center; }
+.book-team-banner img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.book-team-initials { font-size: 2rem; font-weight: 800; color: var(--blue); }
+.book-team-body { padding: 16px 18px; }
+.book-team-name { font-size: 16px; font-weight: 800; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 3px; }
+.book-team-role { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue); margin-bottom: 10px; }
+.book-team-bio { font-size: 13px; color: var(--body); line-height: 1.65; margin-bottom: 10px; }
+.book-team-meta { display: flex; flex-direction: column; gap: 4px; padding-top: 10px; border-top: 1px solid var(--hairline); }
+.book-team-meta-row { font-size: 12px; color: var(--muted); }
+.book-team-meta-row strong { color: var(--ink); font-weight: 600; }
+.book-team-tag { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 8px; border-radius: 4px; background: rgba(30,34,170,0.08); color: var(--blue); margin-bottom: 6px; }
+.book-team-avatar { width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--hairline); flex-shrink: 0; background: rgba(30,34,170,0.06); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; color: var(--blue); }
+.book-team-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.book-team-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.book-team-header-text { flex: 1; }
+
+/* Org pyramid — book style, widths stepped, all details shown */
+.book-org { display: flex; flex-direction: column; gap: 8px; margin: 24px 0; }
+.book-org-tier { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--hairline); align-self: center; }
+.book-org-tier-1 { width: 100%; border-left: 4px solid var(--amber); }
+.book-org-tier-2 { width: 92%; border-left: 4px solid var(--coral); }
+.book-org-tier-3 { width: 84%; border-left: 4px solid var(--blue); }
+.book-org-tier-4 { width: 76%; border-left: 4px solid #4CAF74; }
+.book-org-header { display: grid; grid-template-columns: 1fr auto; align-items: start; padding: 16px 20px 12px; background: #fafbff; border-bottom: 1px solid var(--hairline); }
+.book-org-name { font-size: 16px; font-weight: 800; color: var(--ink); letter-spacing: -0.02em; }
+.book-org-desig { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.book-org-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.book-org-facts { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; }
+.book-org-fact { padding: 12px 16px; border-right: 1px solid var(--hairline); }
+.book-org-fact:last-child { border-right: none; }
+.book-org-fact-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 4px; }
+.book-org-fact-value { font-size: 12px; color: var(--body); line-height: 1.5; }
+.book-org-fact-value strong { color: var(--ink); font-weight: 700; }
+
+/* Mind map — static tree, fully expanded */
+.book-mm { display: flex; flex-direction: column; align-items: center; gap: 0; margin: 24px 0; }
+.book-mm-root { background: var(--blue); color: var(--white); font-size: 18px; font-weight: 800; padding: 18px 48px; border-radius: 14px; letter-spacing: -0.02em; }
+.book-mm-vline { width: 2px; height: 28px; background: rgba(30,34,170,0.2); }
+.book-mm-dept-row { display: flex; justify-content: center; gap: 12px; width: 100%; }
+.book-mm-dept-col { display: flex; flex-direction: column; align-items: center; flex: 1; max-width: 200px; }
+.book-mm-hbar { height: 2px; background: rgba(30,34,170,0.15); width: 100%; margin: 0; }
+.book-mm-dept { background: var(--white); border: 1.5px solid rgba(30,34,170,0.2); color: var(--blue); font-size: 13px; font-weight: 700; padding: 12px 16px; border-radius: 10px; text-align: center; width: 100%; }
+.book-mm-sub-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; width: 100%; }
+.book-mm-sub { background: #f4f5ff; border: 1px solid var(--hairline); color: var(--ink); font-size: 12px; font-weight: 600; padding: 8px 12px; border-radius: 7px; text-align: center; }
+
+/* Stat cards */
+.book-stats { display: grid; grid-template-columns: repeat(5,1fr); gap: 0; border: 1px solid var(--hairline); border-radius: var(--radius); overflow: hidden; margin: 20px 0; }
+.book-stat { padding: 16px; border-right: 1px solid var(--hairline); }
+.book-stat:last-child { border-right: none; }
+.book-stat-num { font-size: 1.4rem; font-weight: 800; color: var(--blue); letter-spacing: -0.03em; margin-bottom: 3px; }
+.book-stat-lbl { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+/* Verticals */
+.book-verticals { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 20px 0; }
+.book-vertical { padding: 20px 18px; border-radius: var(--radius); border: 1px solid var(--hairline); display: flex; flex-direction: column; gap: 8px; }
+.book-vertical--am { border-top: 3px solid var(--blue); }
+.book-vertical--vo { border-top: 3px solid var(--blue); }
+.book-vertical--od { border-top: 3px solid var(--blue); }
+.book-vertical-icon { width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.book-vertical-name { font-size: 15px; font-weight: 800; color: var(--ink); }
+.book-vertical-desc { font-size: 13px; color: var(--body); line-height: 1.55; flex: 1; }
+.book-vertical-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 4px; background: rgba(0,0,0,0.04); color: var(--muted); }
+
+/* Ambition chart embed */
+.book-ambition-chart { border: 1px solid var(--hairline); border-radius: var(--radius); padding: 24px; background: #fafbff; margin: 20px 0; }
+
+/* ── Assessment ── */
+.aq-tracker { display: flex; align-items: center; gap: 14px; margin-bottom: 36px; padding: 16px 20px; background: #FAFBFF; border: 1px solid var(--hairline); border-radius: var(--radius); }
+.aq-tracker-bar { flex: 1; height: 6px; background: var(--hairline); border-radius: 99px; overflow: hidden; }
+.aq-tracker-fill { height: 100%; width: 0%; background: var(--blue); border-radius: 99px; transition: width 0.4s var(--ease); }
+.aq-tracker-label { font-size: 12px; font-weight: 700; color: var(--blue); white-space: nowrap; letter-spacing: 0.02em; }
+.aq-question { margin-bottom: 36px; padding: 24px 28px; border: 1px solid var(--hairline); border-radius: 12px; background: var(--white); transition: border-color 0.2s; }
+.aq-question.is-filled { border-color: rgba(30,34,170,0.35); }
+.aq-q-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.aq-q-num { font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); background: rgba(30,34,170,0.08); padding: 3px 10px; border-radius: 99px; }
+.aq-q-status { font-size: 12px; font-weight: 600; color: var(--muted); }
+.aq-q-status.done { color: #2a7d3f; }
+.aq-q-text { font-size: 14px; color: var(--ink); line-height: 1.7; margin-bottom: 14px; font-weight: 500; }
+.aq-textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--hairline); border-radius: 8px; font-family: var(--sans); font-size: 14px; color: var(--ink); line-height: 1.65; resize: vertical; min-height: 120px; transition: border-color 0.2s, box-shadow 0.2s; background: #FAFBFF; }
+.aq-textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(30,34,170,0.1); background: var(--white); }
+.aq-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 24px; border-top: 1px solid var(--hairline); }
+.aq-footer-note { font-size: 13px; color: var(--muted); }
+.aq-submit-btn { padding: 10px 28px; background: var(--blue); color: var(--white); font-size: 13px; font-weight: 700; border: none; border-radius: var(--radius); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; transition: var(--transition); }
+.aq-submit-btn:hover:not(:disabled) { background: var(--blue-dark); }
+.aq-submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.aq-error { margin-top: 12px; padding: 12px 16px; background: #fff3f3; border: 1px solid #f5c6c6; border-radius: 8px; font-size: 13px; color: #c0392b; }
+.aq-submitted { text-align: center; padding: 48px 24px; border: 1px solid rgba(30,34,170,0.2); border-radius: 12px; background: #FAFBFF; margin-bottom: 24px; }
+.aq-submitted-icon { font-size: 40px; color: #2a7d3f; margin-bottom: 16px; }
+.aq-submitted-title { font-size: 20px; font-weight: 800; color: var(--ink); margin-bottom: 8px; }
+.aq-submitted-body { font-size: 14px; color: var(--body); line-height: 1.7; max-width: 440px; margin: 0 auto; }
+</style>
+
+<div id="read-mode" class="hidden" style="margin-top:52px;">
+  <div class="r-layout">
+
+    <!-- SIDEBAR TOC -->
+    <aside class="r-sidebar">
+      <div class="r-toc-label">Chapter 2</div>
+      <a href="#r-intro"     class="toc-link" data-s="r-intro">Introduction</a>
+      <a href="#r-timeline"  class="toc-link" data-s="r-timeline">01 · The Timeline</a>
+      <a href="#r-verticals" class="toc-link" data-s="r-verticals">02 · Business Verticals</a>
+      <a href="#r-team"      class="toc-link" data-s="r-team">03 · Leadership Team</a>
+      <a href="#r-org"       class="toc-link" data-s="r-org">04 · Org Structure</a>
+      <a href="#r-vertical-leadership" class="toc-link" data-s="r-vertical-leadership">04b · Words from our own</a>
+      <a href="#r-scale"     class="toc-link" data-s="r-scale">05 · Scale &amp; Reach</a>
+      <a href="#r-ambition"  class="toc-link" data-s="r-ambition">06 · The Ambition</a>
+      <a href="#r-stories"   class="toc-link" data-s="r-stories">07 · Success Stories</a>
+      <a href="#r-assess"    class="toc-link" data-s="r-assess">Assessment</a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="r-content">
+
+      <!-- INTRO -->
+      <section class="section" id="r-intro">
+        <div style="margin-bottom:32px;padding:28px 32px;border:1px solid var(--hairline);border-radius:var(--radius);background:#FAFBFF;">
+          <p class="section-body" style="margin-bottom:10px;">This chapter helps you understand the story behind myHQ and maps the company — where it came from, who built it, how it's organized, and where it's headed. It is the story of a dream, a vision, and a journey of building something meaningful from the ground up.</p>
+          <p class="section-body" style="margin-bottom:10px;">myHQ started with a simple question asked in Bangalore traffic in 2015. Today, it has grown into one of India's fastest-growing commercial real estate platforms, serving 50,000+ clients, facilitating ₹500 Cr+ in annual GMV, and pursuing an ambitious goal of ₹5,000 Cr in transactions by 2030.</p>
+          <p class="section-body" style="margin-bottom:0;">The journey from a friend's café to an emerging international platform is more than a company story — it reflects the ambition, resilience, and long-term vision that continue to shape the future of workspaces and commercial real estate.</p>
+        </div>
+      </section>
+
+      <!-- 01: TIMELINE -->
+      <section class="section" id="r-timeline">
+        <div class="section-outcome"><span>Learning Outcome:</span> Understand every phase of myHQ's journey — the bets, the turning points, and what shaped the company it is today.</div>
+        <div class="section-num">01</div>
+        <h2 class="section-title">The Story</h2>
+        <p class="section-body">myHQ didn't start with a funding announcement or a grand plan. It started with a question asked in a Delhi NCR café in 2015 — and a friend's empty chairs that no one was using. What followed was ten years of building, breaking, rebuilding, and refusing to quit. This is that story.</p>
+
+        <div class="r-stats-row" style="margin-bottom:32px;">
+          <div class="r-stat"><div class="r-stat-num">Apr 2016</div><div class="r-stat-lbl">Founded</div></div>
+          <div class="r-stat"><div class="r-stat-num">35X</div><div class="r-stat-lbl">Growth in 3 years</div></div>
+          <div class="r-stat"><div class="r-stat-num">Anarock &amp; WeWork</div><div class="r-stat-lbl">Strategic backers</div></div>
+          <div class="r-stat"><div class="r-stat-num">Dubai · London</div><div class="r-stat-lbl">Now going global</div></div>
+        </div>
+
+        <div class="btl">
+
+          <div class="btl-item">
+            <div class="btl-dot"></div>
+            <div class="btl-year">2015 · Phase 1 begins</div>
+            <div class="btl-title">One question. Why can't people work from wherever they want?</div>
+            <img loading="lazy" src="ch2_book_images/spark.jpg" alt="The Spark" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:cover;max-height:240px;">
+            <div class="btl-body">Utkarsh Kawatra and Vinayak Aggarwal were IIT Delhi Alumni who'd gone their separate ways — Utkarsh to Helion Ventures, Vinayak to Goldman Sachs. They ended up back in NCR at the same time, frustrated by the same thing: good professionals wasting hours commuting to offices they didn't need to be in. The question wasn't complicated. The answer would take a decade to build.</div>
+            <div class="btl-badges"><span class="tl-badge badge-teal">The Insight</span></div>
+          </div>
+
+          <div class="btl-item">
+            <div class="btl-dot"></div>
+            <div class="btl-year">Apr 2016 · Founded</div>
+            <div class="btl-title">A friend's café. Empty chairs every morning. That became the first supply on the platform.</div>
+            <img loading="lazy" src="ch2_book_images/move.png" alt="The Move — First Café" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:cover;max-height:240px;">
+            <div class="btl-body">A friend ran a café that stayed empty before noon — chairs up, tables empty, burning rent before the evening rush. Utkarsh and Vinayak saw something no one else was seeing: <strong>idle real estate is wasted potential.</strong> They started converting cafés and lounges into long-hour working spaces — WiFi, free coffee, discounted menus. Show up, work, leave. No deposit, no commitment. myHQ was born.</div>
+            <div class="btl-badges"><span class="tl-badge badge-mint">Founded</span></div>
+          </div>
+
+          <div class="btl-item">
+            <div class="btl-dot"></div>
+            <div class="btl-year">2016–17 · Proof of Concept</div>
+            <div class="btl-title">100+ bookings a day. 20+ cafés. Startups were hooked.</div>
+            <img loading="lazy" src="ch2_book_images/founded.png" alt="Proof of Concept" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:cover;max-height:240px;">
+            <div class="btl-body">Startups and freelancers loved the model — no lock-in, no security deposit, just show up and get to work. Word spread fast. Within months, myHQ was clocking 100+ daily bookings across 20+ cafés in NCR. The idea worked. Now it needed capital to grow.</div>
+            <div class="btl-funding">
+              <div>
+                <div class="btl-funding-label">2017 · Angel Round</div>
+                <div class="btl-funding-name">Neeraj Singh (Spinny) · Ashneer Grover (BharatPe)</div>
+              </div>
+            </div>
+            <div class="btl-badges"><span class="tl-badge badge-teal">20+ Spaces</span><span class="tl-badge badge-blue">Angel Round · 2017</span></div>
+          </div>
+
+          <div class="btl-item">
+            <div class="btl-dot"></div>
+            <div class="btl-year">2017 · Angel Round</div>
+            <div class="btl-title">Founder-to-founder belief. First outside capital raised.</div>
+            <div class="btl-body">Neeraj Singh was building Spinny. Ashneer Grover was about to start BharatPe. They backed myHQ because they recognised the zero-to-one pattern. VCs were still debating whether coworking was a real category. Operators already knew.</div>
+          </div>
+
+          <div class="btl-item">
+            <div class="btl-dot"></div>
+            <div class="btl-year">2018 · Phase 2 begins</div>
+            <div class="btl-title">Businesses started asking for dedicated space. Assisted Marketplace was born.</div>
+            <img loading="lazy" src="ch2_book_images/first_legs.jpeg" alt="First Legs — Assisted Marketplace" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:cover;max-height:240px;">
+            <div class="btl-body">The On Demand product was growing — but businesses using the platform were asking for something more. They needed dedicated, long-term workspace. myHQ built it: <strong>Assisted Marketplace</strong>, a platform-led advisory for businesses finding office space. Over 100 coworking spaces were onboarded. A new product category was live.</div>
+            <div class="btl-funding">
+              <div>
+                <div class="btl-funding-label">2018 · Pre-Series A</div>
+                <div class="btl-funding-name">Anupam Mittal</div>
+              </div>
+            </div>
+            <div class="btl-badges"><span class="tl-badge badge-teal">100+ Coworkings</span><span class="tl-badge badge-blue">Assisted Marketplace Launched</span></div>
+          </div>
+
+          <div class="btl-item">
+            <div class="btl-dot"></div>
+            <div class="btl-year">2019 · Three products taking shape</div>
+            <div class="btl-title">Virtual Office launched from a Shopify store. Series A followed.</div>
+            <img loading="lazy" src="ch2_book_images/growing_up.png" alt="Growing Up — Three Products" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:cover;max-height:240px;">
+            <div class="btl-body">Businesses needed more than a desk — they needed an address for office &amp; GST registration. myHQ launched <strong>Virtual Office</strong>, initially from a Shopify website. It was scrappy, but it worked. Three products were now live — On Demand, Assisted Marketplace, Virtual Office — and India Quotient backed the platform with a Series A.</div>
+            <div class="btl-funding">
+              <div>
+                <div class="btl-funding-label">2019 · Series A</div>
+                <div class="btl-funding-name">Led by India Quotient</div>
+              </div>
+            </div>
+            <div class="btl-badges"><span class="tl-badge badge-blue">Series A · India Quotient</span><span class="tl-badge badge-teal">Virtual Office Born</span></div>
+          </div>
+
+          <div class="btl-item">
+            <div class="btl-dot"></div>
+            <div class="btl-year">2020 · COVID</div>
+            <div class="btl-title">Offices shut overnight. The business went dark. Buyout offers came in. They said no to every one.</div>
+            <div class="btl-body">COVID didn't ease myHQ into a downturn — it turned the lights off. Overnight. Revenue dropped. The future looked bleak. Multiple acquirers came with buyout offers. <strong>The founders turned every single one down.</strong> They believed in what they were building. They were waiting for the right partner — not a distressed exit.</div>
+            <div class="btl-badges"><span class="tl-badge badge-white">Refused every offer</span></div>
+          </div>
+
+          <div class="btl-item">
+            <div class="btl-dot"></div>
+            <div class="btl-year">2022 · Phase 3 begins</div>
+            <div class="btl-title">Powered by ANAROCK. Brand stays. Founders stay. Mission stays.</div>
+            <div style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;overflow:hidden;border:1px solid var(--hairline);">
+              <img loading="lazy" src="ch2_book_images/new_ch.png" alt="Logo Transition" style="width:100%;height:200px;display:block;object-fit:cover;object-position:center;">
+            </div>
+            <div class="btl-body">Recognizing myHQ's strong technology foundation and scalable business model, ANAROCK became a strategic investor. This wasn't a rescue. It was the right fit. ANAROCK understood commercial real estate at the deepest level, and they wanted myHQ to keep operating as myHQ. The brand was retained. The founders stayed on board. The business verticals were now fully live across metro cities, backed by institutional credibility that opened enterprise doors that hadn't been reachable before.</div>
+            <div class="btl-funding">
+              <div>
+                <div class="btl-funding-label">2022 · Powered by ANAROCK</div>
+                <div class="btl-funding-name">Majority stake · Brand &amp; founders retained</div>
+              </div>
+            </div>
+            <div class="btl-badges"><span class="tl-badge badge-teal">ANAROCK 2022</span><span class="tl-badge badge-mint">3 Verticals · All Metro Cities</span></div>
+          </div>
+
+          <div class="btl-item">
+            <div class="btl-dot"></div>
+            <div class="btl-year">2024 · WeWork Partnership &amp; Investment</div>
+            <div class="btl-title">myHQ becomes WeWork India's exclusive tech, marketing &amp; distribution partner.</div>
+            <img loading="lazy" src="ch1_book_images/myhq_wework.png" alt="myHQ + WeWork" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:contain;max-height:200px;background:#fafbff;border:1px solid var(--hairline);">
+            <div class="btl-body">WeWork invested in myHQ, making it WeWork India's exclusive partner for On Demand and Virtual Office products. The power of India's largest flex operator combined with myHQ's platform. A partnership that added significant inventory and institutional scale overnight.</div>
+            <div class="btl-badges"><span class="tl-badge badge-blue">WeWork · Exclusive Partner</span></div>
+          </div>
+
+          <div class="btl-item">
+            <div class="btl-dot"></div>
+            <div class="btl-year">2025–26 · Going global</div>
+            <div class="btl-title">Virtual Office in Dubai. Assisted Marketplace in London. Same model. New geographies.</div>
+            <img loading="lazy" src="ch2_book_images/today.jpeg" alt="myHQ Today — Going Global" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:cover;max-height:240px;">
+            <div class="btl-body">myHQ is now beyond India. Virtual Office launched in Dubai. Assisted Marketplace is expanding into London. The same operator-agnostic, platform-led model that worked in Delhi NCR is now being applied internationally through <a href="https://www.myhqspaces.com" target="_blank" style="color:inherit;text-decoration:underline;"><strong>myhqspaces.com</strong></a>. The ambition is no longer domestic — it's global.</div>
+            <div class="btl-badges"><span class="tl-badge badge-mint">Dubai · London</span><a href="https://www.myhqspaces.com" target="_blank" style="text-decoration:none;"><span class="tl-badge badge-blue">myhqspaces.com</span></a></div>
+          </div>
+
+          <div class="btl-item">
+            <div class="btl-dot"></div>
+            <div class="btl-year">2030 · The target</div>
+            <div class="btl-title">35X in 3 years. 10X more by 2030. ₹5,000 Cr in transactions.</div>
+            <img loading="lazy" src="logo_landing_hub/who_we_are_BG.png" alt="Who We Are — 2030 Vision" style="width:100%;max-width:560px;border-radius:8px;margin:12px 0;display:block;object-fit:cover;max-height:240px;">
+            <div class="btl-body">From ₹20 Cr in FY22 to ₹1,200 Cr in FY26 — that's 35X in three years. The next chapter ends at <strong>₹5,000 Cr in transactions and ₹500 Cr in revenue by FY30.</strong> Same platform. Same mission. The market for flexible commercial real estate in India alone is massive — and myHQ has barely scratched the surface of it.</div>
+            <div class="btl-badges"><span class="tl-badge badge-blue">₹5,000 Cr Target</span><span class="tl-badge badge-mint">FY30</span></div>
+          </div>
+
+        </div>
+
+        <div class="takeaway">From a friend's café to India's fastest-growing CRE platform — myHQ didn't grow in a straight line. It grew by refusing to stop.</div>
+        <div class="next-up">Next: Business Verticals <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></div>
+      </section>
+
+      <div class="bridge">Redefining workspace solutions for All.</div>
+
+      <!-- 02: BUSINESS VERTICALS -->
+      <section class="section" id="r-verticals">
+        <div class="section-outcome"><span>Learning Outcome:</span> What myHQ's business verticals do, who they serve, and how they work together.</div>
+        <div class="section-num">02</div>
+        <h2 class="section-title">Business Verticals</h2>
+        <p class="section-body">myHQ operates three distinct business lines under one platform. Each vertical serves a different customer need, runs its own PnL, and has its own leadership. They share infrastructure, brand, and operator relationships — but each is a standalone product with its own market.</p>
+        <p class="section-body" style="font-style:italic;color:var(--blue);font-weight:600;">To empower the new age workforce with freedom and flexibility to work in any way that they want and from anywhere by providing technology driven innovative workspace solutions.</p>
+
+        <div class="book-verticals">
+          <div class="book-vertical book-vertical--am">
+            <div class="book-vertical-icon" style="background:rgba(30,34,170,0.1);color:var(--blue);"><i class="fa-solid fa-handshake"></i></div>
+            <div class="book-vertical-name">Assisted Marketplace</div>
+            <div class="book-vertical-desc">Platform led advisory &amp; transaction for businesses finding long term office spaces.</div>
+            <div class="book-vertical-pill"><i class="fa-solid fa-building"></i> Coworking space, Managed office, Conventional Leasing</div>
+          </div>
+          <div class="book-vertical book-vertical--vo">
+            <div class="book-vertical-icon" style="background:rgba(30,34,170,0.1);color:var(--blue);"><i class="fa-solid fa-file-lines"></i></div>
+            <div class="book-vertical-name">Virtual Office</div>
+            <div class="book-vertical-desc">Spaces for business address, GST registration, compliance for individuals and startups.</div>
+            <div class="book-vertical-pill"><i class="fa-solid fa-map-pin"></i> GST Registration, Business Address, Company Registration</div>
+          </div>
+          <div class="book-vertical book-vertical--od">
+            <div class="book-vertical-icon" style="background:rgba(30,34,170,0.1);color:var(--blue);"><i class="fa-solid fa-calendar-day"></i></div>
+            <div class="book-vertical-name">On Demand</div>
+            <div class="book-vertical-desc">Book a desk or meeting room on the go. Work from 2000+ locations across India using a single membership plan.</div>
+            <div class="book-vertical-pill"><i class="fa-solid fa-ticket"></i> Day passes, Meeting room, Training rooms, Executive day passes</div>
+          </div>
+        </div>
+
+        <p class="section-body">myHQ offices are present across <strong>Bengaluru</strong>, <strong>Gurugram</strong>, <strong>New Delhi</strong>, <strong>Noida</strong>, <strong>Hyderabad</strong>, <strong>Chennai</strong>, <strong>Pune</strong> and <strong>Ahmedabad</strong>. All business verticals share the same platform, operator network, and brand — which means every transaction in one vertical strengthens the others.</p>
+        <div class="takeaway">Understanding all business verticals provides a complete picture of how myHQ creates value. Our offerings cater to the entire workspace lifecycle for corporates—from Virtual Offices for business registration, to On-Demand workspaces for occasional use, and Assisted Marketplace (AM) for teams seeking a full-fledged, long-term office solution.</div>
+        <div class="next-up">Next: The team <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></div>
+      </section>
+
+      <div class="bridge">The people behind the platform</div>
+
+      <!-- 03: LEADERSHIP TEAM -->
+      <section class="section" id="r-team">
+        <div class="section-outcome"><span>Learning Outcome:</span> Who leads myHQ, what they did before, and why the team composition matters.</div>
+        <div class="section-num">03</div>
+        <h2 class="section-title">An entrepreneurial team using tech to disrupt commercial real estate.</h2>
+        <p class="section-body">myHQ is led by two IIT Delhi founders backed by a team of operators who've built and scaled businesses before. Every business head has domain depth.</p>
+
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin:24px 0 12px;">Founders</div>
+        <div class="book-team-grid">
+          <div class="book-team-card">
+            <div class="book-team-body">
+              <div class="book-team-header">
+                <div class="book-team-avatar"><img loading="lazy" src="ch2_book_images/utkarsh.png" alt="Utkarsh Kawatra" onerror="this.style.display='none';this.parentElement.innerHTML='UK';"></div>
+                <div class="book-team-header-text">
+                  <div class="book-team-name">Utkarsh Kawatra</div>
+                  <div class="book-team-role">Co-Founder &amp; CEO</div>
+                </div>
+              </div>
+              <div class="book-team-bio">Utkarsh co-founded myHQ in 2016 with one stubborn belief: professionals deserve the freedom to work from anywhere — at the cost of a coffee. He spent time at Helion Ventures before returning to that founding conviction. While still at IIT Delhi, he also co-founded BloodConnect, an NGO now operating across 10+ cities with a 300+ person volunteer team.</div>
+              <div class="book-team-meta">
+                <div class="book-team-meta-row"><strong>Previous:</strong> Helion Ventures · Opera Solutions · BloodConnect</div>
+                <div class="book-team-meta-row"><strong>Education:</strong> IIT Delhi</div>
+              </div>
+              <a href="https://www.linkedin.com/in/utkarshkawatra/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;border-radius:6px;background:#0A66C2;color:#fff;font-size:12px;font-weight:600;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+            </div>
+          </div>
+          <div class="book-team-card">
+            <div class="book-team-body">
+              <div class="book-team-header">
+                <div class="book-team-avatar"><img loading="lazy" src="ch2_book_images/vinayak.jpeg" alt="Vinayak Aggarwal" onerror="this.style.display='none';this.parentElement.innerHTML='VA';"></div>
+                <div class="book-team-header-text">
+                  <div class="book-team-name">Vinayak Aggarwal</div>
+                  <div class="book-team-role">Co-Founder &amp; CTO</div>
+                </div>
+              </div>
+              <div class="book-team-bio">Vinayak leads product, technology, and marketing at myHQ. Before co-founding myHQ, he worked at Goldman Sachs as a Quant &amp; Algorithmic Trading Strategist. He holds two patents in Machine Learning and Computer Vision. The technology platform that powers myHQ's inventory, transactions, and advisory tools is his.</div>
+              <div class="book-team-meta">
+                <div class="book-team-meta-row"><strong>Previous:</strong> Goldman Sachs · Quant &amp; Algo Trading</div>
+                <div class="book-team-meta-row"><strong>Education:</strong> IIT Delhi · 2 Patents (ML &amp; Computer Vision)</div>
+              </div>
+              <a href="https://www.linkedin.com/in/vinayak-agrawal-b2003958/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;border-radius:6px;background:#0A66C2;color:#fff;font-size:12px;font-weight:600;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin:32px 0 12px;">Vertical Heads</div>
+        <div class="book-team-grid" style="grid-template-columns:repeat(2,1fr);">
+          <div class="book-team-card">
+            <div class="book-team-body">
+              <div class="book-team-tag">Assisted Marketplace</div>
+              <div class="book-team-header">
+                <div class="book-team-avatar"><img loading="lazy" src="ch2_book_images/manoj.jpeg" alt="Manoj Kumar Yadav" onerror="this.style.display='none';this.parentElement.innerHTML='MY';"></div>
+                <div class="book-team-header-text">
+                  <div class="book-team-name">Manoj Kumar Yadav</div>
+                  <div class="book-team-role">Vertical Head</div>
+                </div>
+              </div>
+              <div class="book-team-bio">Manoj leads the Assisted Marketplace vertical at myHQ with 7+ years of deep experience in real estate. He started his entrepreneurial journey co-founding SchoolLog before pivoting into commercial real estate.</div>
+              <div class="book-team-meta">
+                <div class="book-team-meta-row"><strong>Previous:</strong> Co-founder, SchoolLog</div>
+                <div class="book-team-meta-row"><strong>Education:</strong> IIT Delhi</div>
+              </div>
+              <a href="https://www.linkedin.com/in/manoj-yadav-b46056119/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;border-radius:6px;background:#0A66C2;color:#fff;font-size:12px;font-weight:600;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+            </div>
+          </div>
+          <div class="book-team-card">
+            <div class="book-team-body">
+              <div class="book-team-tag">Virtual Office</div>
+              <div class="book-team-header">
+                <div class="book-team-avatar"><img loading="lazy" src="ch2_book_images/nitin.jpeg" alt="Nitin Agarwal" onerror="this.style.display='none';this.parentElement.innerHTML='NA';"></div>
+                <div class="book-team-header-text">
+                  <div class="book-team-name">Nitin Agarwal</div>
+                  <div class="book-team-role">Vertical Head</div>
+                </div>
+              </div>
+              <div class="book-team-bio">Nitin leads the Virtual Office vertical at myHQ. He is a serial entrepreneur — having co-founded Paavan and RunnerBee before joining myHQ. He brings deep product thinking to a vertical that handles compliance and registration for thousands of businesses across India.</div>
+              <div class="book-team-meta">
+                <div class="book-team-meta-row"><strong>Previous:</strong> Co-founder Paavan · Co-founder RunnerBee</div>
+                <div class="book-team-meta-row"><strong>Education:</strong> IIT Delhi</div>
+              </div>
+              <a href="https://www.linkedin.com/in/nitinagrawal1207/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;border-radius:6px;background:#0A66C2;color:#fff;font-size:12px;font-weight:600;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+            </div>
+          </div>
+          <div class="book-team-card">
+            <div class="book-team-body">
+              <div class="book-team-tag">Growth / Intl.</div>
+              <div class="book-team-header">
+                <div class="book-team-avatar"><img loading="lazy" src="ch2_book_images/judhajit.jpeg" alt="Judhajit Bal" onerror="this.style.display='none';this.parentElement.innerHTML='JB';"></div>
+                <div class="book-team-header-text">
+                  <div class="book-team-name">Judhajit Bal</div>
+                  <div class="book-team-role">Vertical Head</div>
+                </div>
+              </div>
+              <div class="book-team-bio">Judhajit leads growth and international expansion at myHQ. He co-founded Maidaan and has a background in FMCG with Coca-Cola. He brings consumer-market instincts to a product that serves millions of individual workspace bookings a year — and is now taking that model global.</div>
+              <div class="book-team-meta">
+                <div class="book-team-meta-row"><strong>Previous:</strong> Co-founder Maidaan · Coca-Cola</div>
+                <div class="book-team-meta-row"><strong>Education:</strong> AIT Pune · MDI Gurgaon</div>
+              </div>
+              <a href="https://www.linkedin.com/in/judhajit-bal-b9813296/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;border-radius:6px;background:#0A66C2;color:#fff;font-size:12px;font-weight:600;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+            </div>
+          </div>
+          <div class="book-team-card">
+            <div class="book-team-body">
+              <div class="book-team-tag">Marketing</div>
+              <div class="book-team-header">
+                <div class="book-team-avatar"><img loading="lazy" src="ch2_book_images/malvika.jpeg" alt="Malvika Sankrityayan" onerror="this.style.display='none';this.parentElement.innerHTML='MS';"></div>
+                <div class="book-team-header-text">
+                  <div class="book-team-name">Malvika Sankrityayan</div>
+                  <div class="book-team-role">Marketing Head</div>
+                </div>
+              </div>
+              <div class="book-team-bio">Malvika leads marketing at myHQ, driving brand, demand generation, and content across all business verticals. She brings experience from Accredian and S&amp;P Global — where she developed deep expertise in B2B marketing, product positioning, and growth programs in fast-moving markets.</div>
+              <div class="book-team-meta">
+                <div class="book-team-meta-row"><strong>Previous:</strong> Accredian · S&amp;P Global</div>
+                <div class="book-team-meta-row"><strong>Education:</strong> NMIMS</div>
+              </div>
+              <a href="https://www.linkedin.com/in/malvika-sankrityayan/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;border-radius:6px;background:#0A66C2;color:#fff;font-size:12px;font-weight:600;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+            </div>
+          </div>
+        </div>
+        <div class="takeaway">The leadership team is a feature, not a footnote. Understanding who built myHQ — and how they think — gives you a deeper appreciation of where the company is headed.</div>
+        <div class="next-up">Next: How the org is structured <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></div>
+      </section>
+
+      <div class="bridge">How myHQ is built inside</div>
+
+      <!-- 04: ORG STRUCTURE -->
+      <section class="section" id="r-org">
+        <div class="section-outcome"><span>Learning Outcome:</span> How myHQ's departments, sub-teams, and functions connect to each other.</div>
+        <div class="section-num">04</div>
+        <h2 class="section-title">Org Structure</h2>
+        <p class="section-body">myHQ is organised around its business verticals, each backed by shared functions — technology, marketing, finance, and people. Understanding how the departments connect helps you know who to loop in, who makes decisions, and how your work fits into the larger machine.</p>
+
+        <div style="margin-top:24px;">
+          <div class="org-chart" style="max-width:100%;">
+
+            <!-- ROOT -->
+            <div class="oc-root">myHQ</div>
+            <div class="oc-stem oc-stem--root"></div>
+
+            <!-- TWO COLUMNS -->
+            <div class="oc-cols">
+
+              <!-- LEFT: BUSINESS VERTICALS -->
+              <div class="oc-col" style="position:relative;">
+                <div style="position:absolute;top:0;left:50%;right:-8px;height:1.5px;background:rgba(30,34,170,0.3);z-index:0;"></div>
+                <div class="oc-stem" style="position:relative;z-index:1;"></div>
+                <div class="oc-section oc-section--biz" style="position:relative;z-index:1;">Business Verticals</div>
+                <div class="oc-stem"></div>
+
+                <!-- Three verticals in dashed container -->
+                <div class="oc-vbox">
+                  <div class="oc-vnode">Assisted Marketplace</div>
+                  <div class="oc-vnode">On Demand</div>
+                  <div class="oc-vnode">Virtual Office</div>
+                </div>
+
+                <!-- Hierarchy -->
+                <div class="oc-hier-wrap">
+                  <div class="oc-hierarchy" style="padding-top:18px;">
+                    <div class="oc-h-row"><div class="oc-hnode oc-hnode--1">Individual Contributors</div></div>
+                    <div class="oc-h-row"><div class="oc-hnode oc-hnode--2">Captains</div></div>
+                    <div class="oc-h-row"><div class="oc-hnode oc-hnode--3">Team Leads / City Heads</div></div>
+                    <div class="oc-h-row"><div class="oc-hnode oc-hnode--4">Business Leads</div></div>
+                  </div>
+                  <div class="oc-h-row--l">
+                    <span class="oc-l-curve"></span>
+                    <div class="oc-hnode oc-hnode--5">Vertical Heads</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- DIVIDER -->
+              <div style="width:1px;border-left:2px dashed rgba(30,34,170,0.25);margin:0 8px;align-self:stretch;"></div>
+
+              <!-- RIGHT: BUSINESS ENABLEMENT FUNCTIONS -->
+              <div class="oc-col" style="position:relative;">
+                <div style="position:absolute;top:0;right:50%;left:-8px;height:1.5px;background:rgba(30,34,170,0.3);z-index:0;"></div>
+                <div class="oc-stem" style="position:relative;z-index:1;"></div>
+                <div class="oc-section oc-section--fn" style="position:relative;z-index:1;">Business Enablement Functions</div>
+                <div style="margin-top:40px;display:grid;grid-template-columns:1fr 1fr;row-gap:45px;column-gap:45px;width:100%;max-width:520px;">
+                  <!-- Technology: Blue -->
+                  <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(30,34,170,0.08);border-color:#1E22AA;color:#1E22AA;">
+                    <i class="fa-solid fa-microchip" style="font-size:18px;"></i>
+                    <span>Technology</span>
+                  </div>
+                  <!-- Product & Design: Coral -->
+                  <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(255,115,81,0.08);border-color:#FF7351;color:#FF7351;">
+                    <i class="fa-solid fa-pen-ruler" style="font-size:18px;"></i>
+                    <span>Product &amp; Design</span>
+                  </div>
+                  <!-- Marketing: Amber -->
+                  <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(255,184,72,0.12);border-color:#FFB848;color:#a06800;">
+                    <i class="fa-solid fa-bullhorn" style="font-size:18px;"></i>
+                    <span>Marketing</span>
+                  </div>
+                  <!-- Finance & Legal: Ink -->
+                  <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(11,15,44,0.06);border-color:#0B0F2C;color:#0B0F2C;">
+                    <i class="fa-solid fa-scale-balanced" style="font-size:18px;"></i>
+                    <span>Finance &amp; Legal</span>
+                  </div>
+                  <!-- HR & People: Green -->
+                  <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(190,229,194,0.25);border-color:#5aaa60;color:#2a7a30;">
+                    <i class="fa-solid fa-people-group" style="font-size:18px;"></i>
+                    <span>HR &amp; People</span>
+                  </div>
+                  <!-- IT & Admin: Blue-tint -->
+                  <div class="oc-vnode" style="flex-direction:column;gap:8px;padding:16px 12px;border-radius:12px;min-height:72px;background:rgba(30,34,170,0.04);border-color:rgba(30,34,170,0.4);color:#1E22AA;">
+                    <i class="fa-solid fa-screwdriver-wrench" style="font-size:18px;"></i>
+                    <span>IT &amp; Admin</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="next-up">Next: Words from our own <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></div>
+      </section>
+
+      <div class="bridge">In their own words</div>
+
+      <!-- 04b: WORDS FROM OUR OWN -->
+      <section class="section" id="r-vertical-leadership">
+        <div class="section-outcome"><span>Learning Outcome:</span> Hear directly from the people inside myHQ — what they believe, what drives them, and what it actually feels like to build here.</div>
+        <div class="section-num">04b</div>
+        <h2 class="section-title">Words from our own</h2>
+        <p class="section-body">No mission statements. No curated PR. Just real people at myHQ — across teams, roles, and cities — sharing what working here actually means to them.</p>
+
+        <style>
+        .he-grid-row { display: grid; gap: 20px; margin-top: 32px; }
+        .he-grid-row--3 { grid-template-columns: repeat(3, 1fr); }
+        .he-grid-row--2 { grid-template-columns: repeat(2, 1fr); max-width: 66.66%; margin-left: auto; margin-right: auto; margin-top: 20px; }
+        .he-grid-row--3:last-of-type { margin-top: 20px; }
+        .he-card { display: flex; flex-direction: column; align-items: center; text-align: center; background: #fafbff; border: 1px solid var(--hairline); border-radius: 12px; padding: 28px 20px 24px; gap: 14px; }
+        .he-photo { width: 96px; height: 96px; border-radius: 50%; background: rgba(30,34,170,0.08); border: 3px solid rgba(30,34,170,0.18); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .he-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+        .he-name { font-size: 15px; font-weight: 800; color: var(--ink); letter-spacing: -0.02em; line-height: 1.2; }
+        .he-role { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue); margin-top: 2px; }
+        .he-dept { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: 2px; }
+        .he-quote { font-size: 12.5px; color: var(--body); line-height: 1.6; font-style: italic; border-top: 1px solid var(--hairline); padding-top: 12px; margin-top: 2px; width: 100%; text-align: left; }
+        .he-quote::before { content: '\201C'; }
+        .he-quote::after { content: '\201D'; }
+        </style>
+
+        <!-- Row 1: 3 cards -->
+        <div class="he-grid-row he-grid-row--3">
+
+          <div class="he-card">
+            <div class="he-photo"><img loading="lazy" src="quotes_avatar/sonali.jpeg" alt="Sonali Arora"></div>
+            <div>
+              <div class="he-name">Sonali Arora</div>
+              <div class="he-role">Assistant Manager</div>
+              <div class="he-dept">Virtual Office</div>
+            </div>
+            <div class="he-quote">Being a part of this organisation has been a wonderful experience. The company promotes a family like work culture where employees feel supported, valued, and encouraged to grow. Flexible working helps me to maintain a healthy work life balance. The management is approachable, motivating and always supportive — that inspires the employees to perform their best and grow professionally.</div>
+          </div>
+
+          <div class="he-card">
+            <div class="he-photo"><img loading="lazy" src="quotes_avatar/pratiksha.jpeg" alt="Pratiksha Kandpal"></div>
+            <div>
+              <div class="he-name">Pratiksha Kandpal</div>
+              <div class="he-role">Manager</div>
+              <div class="he-dept">Business Development</div>
+            </div>
+            <div class="he-quote">Nearly two years at myHQ have gone by faster than I expected. The journey has been filled with learning, new challenges, and plenty of opportunities to grow. What has stood out the most is the support from the founders and team, and the satisfaction of seeing your work create a meaningful impact.</div>
+          </div>
+
+          <div class="he-card">
+            <div class="he-photo"><img loading="lazy" src="quotes_avatar/vignesh.jpeg" alt="Vighnesh B"></div>
+            <div>
+              <div class="he-name">Vighnesh B</div>
+              <div class="he-role">Senior Manager</div>
+              <div class="he-dept">Assisted Marketplace</div>
+            </div>
+            <div class="he-quote">We are on a mission to work out of every available office building in HSR and I am proud of being part of this mission. I am also thankful for the steep learning curve, stressful but rewarding work culture and every single colleague who made my life a little bit more fun.</div>
+          </div>
+
+        </div>
+
+        <!-- Row 2: 2 cards centered -->
+        <div class="he-grid-row he-grid-row--3">
+
+          <div class="he-card">
+            <div class="he-photo"><img loading="lazy" src="quotes_avatar/pritam.png" alt="Pritam Kumar"></div>
+            <div>
+              <div class="he-name">Pritam Kumar</div>
+              <div class="he-role">Assistant Manager</div>
+              <div class="he-dept">On Demand</div>
+            </div>
+            <div class="he-quote">I joined when the On Demand team was just finding its feet. Watching revenue grow from ₹50–60K to ₹5–6 lakh a month taught me more than any classroom could. But what I will always value most is the people. The culture here makes you feel like no door is ever closed.</div>
+          </div>
+
+          <div class="he-card">
+            <div class="he-photo"><img loading="lazy" src="quotes_avatar/priyanka_shaw.png" alt="Priyanka Shaw"></div>
+            <div>
+              <div class="he-name">Priyanka Shaw</div>
+              <div class="he-role">Manager</div>
+              <div class="he-dept">Assisted Marketplace</div>
+            </div>
+            <div class="he-quote">Amazing 3 years at myHQ! The journey has been filled with learning, growth, and valuable experiences. A great work culture, supportive team, and innovative environment make it an excellent place to build your career.</div>
+          </div>
+
+          <div class="he-card">
+            <div class="he-photo"><img loading="lazy" src="quotes_avatar/kunal.jpeg" alt="Kunal Ahuja"></div>
+            <div>
+              <div class="he-name">Kunal Ahuja</div>
+              <div class="he-role">Manager</div>
+              <div class="he-dept">Virtual Office</div>
+            </div>
+            <div class="he-quote">Joining myHQ was one of the best decisions of my life. From a welcoming culture and supportive leadership to a politics-free environment, it has transformed my professional journey. The recognition, growth opportunities, and trust I've received have made myHQ more than just a workplace — it's been a life-changing experience.</div>
+          </div>
+
+        </div>
+
+        <div class="takeaway">The best way to understand a company is to listen to the people who choose to stay and build it every day. These are some of those voices.</div>
+        <div class="next-up">Next: Scale &amp; clients <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></div>
+      </section>
+
+      <div class="bridge">India's #1 online platform — and growing 15% MoM.</div>
+
+      <!-- 05: SCALE & CLIENTS -->
+      <section class="section" id="r-scale">
+        <div class="section-outcome"><span>Learning Outcome:</span> myHQ's scale, partner network, and reach — the numbers that reflect platform depth and market trust.</div>
+        <div class="section-num">05</div>
+        <h2 class="section-title">Scale &amp; Reach</h2>
+        <p class="section-body">myHQ is India's #1 online platform for commercial workspace — and it is growing at 15% month-on-month. The numbers below reflect platform depth, market trust, and the scale at which myHQ operates across all verticals.</p>
+
+        <!-- Stats row with icons — matching slide -->
+        <div class="s7-stats" style="margin:20px 0;">
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-handshake" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">50,000 Clients</div><div class="s7-stat-lbl">Corporates, SMEs, Startups</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-envelope" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">30K Virtual Offices</div><div class="s7-stat-lbl">Helping companies register in every state</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-building" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">2M+ sq ft</div><div class="s7-stat-lbl">Leased annually in flex</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-chair" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">5L+ On Demand</div><div class="s7-stat-lbl">For hybrid companies &amp; end users</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-indian-rupee-sign" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">500Cr+ GMV</div><div class="s7-stat-lbl">Value of transactions done annually</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-map-location-dot" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">30 Cities</div><div class="s7-stat-lbl">Covered with ground presence in 10 of them</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-user-tie" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">150 RMs</div><div class="s7-stat-lbl">Working with corporates for all their needs</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-list-check" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">10,000+ Listings</div><div class="s7-stat-lbl">Verified on the platform</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-mobile-screen" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">5L+ Downloads</div><div class="s7-stat-lbl">For hybrid companies &amp; end users</div></div>
+          </div>
+          <div class="s7-stat">
+            <div class="s7-stat-icon"><i class="fa-solid fa-globe" style="color:var(--blue);"></i></div>
+            <div><div class="s7-stat-num">2.5M+ Traffic</div><div class="s7-stat-lbl">On Website (Annually)</div></div>
+          </div>
+        </div>
+
+        <!-- Logo panels — exact same as slide -->
+        <div class="s7-logo-panels" style="margin-top:20px;max-height:none;min-height:0;height:auto;">
+
+          <!-- LEFT: Our Esteemed Clientele -->
+          <div class="s7-logo-panel" style="overflow:visible;height:auto;">
+            <div class="s7-lp-header">
+              <div class="s7-lp-title">Our Esteemed Clientele</div>
+            </div>
+            <div class="s7-lp-sub">Serving modern age companies for their various business needs across different products</div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;">
+
+              <!-- GCCs -->
+              <div class="s7-sub-panel" style="overflow:visible;padding:8px 12px 12px;">
+                <div class="s7-sp-label">GCCs</div>
+                <div class="s7-gccs-row" style="padding:8px 0;">
+                  <img loading="lazy" src="logos_clientele_supply/komatsu.png" alt="Komatsu" class="s7-logo-img s7-logo-img--xl" style="max-width:210px;">
+                  <img loading="lazy" src="logos_clientele_supply/acsendion.png" alt="Ascendion" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+                  <img loading="lazy" src="logos_clientele_supply/nachi.png" alt="NACHI" class="s7-logo-img s7-logo-img--xl">
+                </div>
+              </div>
+
+              <!-- Start-Ups + New Age Brands -->
+              <div class="s7-sub-panel" style="overflow:visible;padding:8px 12px 12px;">
+                <div class="s7-sp-label">Start-Ups + New Age Brands</div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 8px;align-items:center;justify-items:center;padding:8px 0;">
+                  <img loading="lazy" src="logos_clientele_supply/zomato.png" alt="Zomato" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/flipkart.png" alt="Flipkart" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/keka.png" alt="Keka" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/credgenics.png" alt="Credgenics" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/cars24.png" alt="Cars24" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/signzy.png" alt="Signzy" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/tvf.jpg" alt="TVF" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/jiosaavn.png" alt="JioSaavn" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/rebel.png" alt="Rebel Foods" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/angleone.png" alt="AngelOne" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/yulu.jpg" alt="Yulu" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/mpl.png" alt="MPL" class="s7-logo-img s7-logo-img--lg">
+                </div>
+              </div>
+
+              <!-- Enterprises -->
+              <div class="s7-sub-panel" style="overflow:visible;padding:8px 12px 12px;">
+                <div class="s7-sp-label">Enterprises</div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 8px;align-items:center;justify-items:center;padding:8px 0;">
+                  <img loading="lazy" src="logos_clientele_supply/marriot.png" alt="Marriott" class="s7-logo-img">
+                  <img loading="lazy" src="logos_clientele_supply/axis.png" alt="Axis Bank" class="s7-logo-img" style="max-width:160px;">
+                  <img loading="lazy" src="logos_clientele_supply/tatacliq.png" alt="Tata CliQ" class="s7-logo-img">
+                  <img loading="lazy" src="logos_clientele_supply/philips.png" alt="Philip Morris" class="s7-logo-img">
+                  <img loading="lazy" src="logos_clientele_supply/ouylok.png" alt="Outlook" class="s7-logo-img">
+                  <img loading="lazy" src="logos_clientele_supply/adity.png" alt="Aditya Birla" class="s7-logo-img">
+                  <img loading="lazy" src="logos_clientele_supply/uni.png" alt="UNICEF" class="s7-logo-img">
+                  <img loading="lazy" src="logos_clientele_supply/io.png" alt="IndianOil" class="s7-logo-img">
+                  <img loading="lazy" src="logos_clientele_supply/emami.png" alt="Emami" class="s7-logo-img">
+                  <img loading="lazy" src="logos_clientele_supply/taj.png" alt="TAJ" class="s7-logo-img" style="max-width:108px;">
+                  <img loading="lazy" src="logos_clientele_supply/mahi.png" alt="Mahindra Lifespaces" class="s7-logo-img">
+                  <img loading="lazy" src="logos_clientele_supply/teamlease.png" alt="TeamLease" class="s7-logo-img" style="max-width:180px;">
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- RIGHT: Our Space Partners -->
+          <div class="s7-logo-panel" style="overflow:visible;height:auto;">
+            <div class="s7-lp-header">
+              <div class="s7-lp-title">Our Space Partners</div>
+            </div>
+            <div class="s7-lp-sub">Largest network of flex, commercial real estate players in India; Now expanding the platform internationally</div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;">
+
+              <!-- Grade A Developers -->
+              <div class="s7-sub-panel" style="overflow:visible;padding:8px 12px 12px;">
+                <div class="s7-sp-label">Grade A Developers</div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 8px;align-items:center;justify-items:center;padding:8px 0;">
+                  <img loading="lazy" src="logos_clientele_supply/m3m.jpg" alt="M3M" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/embassy.png" alt="Embassy" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/unitech.png" alt="Unitech" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/vamsimran.jpg" alt="Vamsimran" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+                </div>
+              </div>
+
+              <!-- Managed Office Brands -->
+              <div class="s7-sub-panel" style="overflow:visible;padding:8px 12px 12px;">
+                <div class="s7-sp-label">Managed Office Brands</div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 8px;align-items:center;justify-items:center;padding:8px 0;">
+                  <img loading="lazy" src="logos_clientele_supply/smartworks.png" alt="Smartworks" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/indi.png" alt="IndiQube" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/tablespac.png" alt="Table Space" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/urbanvault.png" alt="Urban Vault" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+                  <img loading="lazy" src="logos_clientele_supply/devx.png" alt="DevX" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/isprout.jpg" alt="iSprout" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/headquarters.png" alt="The Headquarters" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/simpli.jpg" alt="Simpliwork" class="s7-logo-img s7-logo-img--lg">
+                </div>
+              </div>
+
+              <!-- Coworking Brands -->
+              <div class="s7-sub-panel" style="overflow:visible;padding:8px 12px 12px;">
+                <div class="s7-sp-label">Coworking Brands</div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 8px;align-items:center;justify-items:center;padding:8px 0;">
+                  <img loading="lazy" src="logos_clientele_supply/wework.png" alt="WeWork" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/awfis.png" alt="Awfis" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/innox8.png" alt="Innov8" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/bhive.png" alt="Bhive" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+                  <img loading="lazy" src="logos_clientele_supply/efc.png" alt="EFC" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+                  <img loading="lazy" src="logos_clientele_supply/springhouse.png" alt="Spring House" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/regus.png" alt="Regus" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/coworks.png" alt="Cowrks" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/91sb.png" alt="91Springboard" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+                  <img loading="lazy" src="logos_clientele_supply/exec_centre.png" alt="The Executive Centre" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+                  <img loading="lazy" src="logos_clientele_supply/vatika.jpg" alt="Vatika" class="s7-logo-img s7-logo-img--lg">
+                  <img loading="lazy" src="logos_clientele_supply/altf.png" alt="alt.f" class="s7-logo-img s7-logo-img--lg" style="max-width:180px;">
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <div class="takeaway">The logos above aren't decoration — they're proof. Tata, Wipro, PhonePe, and hundreds of other organisations have trusted myHQ with their workspace needs.</div>
+        <div class="next-up">Next: The 2030 ambition <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></div>
+      </section>
+
+      <div class="bridge">Where we're headed</div>
+
+      <!-- 06: THE AMBITION -->
+      <section class="section" id="r-ambition">
+        <div class="section-outcome"><span>Learning Outcome:</span> myHQ's 2030 growth plan — the numbers, the drivers, and the opportunity ahead.</div>
+        <div class="section-num">06</div>
+        <h2 class="section-title">The Ambition — 2030</h2>
+        <p class="section-body"><strong>Ambition 2030: ₹5,000 Cr worth of Transactions, ₹500 Cr of Revenue &amp; a global powerhouse.</strong></p>
+        <p class="section-body">We have grown <strong>35X in the last 3 years</strong> — from ₹20 Cr in FY22 to ₹1,200 Cr in FY26. The plan is to grow <strong>10X more in the next 5 years</strong>, reaching ₹5,000 Cr in transactions by FY30. This isn't a stretch target — it's a structured plan built on three growth drivers.</p>
+
+        <div class="book-ambition-chart">
+          <div style="display:grid;grid-template-columns:1fr clamp(140px,18vw,220px);gap:clamp(16px,2.5vw,28px);align-items:start;">
+            <div>
+              <div class="ambition-chart" id="ambitionChartRead"></div>
+            </div>
+            <div style="border:1.5px solid var(--hairline);border-radius:var(--radius);padding:20px 18px;display:flex;flex-direction:column;gap:16px;">
+              <div style="font-size:15px;font-weight:800;color:var(--ink);">Driven by:</div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:12px solid var(--blue);flex-shrink:0;"></div>
+                <div style="font-size:13px;font-weight:600;color:var(--body);">International Expansion</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:12px solid var(--blue);flex-shrink:0;"></div>
+                <div style="font-size:13px;font-weight:600;color:var(--body);">New Business Lines</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:12px solid var(--blue);flex-shrink:0;"></div>
+                <div style="font-size:13px;font-weight:600;color:var(--body);">Tech &amp; Product Innovation</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="section-body">myHQ is in the steepest part of its growth curve. The work done across every vertical and function in the coming years will be a real part of that ₹5,000 Cr journey. The market for flexible commercial real estate in India alone is massive — and myHQ has barely scratched the surface of it.</p>
+
+        <div class="takeaway">"We have grown 35X in the last 3 years and plan to grow 10X more in the next 5." — That is the scale of the opportunity myHQ is building towards.</div>
+        <div class="next-up">Next: Success Stories <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></div>
+      </section>
+
+      <div class="bridge">Growth from within. The myHQ way.</div>
+
+      <!-- 08: SUCCESS STORIES -->
+      <section class="section" id="r-stories">
+        <div class="section-outcome"><span>Learning Outcome:</span> Our leaders grew from within — understand the growth paths that are possible at myHQ.</div>
+        <div class="section-num">07</div>
+        <h2 class="section-title">Success Stories</h2>
+        <p class="section-body" style="font-style:italic;color:var(--blue);font-weight:600;">Our leaders have grown from within; the next one could be you.</p>
+
+        <!-- Timeline header -->
+        <div style="display:grid;grid-template-columns:180px 1fr 48px 1fr;align-items:center;margin:28px 0 8px;padding:0 0 8px;border-bottom:1px solid var(--hairline);">
+          <div></div>
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--blue);text-align:center;">THEN</div>
+          <div></div>
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--blue);text-align:center;">NOW</div>
+        </div>
+
+        <!-- Story rows -->
+        <div style="display:flex;flex-direction:column;gap:0;position:relative;">
+
+          <!-- vertical dashed line -->
+          <div style="position:absolute;left:calc(180px + ((100% - 180px - 48px) / 2) + 24px - 1px);top:0;bottom:0;width:2px;border-left:2px dashed rgba(30,34,170,0.2);z-index:0;"></div>
+
+          <!-- Manoj -->
+          <div style="display:grid;grid-template-columns:180px 1fr 48px 1fr;align-items:center;padding:24px 0;border-bottom:1px solid var(--hairline);position:relative;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding-right:16px;">
+              <div style="width:64px;height:64px;border-radius:50%;border:3px solid var(--blue);overflow:hidden;flex-shrink:0;">
+                <img loading="lazy" src="ch2_book_images/manoj.jpeg" alt="Manoj Yadav" style="width:100%;height:100%;object-fit:cover;object-position:center top;" onerror="this.style.display='none';">
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--blue);text-align:center;">Manoj<br>Yadav</div>
+            </div>
+            <div style="background:#fafbff;border:1px solid var(--hairline);border-radius:var(--radius);padding:16px 18px;margin-right:20px;">
+              <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;">Joined in 2017 — Founding Team</div>
+              <div style="font-size:12px;color:var(--body);line-height:1.6;">- Straight out of campus — IIT Delhi<br>- Operations</div>
+            </div>
+            <div style="display:flex;justify-content:center;z-index:1;">
+              <div style="width:20px;height:20px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 2px var(--blue);flex-shrink:0;"></div>
+            </div>
+            <div style="background:#fafbff;border:1px solid var(--hairline);border-radius:var(--radius);padding:16px 18px;margin-left:20px;">
+              <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;">Leadership Team — Business Head</div>
+              <div style="font-size:12px;color:var(--body);line-height:1.6;">- Built annual GMV of 300 Cr+ | P&amp;L — 40 Cr<br>- Team of 100+</div>
+            </div>
+          </div>
+
+          <!-- Nitin -->
+          <div style="display:grid;grid-template-columns:180px 1fr 48px 1fr;align-items:center;padding:24px 0;border-bottom:1px solid var(--hairline);position:relative;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding-right:16px;">
+              <div style="width:64px;height:64px;border-radius:50%;border:3px solid var(--blue);overflow:hidden;flex-shrink:0;">
+                <img loading="lazy" src="ch2_book_images/nitin.jpeg" alt="Nitin Agrawal" style="width:100%;height:100%;object-fit:cover;object-position:center top;" onerror="this.style.display='none';">
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--blue);text-align:center;">Nitin<br>Agrawal</div>
+            </div>
+            <div style="background:#fafbff;border:1px solid var(--hairline);border-radius:var(--radius);padding:16px 18px;margin-right:20px;">
+              <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;">Joined in 2017 — Founding Team</div>
+              <div style="font-size:12px;color:var(--body);line-height:1.6;">- Straight out of campus — IIT Delhi<br>- Growth &amp; Marketing</div>
+            </div>
+            <div style="display:flex;justify-content:center;z-index:1;">
+              <div style="width:20px;height:20px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 2px var(--blue);flex-shrink:0;"></div>
+            </div>
+            <div style="background:#fafbff;border:1px solid var(--hairline);border-radius:var(--radius);padding:16px 18px;margin-left:20px;">
+              <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;">Leadership Team — Business Head</div>
+              <div style="font-size:12px;color:var(--body);line-height:1.6;">- Built annual GMV of 60 Cr+ | P&amp;L — 15 Cr<br>- Team of 50+</div>
+            </div>
+          </div>
+
+          <!-- Malvika -->
+          <div style="display:grid;grid-template-columns:180px 1fr 48px 1fr;align-items:center;padding:24px 0;border-bottom:1px solid var(--hairline);position:relative;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding-right:16px;">
+              <div style="width:64px;height:64px;border-radius:50%;border:3px solid var(--blue);overflow:hidden;flex-shrink:0;">
+                <img loading="lazy" src="ch2_book_images/malvika.jpeg" alt="Malvika Sankrityayan" style="width:100%;height:100%;object-fit:cover;object-position:center top;" onerror="this.style.display='none';">
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--blue);text-align:center;">Malvika<br>Sankrityayan</div>
+            </div>
+            <div style="background:#fafbff;border:1px solid var(--hairline);border-radius:var(--radius);padding:16px 18px;margin-right:20px;">
+              <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;">Joined in 2020 — SEO Specialist</div>
+              <div style="font-size:12px;color:var(--body);line-height:1.6;">- 2–3 yrs of experience after NMIMS<br>- SEO Content</div>
+            </div>
+            <div style="display:flex;justify-content:center;z-index:1;">
+              <div style="width:20px;height:20px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 2px var(--blue);flex-shrink:0;"></div>
+            </div>
+            <div style="background:#fafbff;border:1px solid var(--hairline);border-radius:var(--radius);padding:16px 18px;margin-left:20px;">
+              <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;">Leadership Team — Marketing Head</div>
+              <div style="font-size:12px;color:var(--body);line-height:1.6;">- Leading all growth initiatives (SEO, SEM, Brand)<br>- Managing annual spends of INR 15 Cr+</div>
+            </div>
+          </div>
+
+          <!-- Ayush -->
+          <div style="display:grid;grid-template-columns:180px 1fr 48px 1fr;align-items:center;padding:24px 0;position:relative;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding-right:16px;">
+              <div style="width:64px;height:64px;border-radius:50%;border:3px solid var(--blue);overflow:hidden;flex-shrink:0;">
+                <img loading="lazy" src="ch2_book_images/ayush.jpeg" alt="Ayush Jindal" style="width:100%;height:100%;object-fit:cover;object-position:center top;" onerror="this.style.display='none';">
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--blue);text-align:center;">Ayush<br>Jindal</div>
+            </div>
+            <div style="background:#fafbff;border:1px solid var(--hairline);border-radius:var(--radius);padding:16px 18px;margin-right:20px;">
+              <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;">Joined in 2020 — Sales Consultant</div>
+              <div style="font-size:12px;color:var(--body);line-height:1.6;">- 1 yr of experience after SRM Chennai<br>- Sales</div>
+            </div>
+            <div style="display:flex;justify-content:center;z-index:1;">
+              <div style="width:20px;height:20px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 2px var(--blue);flex-shrink:0;"></div>
+            </div>
+            <div style="background:#fafbff;border:1px solid var(--hairline);border-radius:var(--radius);padding:16px 18px;margin-left:20px;">
+              <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;">Region Leader — City Head</div>
+              <div style="font-size:12px;color:var(--body);line-height:1.6;">- Built annual GMV of 80 Cr+ | P&amp;L — 10 Cr<br>- Team of 20+</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="takeaway">Every one of these leaders started exactly where you're starting. The path is real — and it's merit-based.</div>
+      </section>
+
+      <!-- ═══ CHAPTER ASSESSMENT ═══ -->
+      <section class="section" id="r-assess" style="margin-top:64px;padding-top:48px;border-top:2px solid var(--hairline);">
+        <div class="section-num">Assessment</div>
+        <h2 class="section-title">Chapter Questions</h2>
+        <p class="section-body" style="margin-bottom:32px;">Answer all 4 questions in your own words. Your responses will be reviewed before the next chapter is unlocked. There are no right or wrong answers — we're looking for genuine observation and independent thinking.</p>
+
+        <div class="aq-tracker" id="aqTracker">
+          <div class="aq-tracker-bar">
+            <div class="aq-tracker-fill" id="aqTrackerFill"></div>
+          </div>
+          <span class="aq-tracker-label" id="aqTrackerLabel">0 / 4 answered</span>
+        </div>
+
+        <form class="aq-form" id="aqForm" onsubmit="return submitAssessment(event);">
+
+          <div class="aq-question" id="aq1">
+            <div class="aq-q-header">
+              <span class="aq-q-num">Q1</span>
+              <span class="aq-q-status" id="aq1-status"></span>
+            </div>
+            <p class="aq-q-text">The term "Assisted Marketplace" is a deliberate choice. What does it reveal about myHQ's approach to the brokerage business, and why does the company prefer this model over a traditional brokerage approach?</p>
+            <textarea class="aq-textarea" id="aq1-ans" name="q1" placeholder="Write your answer here…" rows="6" oninput="onAnsInput(1)"></textarea>
+          </div>
+
+          <div class="aq-question" id="aq2">
+            <div class="aq-q-header">
+              <span class="aq-q-num">Q2</span>
+              <span class="aq-q-status" id="aq2-status"></span>
+            </div>
+            <p class="aq-q-text">Pick anyone from the myHQ leadership team — a city lead, product lead, or business head — and tell their story. What brought them here and what have they built? (Not your direct manager.)</p>
+            <textarea class="aq-textarea" id="aq2-ans" name="q2" placeholder="Write your answer here…" rows="6" oninput="onAnsInput(2)"></textarea>
+          </div>
+
+          <div class="aq-question" id="aq3">
+            <div class="aq-q-header">
+              <span class="aq-q-num">Q3</span>
+              <span class="aq-q-status" id="aq3-status"></span>
+            </div>
+            <p class="aq-q-text">Go online and find 3 headlines about myHQ. What milestone was each one covering and why does it matter?</p>
+            <textarea class="aq-textarea" id="aq3-ans" name="q3" placeholder="Write your answer here…" rows="6" oninput="onAnsInput(3)"></textarea>
+          </div>
+
+          <div class="aq-question" id="aq4">
+            <div class="aq-q-header">
+              <span class="aq-q-num">Q4</span>
+              <span class="aq-q-status" id="aq4-status"></span>
+            </div>
+            <p class="aq-q-text">Write about Virtual Office — what is it, and what need does it solve for businesses?</p>
+            <textarea class="aq-textarea" id="aq4-ans" name="q4" placeholder="Write your answer here…" rows="6" oninput="onAnsInput(4)"></textarea>
+          </div>
+
+          <div class="aq-footer" id="aqFooter">
+            <span class="aq-footer-note" id="aqFooterNote">Answer all 4 questions to submit.</span>
+            <button class="aq-submit-btn" type="submit" id="aqSubmitBtn" disabled>Submit Answers</button>
+          </div>
+          <div class="aq-error" id="aqError" style="display:none;"></div>
+        </form>
+      </section>
+
+    </main>
+  </div>
+</div><!-- /read-mode -->
+
+
+<script>
+/* ── MODE TOGGLE ── */
+let currentMode = 'slide';
+
+function setMode(mode) {
+  currentMode = mode;
+  const isSlide = mode === 'slide';
+  document.getElementById('slide-mode').style.display = isSlide ? '' : 'none';
+  const readEl = document.getElementById('read-mode');
+  readEl.classList.toggle('hidden', isSlide);
+  document.body.style.overflow = isSlide ? 'hidden' : 'auto';
+  document.getElementById('screenCounter').style.display = isSlide ? '' : 'none';
+  document.getElementById('dotNav').style.display = isSlide ? '' : 'none';
+  const keyHintEl = document.getElementById('keyHint'); if (keyHintEl) keyHintEl.style.display = isSlide ? '' : 'none';
+  const chapterLabelEl = document.getElementById('chapterLabel');
+  if (chapterLabelEl) chapterLabelEl.style.display = isSlide ? '' : 'none';
+  const btn = document.getElementById('btnRead');
+  if (isSlide) {
+    btn.innerHTML = '<i class="fa-solid fa-book-open"></i>&nbsp;Read Full Chapter';
+    btn.onclick = function() { setMode('read'); };
+  } else {
+    btn.innerHTML = '<i class="fa-solid fa-display"></i>&nbsp;Back to Slides';
+    btn.onclick = function() { setMode('slide'); };
+    window.scrollTo(0, 0);
+  }
+}
+
+/* ── SLIDE ENGINE ── */
+const TOTAL = 9;
+let current = 0;
+let animating = false;
+
+function buildDots() {
+  const nav = document.getElementById('dotNav');
+  nav.innerHTML = '';
+  for (let i = 0; i < TOTAL; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    nav.appendChild(d);
+  }
+}
+
+function updateCounter() {
+  document.getElementById('screenCounter').textContent = `${current + 1} / ${TOTAL}`;
+  const chap = document.getElementById('chapterLabel');
+  if (chap) chap.style.display = current === 0 ? '' : 'none';
+}
+
+function goTo(index) {
+  if (animating || index === current || index < 0 || index >= TOTAL) return;
+  animating = true;
+  const screens = document.querySelectorAll('.screen');
+  const dots = document.querySelectorAll('.dot');
+  const prev = current;
+  current = index;
+  screens[prev].classList.add('exit-up');
+  screens[prev].classList.remove('active');
+  setTimeout(() => screens[prev].classList.remove('exit-up'), 500);
+  screens[current].classList.add('active');
+  dots[prev].classList.remove('active');
+  dots[current].classList.add('active');
+  updateCounter();
+  const keyHint = document.getElementById('keyHint'); if (keyHint) keyHint.classList.add('hidden');
+  setTimeout(() => {
+    animating = false;
+    if (typeof redrawAmbitionChart === 'function') redrawAmbitionChart();
+  }, 520);
+}
+
+function next() { goTo(current + 1); }
+function prev() { goTo(current - 1); }
+
+function openVideo() {
+  window.open('https://drive.google.com/file/d/1wwAvkUOgfiJmIt4glcrTrSd8EBN7miiz/view', '_blank');
+}
+
+document.addEventListener('keydown', e => {
+  if (currentMode !== 'slide') return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next();
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prev();
+});
+
+/* ── TIMELINE ACCORDION ── */
+function toggleTl(id) {
+  const item = document.getElementById(id);
+  if (!item) return;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.tl-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+/* ── DYK ACCORDION ── */
+function toggleDyk(trigger, e) {
+  e.stopPropagation();
+  const dyk = trigger.closest('.tl-dyk');
+  dyk.classList.toggle('open');
+}
+
+/* ── TOC SCROLL SPY ── */
+const tocLinks = document.querySelectorAll('.toc-link');
+const readSections = document.querySelectorAll('.section[id], .r-section[id]');
+const tocObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      tocLinks.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`.toc-link[data-s="${entry.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-15% 0px -75% 0px', threshold: 0 });
+readSections.forEach(s => tocObserver.observe(s));
+
+/* ── INIT ── */
+window.addEventListener('DOMContentLoaded', () => {
+  buildDots();
+  document.querySelectorAll('.screen')[0].classList.add('active');
+  updateCounter();
+});
+
+
+/* ── SCORM 1.2 API ── */
+var _scormAPI = null;
+function findScormAPI(win) {
+  var tries = 0;
+  while (win.API == null && win.parent != null && win.parent != win && tries < 10) {
+    win = win.parent; tries++;
+  }
+  return win.API || null;
+}
+function scormInit() {
+  _scormAPI = findScormAPI(window);
+  if (_scormAPI) _scormAPI.LMSInitialize('');
+}
+function scormGetLearner() {
+  if (!_scormAPI) return { name: '—', id: '—' };
+  return {
+    name: _scormAPI.LMSGetValue('cmi.core.student_name') || '—',
+    id:   _scormAPI.LMSGetValue('cmi.core.student_id')   || '—'
+  };
+}
+function scormComplete() {
+  if (!_scormAPI) return;
+  _scormAPI.LMSSetValue('cmi.core.lesson_status', 'passed');
+  _scormAPI.LMSSetValue('cmi.core.score.raw', '100');
+  _scormAPI.LMSSetValue('cmi.core.score.min', '0');
+  _scormAPI.LMSSetValue('cmi.core.score.max', '100');
+  _scormAPI.LMSCommit('');
+  _scormAPI.LMSFinish('');
+}
+window.addEventListener('load', scormInit);
+window.addEventListener('beforeunload', function() { if (_scormAPI) _scormAPI.LMSFinish(''); });
+
+/* ── ASSESSMENT ── */
+const SHEET_URL_CH2 = 'https://script.google.com/macros/s/AKfycbwX0Z5vx6DSwdwZwK26pKZL3V3U9XwEyWgPa9Ek_cFEH1_tpULnWNcn7RlgE-wT8M9M/exec';
+const TOTAL_QUESTIONS = 4;
+const MIN_WORDS = 5;
+
+function wordCount(str) {
+  return str.trim().split(/\s+/).filter(w => w.length > 0).length;
+}
+
+function onAnsInput(n) {
+  const val = document.getElementById('aq' + n + '-ans').value;
+  const wc = wordCount(val);
+  const q = document.getElementById('aq' + n);
+  const status = document.getElementById('aq' + n + '-status');
+  if (wc >= MIN_WORDS) {
+    q.classList.add('is-filled');
+    status.textContent = '✓ ' + wc + ' words';
+    status.classList.add('done');
+  } else {
+    q.classList.remove('is-filled');
+    status.textContent = wc > 0 ? wc + ' / ' + MIN_WORDS + ' words min' : '';
+    status.classList.remove('done');
+  }
+  updateTracker();
+}
+
+function updateTracker() {
+  let count = 0;
+  for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+    if (wordCount(document.getElementById('aq' + i + '-ans').value) >= MIN_WORDS) count++;
+  }
+  document.getElementById('aqTrackerFill').style.width = (count / TOTAL_QUESTIONS * 100) + '%';
+  document.getElementById('aqTrackerLabel').textContent = count + ' / ' + TOTAL_QUESTIONS + ' answered';
+  const btn = document.getElementById('aqSubmitBtn');
+  const note = document.getElementById('aqFooterNote');
+  if (count === TOTAL_QUESTIONS) {
+    btn.disabled = false;
+    note.textContent = 'All questions answered. Ready to submit.';
+  } else {
+    btn.disabled = true;
+    note.textContent = 'Answer all ' + TOTAL_QUESTIONS + ' questions (min ' + MIN_WORDS + ' words each) to submit.';
+  }
+}
+
+function submitAssessment(e) {
+  e.preventDefault();
+  const btn = document.getElementById('aqSubmitBtn');
+  const errEl = document.getElementById('aqError');
+  errEl.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  const learner = scormGetLearner();
+  const name  = learner.name;
+  const email = learner.id;
+  const answers = {};
+  for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+    answers['q' + i] = document.getElementById('aq' + i + '-ans').value.trim();
+  }
+
+  showSubmittedState();
+  scormComplete();
+
+  fetch(SHEET_URL_CH2, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ chapter: 'Chapter 2', chapterName: 'Who We Are', status: 'Completed', name, email, timestamp: new Date().toISOString(), ...answers })
+  }).catch(() => {});
+  return false;
+}
+
+function showSubmittedState() {
+  for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+    const ta = document.getElementById('aq' + i + '-ans');
+    if (ta) { ta.readOnly = true; ta.style.background = '#F7F8FF'; ta.style.color = '#2A2E4A'; }
+    const status = document.getElementById('aq' + i + '-status');
+    if (status) { status.textContent = '✓ Submitted'; status.classList.add('done'); }
+    const q = document.getElementById('aq' + i);
+    if (q) q.classList.add('is-filled');
+  }
+  document.getElementById('aqTracker').style.display = 'none';
+  const footer = document.getElementById('aqFooter');
+  if (footer) {
+    footer.innerHTML = '<div style="text-align:center;padding:24px 0 8px;"><div style="font-size:32px;margin-bottom:12px;">✓</div><div style="font-size:18px;font-weight:800;color:var(--ink);margin-bottom:8px;">Chapter Complete</div><div style="font-size:14px;color:var(--muted);line-height:1.6;">Your responses have been recorded.<br>You can now close this window or move to the next chapter in Zoho Learn.</div></div>';
+    footer.style.display = 'flex';
+    footer.style.justifyContent = 'center';
+  }
+}
+
+// ── Ambition 2030 Chart ──────────────────────────────────────────────────────
+(function() {
+  const BARS = [
+    { label:'FY 22', value:20,   actual:true  },
+    { label:'FY 23', value:200,  actual:true  },
+    { label:'FY 24', value:400,  actual:true  },
+    { label:'FY 25', value:700,  actual:true  },
+    { label:'FY 26', value:1200, actual:true  },
+    { label:'FY 27', value:1700, actual:false },
+    { label:'FY 28', value:2400, actual:false },
+    { label:'FY 29', value:3500, actual:false },
+    { label:'FY 30', value:5000, actual:false, target:true },
+  ];
+  const MAX_VAL = 5000;
+  const BLUE = '#1E22AA';
+  const GREEN = '#2e7d36';
+  const MAX_H = '41vh'; // tallest bar height — vh keeps chart within screen at any zoom level
+
+  function buildChart(container) {
+    container.innerHTML = '';
+
+    const barRow = document.createElement('div');
+    barRow.className = 'ambition-bar-row';
+    barRow.style.height = MAX_H;
+    barRow.style.position = 'relative';
+    barRow.style.paddingTop = '2vw'; // room for arrowhead + value labels above tallest bar
+    container.appendChild(barRow);
+
+    const labelRow = document.createElement('div');
+    labelRow.className = 'ambition-label-row';
+    container.appendChild(labelRow);
+
+    BARS.forEach((bar) => {
+
+      const col = document.createElement('div');
+      col.className = 'ambition-bar-col';
+
+      const valLabel = document.createElement('div');
+      valLabel.className = 'ambition-val';
+      valLabel.style.fontWeight = bar.target ? '800' : '700';
+      valLabel.style.color = bar.target ? GREEN : BLUE;
+      if (bar.actual || bar.target) valLabel.textContent = bar.value + ' Cr';
+      else valLabel.innerHTML = '&nbsp;';
+
+      const barEl = document.createElement('div');
+      barEl.className = 'ambition-bar';
+      barEl.style.height = ((bar.value / MAX_VAL) * 41).toFixed(3) + 'vh';
+      if (bar.target) {
+        barEl.style.background = 'rgba(30,100,60,0.06)';
+        barEl.style.border = '1.5px dashed ' + GREEN;
+      } else if (bar.actual) {
+        barEl.style.background = BLUE;
+      } else {
+        barEl.style.background = 'rgba(30,34,170,0.08)';
+        barEl.style.border = '1.5px dashed ' + BLUE;
+      }
+
+      col.appendChild(valLabel);
+      col.appendChild(barEl);
+      barRow.appendChild(col);
+
+      const fyEl = document.createElement('div');
+      fyEl.className = 'ambition-label';
+      fyEl.style.fontWeight = bar.target ? '700' : '600';
+      fyEl.style.color = bar.target ? GREEN : '#94909C';
+      fyEl.textContent = bar.label;
+      labelRow.appendChild(fyEl);
+    });
+
+    // Canvas for curve — CSS sized to match barRow, redrawn on resize
+    const cvs = document.createElement('canvas');
+    cvs.className = 'ambition-canvas';
+    cvs.style.height = MAX_H;
+    barRow.appendChild(cvs);
+    redrawCanvas(cvs);
+  }
+
+  function redrawCanvas(cvs) {
+    requestAnimationFrame(() => {
+      const W = cvs.offsetWidth;
+      const H = cvs.offsetHeight;
+      if (!W || !H) return;
+      const dpr = window.devicePixelRatio || 1;
+      cvs.width = Math.round(W * dpr);
+      cvs.height = Math.round(H * dpr);
+      const ctx = cvs.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      const n = BARS.length;
+      const gapFrac = 0.008;
+      const colW = (W - gapFrac * W * (n - 1)) / n;
+
+      const pts = BARS.map((bar, i) => ({
+        x: i * (colW + gapFrac * W) + colW / 2,
+        y: H - (bar.value / MAX_VAL) * H,
+      }));
+
+      // Gridlines
+      [0, 1200, 2400, 3500, 5000].forEach((v, idx) => {
+        const y = H - (v / MAX_VAL) * H;
+        ctx.strokeStyle = '#e8e8f0';
+        ctx.lineWidth = 1;
+        ctx.setLineDash(idx === 0 ? [] : [4, 3]);
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+      });
+      ctx.setLineDash([]);
+
+      // Curve
+      ctx.strokeStyle = BLUE;
+      ctx.lineWidth = Math.max(1.5, W * 0.004);
+      ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (let i = 0; i < pts.length - 1; i++) {
+        const mx = (pts[i].x + pts[i + 1].x) / 2;
+        ctx.bezierCurveTo(mx, pts[i].y, mx, pts[i + 1].y, pts[i + 1].x, pts[i + 1].y);
+      }
+      ctx.stroke();
+
+      // Arrowhead
+      const tip = pts[pts.length - 1];
+      const a = Math.max(5, W * 0.011);
+      ctx.fillStyle = BLUE;
+      ctx.beginPath();
+      ctx.moveTo(tip.x, tip.y - a);
+      ctx.lineTo(tip.x - a * 0.6, tip.y + a * 0.35);
+      ctx.lineTo(tip.x + a * 0.6, tip.y + a * 0.35);
+      ctx.closePath(); ctx.fill();
+    });
+  }
+
+  function initChart(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const ro = new ResizeObserver(() => { if (el.offsetWidth > 0) buildChart(el); });
+    ro.observe(el);
+    if (el.offsetWidth > 0) buildChart(el);
+  }
+
+  window.redrawAmbitionChart = function() {
+    ['ambitionChart','ambitionChartRead'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.offsetWidth > 0) buildChart(el);
+    });
+  };
+
+  // On zoom, only the canvas needs redrawing — bars are vw-sized CSS, browser handles them
+  window.addEventListener('resize', () => {
+    document.querySelectorAll('.ambition-canvas').forEach(cvs => redrawCanvas(cvs));
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { initChart('ambitionChart'); initChart('ambitionChartRead'); });
+  } else {
+    initChart('ambitionChart'); initChart('ambitionChartRead');
+  }
+})();
+
+
+window.addEventListener('DOMContentLoaded', function initAssessment() {
+  updateTracker();
+});
+
+</script>
+</body>
+</html>

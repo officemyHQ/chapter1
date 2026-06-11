@@ -11,6 +11,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" as="style">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<!-- Firebase v9 compat -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 <style>
 /* ── TOKENS (identical to Where We Play) ── */
 :root {
@@ -428,7 +434,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
     <span class="topbar-logo">myHQ</span>
     <span class="topbar-chapter" id="chapterLabel">Chapter 2</span>
   </div>
-  <div class="topbar-center">Who We Are</div>
+  <div class="topbar-center" data-editable="slide-1-headline">Who We Are</div>
   <div class="topbar-right">
     <a class="hub-btn" href="hub.html" title="Back to Hub"><i class="fa-solid fa-house"></i></a>
     <span class="screen-counter" id="screenCounter">1 / 9</span>
@@ -448,7 +454,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
       <div>
 
         <h1 class="s0-headline">From a friend's café<br>to <em>India's fastest growing</em><br>CRE platform.</h1>
-        <p class="s0-sub">Before you start, let's know the story and journey of myHQ.</p>
+        <p class="s0-sub" data-editable="slide-1-sub">Before you start, let's know the story and journey of myHQ.</p>
         <div class="s0-vision">
           <span class="s0-vision-label">Our Vision</span>
           <span class="s0-vision-text" style="white-space:nowrap;">"A world where <strong>everyone</strong> has the opportunity<br>to make magic, <strong>everywhere</strong>."</span>
@@ -2175,6 +2181,37 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); ov
 
 
 <script>
+/* ── FIREBASE AUTH GATE ── */
+(function() {
+  var CHAPTER_ID = 'ch2';
+  window.firebaseAuth.onAuthStateChanged(function(user) {
+    if (!user) { window.location.href = 'landing.html'; return; }
+    var db = window.firebaseDB;
+    db.collection('users').doc(user.uid).get().then(function(snap) {
+      var data = snap.exists ? snap.data() : {};
+      var unlocked = (data.unlockedChapters && data.unlockedChapters.beginner) || [];
+      if (unlocked.indexOf(CHAPTER_ID) === -1) {
+        document.getElementById('slide-mode').style.display = 'none';
+        var rm = document.getElementById('read-mode');
+        if (rm) rm.style.display = 'none';
+        var lock = document.createElement('div');
+        lock.style.cssText = 'position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;font-family:Manrope,sans-serif;z-index:9999;';
+        lock.innerHTML = '<div style="font-size:2.5rem;">🔒</div><div style="font-size:1.2rem;font-weight:800;color:#1E22AA;">This chapter is locked.</div><div style="font-size:14px;color:#7B7FE8;max-width:340px;text-align:center;">Ask your admin to unlock it.</div><a href="hub.html" style="margin-top:8px;font-size:13px;font-weight:700;color:#1E22AA;text-decoration:underline;">← Back to Hub</a>';
+        document.body.appendChild(lock);
+        return;
+      }
+      db.collection('content').doc(CHAPTER_ID).get().then(function(cSnap) {
+        if (!cSnap.exists) return;
+        var cData = cSnap.data();
+        document.querySelectorAll('[data-editable]').forEach(function(el) {
+          var val = cData[el.getAttribute('data-editable')];
+          if (val !== undefined) el.textContent = val;
+        });
+      });
+    });
+  });
+})();
+
 /* ── MODE TOGGLE ── */
 let currentMode = 'slide';
 
