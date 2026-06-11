@@ -625,37 +625,53 @@ auth.onAuthStateChanged(function(user) {
   document.getElementById('subtitle-course').textContent = 'Beginner Course';
 
   db.collection('users').doc(user.uid).get().then(function(snap) {
-    var data = snap.exists ? snap.data() : {};
+    var data     = snap.exists ? snap.data() : {};
     var unlocked = (data.unlockedChapters && data.unlockedChapters.beginner) || [];
+    var progress = data.progress || {};
 
-    // Show admin portal row if admin or masterAdmin
+    // Admin portal row
     if (data.isAdmin || data.masterAdmin) {
       document.getElementById('admin-portal-wrap').style.display = '';
     }
 
-    // Chapter 1 — always show, locked state based on Firestore
-    var ch1Unlocked = unlocked.indexOf('ch1') !== -1;
-    var card1    = document.getElementById('card-ch1');
-    var status1  = document.getElementById('status-ch1');
-    var cta1wrap = document.getElementById('cta-ch1');
-    var cta1text = document.getElementById('cta-ch1-text');
+    // ── Chapter 1 ──
+    var ch1Unlocked  = unlocked.indexOf('ch1') !== -1;
+    var ch1Completed = progress.ch1 && progress.ch1.completed;
+    var card1        = document.getElementById('card-ch1');
+    var status1      = document.getElementById('status-ch1');
+    var cta1wrap     = document.getElementById('cta-ch1');
+
     if (!ch1Unlocked) {
       card1.classList.remove('unlocked'); card1.classList.add('locked');
       status1.textContent = 'Locked'; status1.className = 'badge badge-locked';
-      cta1wrap.outerHTML = '<button class="card-cta cta-locked" disabled>Locked</button>';
+      if (cta1wrap) cta1wrap.outerHTML = '<button class="card-cta cta-locked" disabled>Locked</button>';
+    } else if (ch1Completed) {
+      card1.classList.add('completed');
+      status1.textContent = 'Completed'; status1.className = 'badge badge-mint';
+      if (cta1wrap) { cta1wrap.querySelector('span').textContent = 'Review'; cta1wrap.className = 'card-cta cta-done'; }
+    } else {
+      status1.textContent = 'Not started'; status1.className = 'badge badge-blue';
     }
 
-    // Chapter 2
-    var ch2Unlocked = unlocked.indexOf('ch2') !== -1;
-    var card2    = document.getElementById('card-ch2');
-    var footer2  = document.getElementById('footer-ch2');
-    var unlockSec = document.getElementById('unlock-section-ch2');
-    var status2  = document.getElementById('status-ch2');
+    // ── Chapter 2 ──
+    var ch2Unlocked  = unlocked.indexOf('ch2') !== -1;
+    var ch2Completed = progress.ch2 && progress.ch2.completed;
+    var card2        = document.getElementById('card-ch2');
+    var footer2      = document.getElementById('footer-ch2');
+    var unlockSec    = document.getElementById('unlock-section-ch2');
+    var status2      = document.getElementById('status-ch2');
+
     if (ch2Unlocked) {
       card2.classList.remove('locked'); card2.classList.add('unlocked');
-      status2.textContent = 'Unlocked'; status2.className = 'badge badge-blue';
-      footer2.innerHTML = '<a class="card-cta cta-primary" href="Who_We_Are_v2.html"><span>Start</span><span class="arrow">→</span></a>';
       if (unlockSec) unlockSec.style.display = 'none';
+      if (ch2Completed) {
+        card2.classList.add('completed');
+        status2.textContent = 'Completed'; status2.className = 'badge badge-mint';
+        footer2.innerHTML = '<a class="card-cta cta-done" href="Who_We_Are_v2.html"><span>Review</span><span class="arrow">→</span></a>';
+      } else {
+        status2.textContent = 'Unlocked'; status2.className = 'badge badge-blue';
+        footer2.innerHTML = '<a class="card-cta cta-primary" href="Who_We_Are_v2.html"><span>Start</span><span class="arrow">→</span></a>';
+      }
     }
   });
 });
