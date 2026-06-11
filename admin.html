@@ -248,13 +248,15 @@ body { font-family: var(--sans); background: var(--blue-wash); color: var(--blue
 .chapter-pill.active { background: var(--blue); color: var(--white); border-color: var(--blue); }
 .chapter-pill:disabled { opacity: 0.4; cursor: default; }
 .pill-wrap { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.chapter-pill.has-pending { border-color: #f59e0b; color: #92400e; background: #fffbeb; }
+.chapter-pill.has-pending.active { background: var(--blue); color: var(--white); border-color: var(--blue); }
+.course-pill.has-pending { border-color: #f59e0b; color: #92400e; }
+.course-pill.has-pending.active { background: var(--blue); color: var(--white); border-color: var(--blue); }
 .pill-callout {
   font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
   text-transform: uppercase; padding: 2px 7px; border-radius: 2px;
 }
-.pill-callout.status-pending  { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
-.pill-callout.status-reviewed { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
-.pill-callout.status-rejected { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+.pill-callout.status-pending { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
 </style>
 </head>
 <body>
@@ -342,11 +344,7 @@ body { font-family: var(--sans); background: var(--blue-wash); color: var(--blue
     <!-- Step 1: Course picker -->
     <div class="card">
       <div class="card-title">Select Course</div>
-      <div class="course-pills" id="edit-course-pills">
-        <button class="course-pill active" onclick="selectEditCourse('beginner', this)">01 Beginner</button>
-        <button class="course-pill" onclick="selectEditCourse('intermediate', this)">02 Intermediate</button>
-        <button class="course-pill" onclick="selectEditCourse('advanced', this)">03 Advanced</button>
-      </div>
+      <div class="course-pills" id="edit-course-pills"></div>
     </div>
 
     <!-- Step 2: Chapter picker -->
@@ -533,6 +531,7 @@ auth.onAuthStateChanged(async function(user) {
   if (!data.isAdmin && !data.masterAdmin) { window.location.href = 'hub.html'; return; }
   isMasterAdmin = !!data.masterAdmin;
   loadAllUsers();
+  renderCoursePills();
   renderChapterPills();
 });
 
@@ -775,17 +774,32 @@ let liveData         = {};
 let draftData        = {};
 let fieldAccepted    = {};
 
-function selectEditCourse(course, btn) {
+function selectEditCourse(course) {
   currentEditCourse = course;
-  document.querySelectorAll('#edit-course-pills .course-pill').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  pillStatuses = {};
   refreshPillStatuses();
   document.getElementById('edit-editor-card').style.display = 'none';
+  document.getElementById('diff-card').style.display = 'none';
 }
 
-// pillStatuses: chId -> { draftStatus: 'pending'|'reviewed'|'rejected'|null, hasDraft: bool }
+// pillStatuses: chId -> { hasDraft: bool, draftStatus: 'pending'|null }
 let pillStatuses = {};
+
+const COURSE_LABELS = { beginner: '01 Beginner', intermediate: '02 Intermediate', advanced: '03 Advanced' };
+
+function renderCoursePills() {
+  const el = document.getElementById('edit-course-pills');
+  el.innerHTML = Object.keys(COURSE_LABELS).map(course => {
+    const groups = COURSES[course] || [];
+    const available = groups.flatMap(g => g.chapters.filter(c => c.available));
+    const hasPending = isMasterAdmin && available.some(ch => {
+      const s = pillStatuses[ch.id] || {};
+      return s.hasDraft && s.draftStatus === 'pending';
+    });
+    const isActive = course === currentEditCourse;
+    return `<button class="course-pill${isActive ? ' active' : ''}${hasPending ? ' has-pending' : ''}"
+      onclick="selectEditCourse('${course}', this)">${COURSE_LABELS[course]}${hasPending ? ' ●' : ''}</button>`;
+  }).join('');
+}
 
 function renderChapterPills() {
   const pillsEl = document.getElementById('edit-chapter-pills');
@@ -797,53 +811,46 @@ function renderChapterPills() {
   }
   pillsEl.innerHTML = available.map(ch => {
     const s = pillStatuses[ch.id] || {};
-    let callout = '';
-    if (s.hasDraft && s.draftStatus === 'pending') {
-      callout = `<span class="pill-callout status-pending">Pending review</span>`;
-    } else if (s.draftStatus === 'reviewed') {
-      callout = `<span class="pill-callout status-reviewed">Reviewed ✓</span>`;
-    } else if (s.draftStatus === 'rejected') {
-      callout = `<span class="pill-callout status-rejected">Rejected</span>`;
-    }
+    const isPending = isMasterAdmin && s.hasDraft && s.draftStatus === 'pending';
+    const callout = isPending ? `<span class="pill-callout status-pending">Pending review</span>` : '';
     return `<div class="pill-wrap">
-      <button class="chapter-pill" id="pill-${ch.id}" onclick="loadChapter('${ch.id}', this)">${ch.name}</button>
+      <button class="chapter-pill${isPending ? ' has-pending' : ''}" id="pill-${ch.id}" onclick="loadChapter('${ch.id}', this)">${ch.name}</button>
       <span id="callout-${ch.id}">${callout}</span>
     </div>`;
   }).join('');
 }
 
 async function refreshPillStatuses() {
-  const groups = COURSES[currentEditCourse] || [];
-  const available = groups.flatMap(g => g.chapters.filter(c => c.available));
-  await Promise.all(available.map(async ch => {
+  const allChapters = Object.values(COURSES).flat().flatMap(g => g.chapters).filter(c => c.available);
+  await Promise.all(allChapters.map(async ch => {
     const draftSnap = await db.collection('content-drafts').doc(ch.id).get();
     if (draftSnap.exists) {
       const d = draftSnap.data();
       const contentKeys = Object.keys(d).filter(k => k !== '_draftStatus');
       pillStatuses[ch.id] = {
         hasDraft: contentKeys.length > 0,
-        draftStatus: d._draftStatus || (contentKeys.length > 0 ? 'pending' : null)
+        draftStatus: contentKeys.length > 0 ? (d._draftStatus || 'pending') : null
       };
     } else {
       pillStatuses[ch.id] = { hasDraft: false, draftStatus: null };
     }
   }));
+  renderCoursePills();
   renderChapterPills();
 }
 
 function updatePillStatus(chId, hasDraft, draftStatus) {
   pillStatuses[chId] = { hasDraft, draftStatus };
+  // Refresh callout for this chapter
   const calloutEl = document.getElementById('callout-' + chId);
-  if (!calloutEl) return;
-  let callout = '';
-  if (hasDraft && draftStatus === 'pending') {
-    callout = `<span class="pill-callout status-pending">Pending review</span>`;
-  } else if (draftStatus === 'reviewed') {
-    callout = `<span class="pill-callout status-reviewed">Reviewed ✓</span>`;
-  } else if (draftStatus === 'rejected') {
-    callout = `<span class="pill-callout status-rejected">Rejected</span>`;
+  const pillEl    = document.getElementById('pill-' + chId);
+  const isPending = isMasterAdmin && hasDraft && draftStatus === 'pending';
+  if (calloutEl) calloutEl.innerHTML = isPending ? `<span class="pill-callout status-pending">Pending review</span>` : '';
+  if (pillEl) {
+    pillEl.classList.toggle('has-pending', isPending);
   }
-  calloutEl.innerHTML = callout;
+  // Re-render course pills to update their highlight
+  renderCoursePills();
 }
 
 async function loadChapter(chId, btn) {
