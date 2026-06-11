@@ -244,9 +244,14 @@ body { font-family: var(--sans); background: var(--blue-wash); color: var(--blue
   padding: 8px 16px; font-size: 12px; font-weight: 700;
   border: 1.5px solid var(--border); background: var(--white);
   color: var(--blue-soft); cursor: pointer; transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 8px;
 }
 .chapter-pill.active { background: var(--blue); color: var(--white); border-color: var(--blue); }
 .chapter-pill:disabled { opacity: 0.4; cursor: default; }
+.pill-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; background: #ddd; }
+.pill-dot.dot-draft   { background: #f59e0b; }
+.pill-dot.dot-live    { background: #22c55e; }
+.pill-dot.dot-default { background: #cbd5e1; }
 </style>
 </head>
 <body>
@@ -533,6 +538,7 @@ function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', ['access','edit'][i] === tab));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'edit') refreshPillStatuses();
 }
 
 /* ── Search user ── */
@@ -770,9 +776,12 @@ function selectEditCourse(course, btn) {
   currentEditCourse = course;
   document.querySelectorAll('#edit-course-pills .course-pill').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
-  renderChapterPills();
+  pillStatuses = {};
+  refreshPillStatuses();
   document.getElementById('edit-editor-card').style.display = 'none';
 }
+
+let pillStatuses = {}; // chId -> 'draft' | 'live' | 'default'
 
 function renderChapterPills() {
   const pillsEl = document.getElementById('edit-chapter-pills');
@@ -782,9 +791,42 @@ function renderChapterPills() {
     pillsEl.innerHTML = '<span style="font-size:12px;color:var(--blue-soft);">No chapters available yet.</span>';
     return;
   }
-  pillsEl.innerHTML = available.map(ch =>
-    `<button class="chapter-pill" onclick="loadChapter('${ch.id}', this)">${ch.name}</button>`
-  ).join('');
+  pillsEl.innerHTML = available.map(ch => {
+    const status = pillStatuses[ch.id] || 'default';
+    const tipMap = { draft: 'Has pending draft', live: 'Up to date', default: 'Not yet edited' };
+    return `<button class="chapter-pill" id="pill-${ch.id}" onclick="loadChapter('${ch.id}', this)" title="${tipMap[status]}">
+      <span class="pill-dot dot-${status}"></span>${ch.name}
+    </button>`;
+  }).join('');
+}
+
+async function refreshPillStatuses() {
+  const groups = COURSES[currentEditCourse] || [];
+  const available = groups.flatMap(g => g.chapters.filter(c => c.available));
+  await Promise.all(available.map(async ch => {
+    const [liveSnap, draftSnap] = await Promise.all([
+      db.collection('content').doc(ch.id).get(),
+      db.collection('content-drafts').doc(ch.id).get()
+    ]);
+    if (draftSnap.exists && Object.keys(draftSnap.data()).length > 0) {
+      pillStatuses[ch.id] = 'draft';
+    } else if (liveSnap.exists && Object.keys(liveSnap.data()).length > 0) {
+      pillStatuses[ch.id] = 'live';
+    } else {
+      pillStatuses[ch.id] = 'default';
+    }
+  }));
+  renderChapterPills();
+}
+
+function updatePillStatus(chId, status) {
+  pillStatuses[chId] = status;
+  const pill = document.getElementById('pill-' + chId);
+  if (!pill) return;
+  const dot = pill.querySelector('.pill-dot');
+  if (dot) { dot.className = 'pill-dot dot-' + status; }
+  const tipMap = { draft: 'Has pending draft', live: 'Up to date', default: 'Not yet edited' };
+  pill.title = tipMap[status] || '';
 }
 
 async function loadChapter(chId, btn) {
@@ -898,6 +940,7 @@ async function saveDraft() {
   draftData = { ...draftData, ...data };
   await db.collection('content-drafts').doc(currentChapterId).set(data, { merge: true });
   document.getElementById('draft-indicator').textContent = 'Draft saved ✓';
+  updatePillStatus(currentChapterId, 'draft');
 }
 
 // fieldAccepted: null = pending, true = accepted, false = rejected
@@ -1053,6 +1096,7 @@ function rejectAllFields() {
   if (Object.keys(cleanup).length) {
     db.collection('content-drafts').doc(currentChapterId).set(cleanup, { merge: true });
   }
+  updatePillStatus(currentChapterId, Object.keys(draftData).length > 0 ? 'draft' : 'live');
   showEditorView();
 }
 
@@ -1091,6 +1135,7 @@ async function pushLive() {
   const hhmm = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
   document.getElementById('sync-msg').textContent = `Pushed live at ${hhmm} — accepted changes visible to all users.`;
   btn.textContent = 'Push to Live →';
+  updatePillStatus(currentChapterId, Object.keys(draftData).length > 0 ? 'draft' : 'live');
   setTimeout(showEditorView, 1600);
 }
 </script>
