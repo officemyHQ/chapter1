@@ -1070,6 +1070,7 @@ function onDraftInputChange(fieldId) {
 function showEditorView() {
   document.getElementById('diff-card').style.display = 'none';
   document.getElementById('edit-editor-card').style.display = '';
+  renderEditFields();
   updateSyncArea();
 }
 
