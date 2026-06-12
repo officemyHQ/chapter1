@@ -2196,12 +2196,7 @@ h2.section-title { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.03em;
           var key = el.getAttribute('data-editable');
           var val = cData[key];
           if (val === undefined) return;
-          if (key.indexOf('-body') !== -1 || key.indexOf('-outcome') !== -1) {
-            el.innerHTML = val;
-          } else {
-            // Strip any HTML tags that may have been stored in old data
-            el.textContent = String(val).replace(/<[^>]*>/g, '');
-          }
+          el.innerHTML = val;
         });
       });
     });
